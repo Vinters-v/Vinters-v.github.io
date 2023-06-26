@@ -1,0 +1,684 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/avatar_my.jpg">
+  <link rel="icon" href="/img/avatar_my.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Vinters-v">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="毕设Matlab笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="毕设Matlab笔记">
+<meta property="og:url" content="http://vinters-v.github.io/2023/06/26/%E6%AF%95%E8%AE%BEMatlab%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Vinters-v">
+<meta property="og:description" content="毕设Matlab笔记">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://vinters-v.github.io/img/default.png">
+<meta property="article:published_time" content="2023-06-26T07:53:59.737Z">
+<meta property="article:modified_time" content="2023-06-26T08:03:07.596Z">
+<meta property="article:author" content="Vinters-v">
+<meta property="article:tag" content="Matlab">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://vinters-v.github.io/img/default.png">
+  
+  
+  
+  <title>毕设Matlab笔记 - Vinters-v</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"vinters-v.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Vinters-v</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="毕设Matlab笔记"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-06-26 15:53" pubdate>
+          2023年6月26日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          23k 字
+        
+      </span>
+    
+
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="padding-left: 2rem; margin-right: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">毕设Matlab笔记</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>毕设Matlab笔记</p>
+<span id="more"></span>
+
+<h1 id="Matlab-笔记"><a href="#Matlab-笔记" class="headerlink" title="Matlab 笔记"></a>Matlab 笔记</h1><h2 id="一、PA建模"><a href="#一、PA建模" class="headerlink" title="一、PA建模"></a>一、PA建模</h2><p>本例使用NXP Airfast LDMOS Doherty PA，工作频率3.6-3.8 GHz，增益29 dB。</p>
+<h2 id="1、无记忆非线性模型阅读"><a href="#1、无记忆非线性模型阅读" class="headerlink" title="1、无记忆非线性模型阅读"></a>1、无记忆非线性模型阅读</h2><p>导入原始测量的功放输入输出数据（复数形式）</p>
+<p>对输入输出数据取绝对值，然后转换为dBm</p>
+<p>对数据进行统计histcounts，直方图</p>
+<p>求输入数据最大值-20</p>
+<p>找出满足条件的边缘数据的位置</p>
+<p>建立新的表格存储满足条件的数据值</p>
+<p>分别求输入功率，输出功率，相移的平均值</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs matlab">sampleRate = <span class="hljs-number">860160000</span>;<br><br><span class="hljs-comment">%数据转换</span><br>paInputdBm  = mag2db(<span class="hljs-built_in">abs</span>(paInput)) + <span class="hljs-number">30</span> - <span class="hljs-number">20</span>;<br>paOutputdBm  = mag2db(<span class="hljs-built_in">abs</span>(paOutput)) + <span class="hljs-number">30</span> - <span class="hljs-number">20</span>;<br><br><span class="hljs-comment">%准备建模数据</span><br>[N,edges,idx] = histcounts(paInputdBm, <span class="hljs-string">&#x27;BinWidth&#x27;</span>, <span class="hljs-number">0.5</span>);  <span class="hljs-comment">%hiscounts函数，直方图bin计数</span><br>minInPowerdBm = <span class="hljs-built_in">max</span>(paInputdBm) - <span class="hljs-number">20</span>;  <span class="hljs-comment">%输入功率值不能小于最大输入功率20db</span><br>minIdx = <span class="hljs-built_in">find</span>(edges &lt; minInPowerdBm, <span class="hljs-number">1</span>, <span class="hljs-string">&#x27;last&#x27;</span>);<br>tableLen = <span class="hljs-built_in">length</span>(edges)-minIdx<span class="hljs-number">-1</span>;<br>inOutTable = <span class="hljs-built_in">zeros</span>(tableLen,<span class="hljs-number">2</span>);<br><span class="hljs-keyword">for</span> p = minIdx+<span class="hljs-number">1</span>:<span class="hljs-built_in">length</span>(edges)<span class="hljs-number">-1</span><br>	inOutTable(p-minIdx,<span class="hljs-number">1</span>) = <span class="hljs-built_in">mean</span>(paInputdBm(idx == p));   <span class="hljs-comment">% Average input power for current bin</span><br>	inOutTable(p-minIdx,<span class="hljs-number">2</span>) = <span class="hljs-built_in">mean</span>(paOutputdBm(idx == p));  <span class="hljs-comment">% Average output power for current bin</span><br>	inOutTable(p-minIdx,<span class="hljs-number">3</span>) = <span class="hljs-built_in">mean</span>(<span class="hljs-built_in">angle</span>(paOutput(idx == p)./paInput(idx == p))); <span class="hljs-comment">% Average phase shift for current                                                                                       bin</span><br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">%建立模型</span><br>pa = comm.MemorylessNonlinearity(<span class="hljs-string">&#x27;Method&#x27;</span>,<span class="hljs-string">&#x27;Lookup table&#x27;</span>,<span class="hljs-string">&#x27;Table&#x27;</span>,inOutTable,<span class="hljs-string">&#x27;ReferenceImpedance&#x27;</span>,<span class="hljs-number">100</span>);<br><br><span class="hljs-comment">%计算模型输出</span><br>paOutputFitMemless = pa(paInput);<br><span class="hljs-comment">%计算误差</span><br>err = <span class="hljs-built_in">abs</span>(paOutput - paOutputFitMemless)./<span class="hljs-built_in">abs</span>(paOutput);<br>rmsErrorMemless = rms(err)*<span class="hljs-number">100</span>;<br><span class="hljs-built_in">disp</span>([<span class="hljs-string">&#x27;Percent RMS error in time domain is &#x27;</span> num2str(rmsErrorMemless) <span class="hljs-string">&#x27;%&#x27;</span>]);<br><span class="hljs-comment">%绘制图形观察</span><br>helperPACharPlotTime(paOutput, paOutputFitMemless, sampleRate);<br>helperPACharPlotGain(paInput, paOutput, paOutputFitMemless);<br><br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="2、记忆多项式模型阅读"><a href="#2、记忆多项式模型阅读" class="headerlink" title="2、记忆多项式模型阅读"></a>2、记忆多项式模型阅读</h2><p>程序阅读</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs matlab">modType = <span class="hljs-string">&#x27;memPoly&#x27;</span>; <span class="hljs-comment">%记忆多项式模型</span><br>memLen = <span class="hljs-number">5</span>;     <span class="hljs-comment">% M = 5</span><br>degLen = <span class="hljs-number">5</span>;     <span class="hljs-comment">% K = 5</span><br>numDataPts = <span class="hljs-built_in">length</span>(paInput);<br>halfDataPts = <span class="hljs-built_in">round</span>(numDataPts/<span class="hljs-number">2</span>);<br>fitCoefMatMem = helperPACharMemPolyModel(<span class="hljs-string">&#x27;coefficientFinder&#x27;</span>,paInput(<span class="hljs-number">1</span>:halfDataPts),paOutput(<span class="hljs-number">1</span>:halfDataPts),memLen,degLen,modType);<br><span class="hljs-built_in">disp</span>(<span class="hljs-built_in">abs</span>(fitCoefMatMem));<br><br>rmsErrorTimeMem = helperPACharMemPolyModel(<span class="hljs-string">&#x27;errorMeasure&#x27;</span>,paInput, paOutput, fitCoefMatMem, modType);<br><span class="hljs-built_in">disp</span>([<span class="hljs-string">&#x27;Percent RMS error in time domain is &#x27;</span> num2str(rmsErrorTimeMem) <span class="hljs-string">&#x27;%&#x27;</span>]);<br><br>paOutputFitMem = helperPACharMemPolyModel(<span class="hljs-string">&#x27;signalGenerator&#x27;</span>, paInput, fitCoefMatMem, modType);<br><br>helperPACharPlotTime(paOutput, paOutputFitMem, sampleRate);<br>helperPACharPlotGain(paInput, paOutput, paOutputFitMem);<br><br><br><br></code></pre></td></tr></table></figure>
+
+<p>我的程序</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><code class="hljs matlab"><span class="hljs-comment">%x = (0 : 3);</span><br>x = paInput;<br>x = x(:);<br>xLength = <span class="hljs-built_in">length</span>(x);<br><br><span class="hljs-comment">%y = (2 : 5);</span><br>y = paOutput;<br>y = y(:);<br>yLength = <span class="hljs-built_in">length</span>(y);<br><br>M = <span class="hljs-number">3</span>;<br>K = <span class="hljs-number">5</span>;<br><br><span class="hljs-comment">%构造(x(n) - m)矩阵，m从0到M-1, 矩阵大小为xLength*M</span><br>xm = x;<br><span class="hljs-keyword">for</span> m = <span class="hljs-number">0</span> : M - <span class="hljs-number">1</span><br>    xm(M:xLength , m+<span class="hljs-number">1</span>) = xm(M-m:xLength-m , <span class="hljs-number">1</span>) ;<br><span class="hljs-keyword">end</span><br>xm_fix = xm; <span class="hljs-comment">%保存(x(n) - m)矩阵</span><br><br><span class="hljs-comment">%构造(x(n) - m) * |x(n) - m|^k 矩阵，矩阵大小为(xLength-M+1)*（M*K）</span><br>xmAbs = <span class="hljs-built_in">abs</span>(xm);<span class="hljs-comment">%保存|x - m|矩阵</span><br><span class="hljs-keyword">for</span> k = <span class="hljs-number">1</span> : K<span class="hljs-number">-1</span><br>    mid = (xmAbs.^ k) .* xm_fix;<br>    xm = <span class="hljs-built_in">cat</span>(<span class="hljs-number">2</span>, xm, mid);<br><span class="hljs-keyword">end</span><br>xmk = xm(M:xLength,:);<br><br><span class="hljs-comment">%计算系数矩阵，矩阵大小为（M*K） * 1</span><br>coef = xmk \ y(M:xLength);<br><br><span class="hljs-comment">%带入求解yout矩阵，矩阵大小为xLength*1</span><br>yout = xm * coef;<br><br><span class="hljs-comment">% helperPACharPlotTime(y, yout, 860160000);</span><br><span class="hljs-comment">% helperPACharPlotGain(x, y, yout);</span><br><br><br><span class="hljs-comment">%通过归一化均方误差衡量功放的建模精度</span><br>NMSE = <span class="hljs-number">10</span> * <span class="hljs-built_in">log10</span>( sum ( (<span class="hljs-built_in">abs</span>(y - yout)).^<span class="hljs-number">2</span> ) / sum ( (<span class="hljs-built_in">abs</span>(y).^<span class="hljs-number">2</span>) ) ) ;<br><br><br><br><span class="hljs-comment">%AM/AM图绘制</span><br><span class="hljs-comment">%单位转换</span><br>paInputPowerdBm = mag2db(<span class="hljs-built_in">abs</span>(x)) + <span class="hljs-number">30</span> - <span class="hljs-number">20</span>;<br>paOutputPowerdBm = mag2db(<span class="hljs-built_in">abs</span>(y)) + <span class="hljs-number">30</span> - <span class="hljs-number">20</span>;<br>paOutputPowerFitdBm = mag2db(<span class="hljs-built_in">abs</span>(yout)) + <span class="hljs-number">30</span> - <span class="hljs-number">20</span>;<br><br><span class="hljs-comment">%去除噪点</span><br>inputPowerRange = <span class="hljs-number">20</span>;<br>idxToDiscard = paInputPowerdBm &lt; (<span class="hljs-built_in">max</span>(paInputPowerdBm)-inputPowerRange);<span class="hljs-comment">%去除掉与最大输入功率相差20的点</span><br><br>paInputPowerdBm(idxToDiscard) = [];<br>paOutputPowerdBm(idxToDiscard) = [];<br>paOutputPowerFitdBm(idxToDiscard) = [];<br><br><span class="hljs-built_in">plot</span>(paInputPowerdBm, paOutputPowerdBm, <span class="hljs-string">&#x27;o&#x27;</span>, paInputPowerdBm,paOutputPowerFitdBm, <span class="hljs-string">&#x27;.&#x27;</span>)<br>grid on<br>xlabel(<span class="hljs-string">&#x27;Input Power (dBm)&#x27;</span>)<br>ylabel(<span class="hljs-string">&#x27;Output Power (dBm)&#x27;</span>)<br>title(<span class="hljs-string">&#x27;AM/AM&#x27;</span>)<br><br><span class="hljs-comment">%AM/PM图绘制</span><br>paInputPhase = <span class="hljs-built_in">angle</span>(x);<br>paOutputPhase = <span class="hljs-built_in">angle</span>(y);<br>paOutputPhaseFit = <span class="hljs-built_in">angle</span>(yout);<br><br>paInputPhase(idxToDiscard) = [];<br>paOutputPhase(idxToDiscard) = [];<br>paOutputPhaseFit(idxToDiscard) = [];<br><br>paPhaseChange =  paInputPhase - paOutputPhase;<br>paPhaseChangeFit =paOutputPhaseFit - paOutputPhase;<br><br><span class="hljs-comment">%将角度集中在-pi-pi之间</span><br>lambdaWrapped = wrapToPi(paPhaseChange);<br>lambdaWrapped2 = wrapToPi(paPhaseChangeFit);<br><br><span class="hljs-built_in">plot</span>(paInputPowerdBm, lambdaWrapped, <span class="hljs-string">&#x27;o&#x27;</span>, paInputPowerdBm,lambdaWrapped2, <span class="hljs-string">&#x27;.&#x27;</span>)<br>grid on<br>xlabel(<span class="hljs-string">&#x27;Input Power (dBm)&#x27;</span>)<br>ylabel(<span class="hljs-string">&#x27;Phase Change&#x27;</span>)<br>title(<span class="hljs-string">&#x27;AM/PM&#x27;</span>)<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="我的程序"><a href="#我的程序" class="headerlink" title="我的程序"></a>我的程序</h2><h3 id="1、毕设论文1-矩阵处理函数"><a href="#1、毕设论文1-矩阵处理函数" class="headerlink" title="1、毕设论文1_矩阵处理函数"></a>1、毕设论文1_矩阵处理函数</h3><h4 id="1、改进后模型"><a href="#1、改进后模型" class="headerlink" title="1、改进后模型"></a>1、改进后模型</h4><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><code class="hljs matlab"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">[Xout]</span> = <span class="hljs-title">MatrixDeal</span><span class="hljs-params">(x,M,K)</span></span><br><br><br><span class="hljs-comment">%构造x(n - m)矩阵，m从1到M, 矩阵大小为xLength*M,有效长度为Xlength-M</span><br>xnm = x;<br>xhalfLength = <span class="hljs-built_in">length</span>(xnm);<br><span class="hljs-keyword">for</span> m = <span class="hljs-number">1</span> : M<br>    xnm(M+<span class="hljs-number">1</span>:xhalfLength , m) = x(M-m+<span class="hljs-number">1</span>:xhalfLength-m , <span class="hljs-number">1</span>) ;  <span class="hljs-comment">%(m从1-M)</span><br><span class="hljs-keyword">end</span><br><br>xnm_fix = xnm; <span class="hljs-comment">%保存x(n - m)矩阵</span><br>xnm_fixabs = <span class="hljs-built_in">abs</span>(xnm_fix);<span class="hljs-comment">%保存 |x(n - m)| 矩阵</span><br><br>xn_fix = x;<span class="hljs-comment">%保存 x(n) 矩阵</span><br>xn_fixabs = <span class="hljs-built_in">abs</span>(xn_fix);<span class="hljs-comment">%保存 |x(n)| 矩阵</span><br><br><span class="hljs-comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span><br><span class="hljs-comment">%m从0开始到M</span><br>xnm_0 = x;<br>xhalfLength = <span class="hljs-built_in">length</span>(xnm_0);<br><span class="hljs-keyword">for</span> m = <span class="hljs-number">0</span> : M<br>    xnm_0(M+<span class="hljs-number">1</span>:xhalfLength , m+<span class="hljs-number">1</span>) = x(M-m+<span class="hljs-number">1</span>:xhalfLength-m , <span class="hljs-number">1</span>) ;  <span class="hljs-comment">%(m从1-M)</span><br><span class="hljs-keyword">end</span><br>xnm_fix_0 = xnm_0; <span class="hljs-comment">%保存x(n - m)矩阵</span><br>xnm_fixabs_0 = <span class="hljs-built_in">abs</span>(xnm_fix_0);<span class="hljs-comment">%保存 |x(n - m)| 矩阵</span><br><span class="hljs-comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span><br><br><span class="hljs-comment">%构造Bk矩阵</span><br>Bk = (<span class="hljs-number">0</span>:K<span class="hljs-number">-1</span>);<br>Bk = Bk/K;<br><br><br><span class="hljs-comment">%f0</span><br><span class="hljs-comment">%构造 x(n-m)矩阵，矩阵大小为xLength * (M*k)</span><br><span class="hljs-comment">% X1 = xnm_fix(M+1:xhalfLength,:);</span><br><br>X1 = xnm_fix_0(M+<span class="hljs-number">1</span>:xhalfLength,:);<br><br><span class="hljs-comment">%F21</span><br><span class="hljs-comment">%构造| ( |x(n-m)| - Bk ) | * x(n - m) * |x(n)| 矩阵，矩阵大小为xLength * (M*k)</span><br>xmk_F21 = <span class="hljs-built_in">abs</span>( xnm_fixabs - Bk(<span class="hljs-number">1</span>) ) .* xnm_fix .* xn_fixabs;<br><span class="hljs-keyword">for</span> k = <span class="hljs-number">2</span> : K<br>    mid = <span class="hljs-built_in">abs</span>( xnm_fixabs - Bk(k) ) .* xnm_fix .* xn_fixabs;<br>    xmk_F21 = <span class="hljs-built_in">cat</span>(<span class="hljs-number">2</span>,xmk_F21,mid);<br><span class="hljs-keyword">end</span><br><span class="hljs-comment">%矩阵大小为(xLength-M) * (M*K)</span><br>X2 = xmk_F21(M+<span class="hljs-number">1</span>:xhalfLength,:);<br><br><br><span class="hljs-comment">%f22</span><br><span class="hljs-comment">%构造 | ( |x(n-m)| - Bk ) | * x(n) 矩阵，矩阵大小为xLength * (M*k)</span><br>xmk_f22 = <span class="hljs-built_in">abs</span>( xnm_fixabs - Bk(<span class="hljs-number">1</span>) ) .* xn_fix;<br><span class="hljs-keyword">for</span> k = <span class="hljs-number">2</span> : K<br>    mid = <span class="hljs-built_in">abs</span>( xnm_fixabs - Bk(k) ) .* xn_fix;<br>    xmk_f22 = <span class="hljs-built_in">cat</span>(<span class="hljs-number">2</span>,xmk_f22,mid);<br><span class="hljs-keyword">end</span><br><span class="hljs-comment">%矩阵大小为(xLength-M) * (M*K)</span><br>X3 = xmk_f22(M+<span class="hljs-number">1</span>:xhalfLength,:);<br><br><br><span class="hljs-comment">%F23</span><br><span class="hljs-comment">%构造  | ( |x(n-m)| - Bk ) | * x(n-m) 矩阵，矩阵大小为xLength * (M*k)</span><br><span class="hljs-comment">% xmk_F23 = abs( xnm_fixabs - Bk(1) ) .* xnm_fix;</span><br><span class="hljs-comment">% for k = 2 : K</span><br><span class="hljs-comment">%     mid = abs( xnm_fixabs - Bk(k) ) .* xnm_fix;</span><br><span class="hljs-comment">%     xmk_F23 = cat(2,xmk_F23,mid);</span><br><span class="hljs-comment">% end</span><br><span class="hljs-comment">% %矩阵大小为(xLength-M) * (M*K)</span><br><span class="hljs-comment">% X4 = xmk_F23(M+1:xhalfLength,:);</span><br><br><br><br>xmk_F23 = <span class="hljs-built_in">abs</span>( xnm_fixabs_0 - Bk(<span class="hljs-number">1</span>) ) .* xnm_fix_0;<br><span class="hljs-keyword">for</span> k = <span class="hljs-number">2</span> : K<br>    mid = <span class="hljs-built_in">abs</span>( xnm_fixabs_0 - Bk(k) ) .* xnm_fix_0;<br>    xmk_F23 = <span class="hljs-built_in">cat</span>(<span class="hljs-number">2</span>,xmk_F23,mid);<br><span class="hljs-keyword">end</span><br><span class="hljs-comment">%矩阵大小为(xLength-M) * (M*K)</span><br>X4 = xmk_F23(M+<span class="hljs-number">1</span>:xhalfLength,:);<br><br><br><span class="hljs-comment">%f24</span><br><span class="hljs-comment">%构造 | ( |x(n)| - Bk ) | * x(n-m) 矩阵，矩阵大小为xLength * (M*k)</span><br>xmk_f24 = <span class="hljs-built_in">abs</span>( xn_fixabs - Bk(<span class="hljs-number">1</span>) ) .* xnm_fix;<br><span class="hljs-keyword">for</span> k = <span class="hljs-number">2</span> : K<br>    mid = <span class="hljs-built_in">abs</span>( xn_fixabs - Bk(k) ) .* xnm_fix;<br>    xmk_f24 = <span class="hljs-built_in">cat</span>(<span class="hljs-number">2</span>,xmk_f24,mid);<br><span class="hljs-keyword">end</span><br><span class="hljs-comment">%矩阵大小为(xLength-M) * (M*K)</span><br>X5 = xmk_f24(M+<span class="hljs-number">1</span>:xhalfLength,:);<br><br><br><span class="hljs-comment">%合并矩阵，矩阵大小为(xLength-M) *（M*K*4+M） </span><br>Xout = [X1 X2 X3 X4 X5];<br><br><span class="hljs-keyword">end</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="2、DVR模型"><a href="#2、DVR模型" class="headerlink" title="2、DVR模型"></a>2、DVR模型</h4><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br></pre></td><td class="code"><pre><code class="hljs matlab"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">[Xout]</span> = <span class="hljs-title">MatrixDeal_DVR</span><span class="hljs-params">(x,M,K)</span></span><br><br><br><span class="hljs-comment">%构造x(n - m)矩阵，m从1到M, 矩阵大小为xLength*M,有效长度为Xlength-M-1</span><br>xnm = x;<br>xhalfLength = <span class="hljs-built_in">length</span>(xnm);<br><span class="hljs-keyword">for</span> m = <span class="hljs-number">1</span> : M<br>    xnm(M+<span class="hljs-number">1</span>:xhalfLength , m) = x(M-m+<span class="hljs-number">1</span>:xhalfLength-m , <span class="hljs-number">1</span>) ;<br><span class="hljs-keyword">end</span><br><br>xnm_fix = xnm; <span class="hljs-comment">%保存x(n - m)矩阵</span><br>xnm_fixabs = <span class="hljs-built_in">abs</span>(xnm_fix);<span class="hljs-comment">%保存 |x(n - m)| 矩阵</span><br>    <br>xn_fix = x;<span class="hljs-comment">%保存 x(n) 矩阵</span><br>xn_fixabs = <span class="hljs-built_in">abs</span>(xn_fix);<span class="hljs-comment">%保存 |x(n)| 矩阵</span><br><br><span class="hljs-comment">%构造Bk矩阵</span><br>Bk = (<span class="hljs-number">0</span>:K<span class="hljs-number">-1</span>);<br>Bk = Bk/K;<br><br><br><span class="hljs-comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span><br><span class="hljs-comment">%m从0开始到M</span><br>xnm_0 = x;<br>xhalfLength = <span class="hljs-built_in">length</span>(xnm_0);<br><span class="hljs-keyword">for</span> m = <span class="hljs-number">0</span> : M<br>    xnm_0(M+<span class="hljs-number">1</span>:xhalfLength , m+<span class="hljs-number">1</span>) = x(M-m+<span class="hljs-number">1</span>:xhalfLength-m , <span class="hljs-number">1</span>) ;  <span class="hljs-comment">%(m从1-M)</span><br><span class="hljs-keyword">end</span><br>xnm_fix_0 = xnm_0; <span class="hljs-comment">%保存x(n - m)矩阵</span><br>xnm_fixabs_0 = <span class="hljs-built_in">abs</span>(xnm_fix_0);<span class="hljs-comment">%保存 |x(n - m)| 矩阵</span><br><span class="hljs-comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span><br><br><br><span class="hljs-comment">% %构造xAngle(n-m)矩阵</span><br><span class="hljs-comment">% xAngle = angle(xnm);</span><br><span class="hljs-comment">% for m = 1 : M</span><br><span class="hljs-comment">%     xAngle(M+1:xhalfLength , m) = xAngle(M-m+1:xhalfLength-m , 1) ;</span><br><span class="hljs-comment">% end</span><br><span class="hljs-comment">% xAngle_fix = 1i * xAngle;%保存i * xAngle(n-m)矩阵</span><br><br><span class="hljs-comment">%构造xAngle(n-m)矩阵</span><br>xAngle = <span class="hljs-built_in">angle</span>(xnm);<br><span class="hljs-keyword">for</span> m = <span class="hljs-number">0</span> : M<br>    xAngle(M+<span class="hljs-number">1</span>:xhalfLength , m+<span class="hljs-number">1</span>) = xAngle(M-m+<span class="hljs-number">1</span>:xhalfLength-m , <span class="hljs-number">1</span>) ;<br><span class="hljs-keyword">end</span><br>xAngle_fix = <span class="hljs-number">1</span><span class="hljs-built_in">i</span> * xAngle;<span class="hljs-comment">%保存i * xAngle(n-m)矩阵</span><br><br><span class="hljs-comment">%f0</span><br><span class="hljs-comment">%构造 x(n-m)矩阵，矩阵大小为xLength * (M*k)</span><br><span class="hljs-comment">% X1 = xnm_fix(M+1:xhalfLength,:);</span><br><br>X1 = xnm_fix_0(M+<span class="hljs-number">1</span>:xhalfLength,:);<br><br><span class="hljs-comment">% %f1</span><br><span class="hljs-comment">% %构造 | ( |x(n-m)| - Bk ) | * e^(xAngle_fix) 矩阵</span><br><span class="hljs-comment">% xmk_f1 = abs( xnm_fixabs - Bk(1) ) .* exp(xAngle_fix);</span><br><span class="hljs-comment">% for k = 2 : K</span><br><span class="hljs-comment">%     mid = abs( xnm_fixabs - Bk(k) ) .* exp(xAngle_fix);</span><br><span class="hljs-comment">%     xmk_f1 = cat(2,xmk_f1,mid);</span><br><span class="hljs-comment">% end</span><br><span class="hljs-comment">% X2 = xmk_f1(M+1:xhalfLength,:);</span><br><br><span class="hljs-comment">%f1</span><br><span class="hljs-comment">%构造 | ( |x(n-m)| - Bk ) | * e^(xAngle_fix) 矩阵</span><br>xmk_f1 = <span class="hljs-built_in">abs</span>( xnm_fixabs_0 - Bk(<span class="hljs-number">1</span>) ) .* <span class="hljs-built_in">exp</span>(xAngle_fix);<br><span class="hljs-keyword">for</span> k = <span class="hljs-number">2</span> : K<br>    mid = <span class="hljs-built_in">abs</span>( xnm_fixabs_0 - Bk(k) ) .* <span class="hljs-built_in">exp</span>(xAngle_fix);<br>    xmk_f1 = <span class="hljs-built_in">cat</span>(<span class="hljs-number">2</span>,xmk_f1,mid);<br><span class="hljs-keyword">end</span><br>X2 = xmk_f1(M+<span class="hljs-number">1</span>:xhalfLength,:);<br><br><br><span class="hljs-comment">% %f21</span><br><span class="hljs-comment">% %构造| ( |x(n-m)| - Bk ) | * e^(xAngle_fix) * |x(n)| 矩阵，矩阵大小为xLength * (M*k)</span><br><span class="hljs-comment">% xmk_f21 = abs( xnm_fixabs - Bk(1) ) .* exp(xAngle_fix) .* xn_fixabs;</span><br><span class="hljs-comment">% for k = 2 : K</span><br><span class="hljs-comment">%     mid = abs( xnm_fixabs - Bk(k) ) .* exp(xAngle_fix) .* xn_fixabs;</span><br><span class="hljs-comment">%     xmk_f21 = cat(2,xmk_f21,mid);</span><br><span class="hljs-comment">% end</span><br><span class="hljs-comment">% %矩阵大小为(xLength-M) * (M*K)</span><br><span class="hljs-comment">% X3 = xmk_f21(M+1:xhalfLength,:);</span><br><br><span class="hljs-comment">%f21</span><br><span class="hljs-comment">%构造| ( |x(n-m)| - Bk ) | * e^(xAngle_fix) * |x(n)| 矩阵，矩阵大小为xLength * (M*k)</span><br>xmk_f21 = <span class="hljs-built_in">abs</span>( xnm_fixabs_0 - Bk(<span class="hljs-number">1</span>) ) .* <span class="hljs-built_in">exp</span>(xAngle_fix) .* xn_fixabs;<br><span class="hljs-keyword">for</span> k = <span class="hljs-number">2</span> : K<br>    mid = <span class="hljs-built_in">abs</span>( xnm_fixabs_0 - Bk(k) ) .* <span class="hljs-built_in">exp</span>(xAngle_fix) .* xn_fixabs;<br>    xmk_f21 = <span class="hljs-built_in">cat</span>(<span class="hljs-number">2</span>,xmk_f21,mid);<br><span class="hljs-keyword">end</span><br><span class="hljs-comment">%矩阵大小为(xLength-M) * (M*K)</span><br>X3 = xmk_f21(M+<span class="hljs-number">1</span>:xhalfLength,:);<br><br><br><span class="hljs-comment">%f22</span><br><span class="hljs-comment">%构造| ( |x(n-m)| - Bk ) | * x(n) 矩阵，矩阵大小为xLength * (M*k)</span><br>xmk_f22 = <span class="hljs-built_in">abs</span>( xnm_fixabs - Bk(<span class="hljs-number">1</span>) ) .* xn_fix;<br><span class="hljs-keyword">for</span> k = <span class="hljs-number">2</span> : K<br>    mid = <span class="hljs-built_in">abs</span>( xnm_fixabs - Bk(k) ) .* xn_fix;<br>    xmk_f22 = <span class="hljs-built_in">cat</span>(<span class="hljs-number">2</span>,xmk_f22,mid);<br><span class="hljs-keyword">end</span><br><span class="hljs-comment">%矩阵大小为(xLength-M) * (M*K)</span><br>X4 = xmk_f22(M+<span class="hljs-number">1</span>:xhalfLength,:);<br><br><br><span class="hljs-comment">%f23</span><br><span class="hljs-comment">%构造| ( |x(n-m)| - Bk ) | * x(n-m) 矩阵，矩阵大小为xLength * (M*k)</span><br>xmk_f23 = <span class="hljs-built_in">abs</span>( xnm_fixabs - Bk(<span class="hljs-number">1</span>) ) .* xnm_fix;<br><span class="hljs-keyword">for</span> k = <span class="hljs-number">2</span> : K<br>    mid = <span class="hljs-built_in">abs</span>( xnm_fixabs - Bk(k) ) .* xnm_fix;<br>    xmk_f23 = <span class="hljs-built_in">cat</span>(<span class="hljs-number">2</span>,xmk_f23,mid);<br><span class="hljs-keyword">end</span><br><span class="hljs-comment">%矩阵大小为(xLength-M) * (M*K)</span><br>X5 = xmk_f23(M+<span class="hljs-number">1</span>:xhalfLength,:);<br><br><br><span class="hljs-comment">%f24</span><br><span class="hljs-comment">%构造 | ( |x(n-m)| - Bk ) | * x(n-m) 矩阵，矩阵大小为xLength * (M*k)</span><br>xmk_f24 = <span class="hljs-built_in">abs</span>( xn_fixabs - Bk(<span class="hljs-number">1</span>) ) .* xnm_fix;<br><span class="hljs-keyword">for</span> k = <span class="hljs-number">2</span> : K<br>    mid = <span class="hljs-built_in">abs</span>( xn_fixabs - Bk(k) ) .* xnm_fix;<br>    xmk_f24 = <span class="hljs-built_in">cat</span>(<span class="hljs-number">2</span>,xmk_f24,mid);<br><span class="hljs-keyword">end</span><br><span class="hljs-comment">%矩阵大小为(xLength-M) * (M*K)</span><br>X6 = xmk_f24(M+<span class="hljs-number">1</span>:xhalfLength,:);<br><br><span class="hljs-comment">%合并矩阵，矩阵大小为(xLength-M) *（M*K*4+M） </span><br>Xout = [X1 X2 X3 X4 X5 X6];<br><br><br><span class="hljs-keyword">end</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="3、记忆多项式"><a href="#3、记忆多项式" class="headerlink" title="3、记忆多项式"></a>3、记忆多项式</h4><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs matlab"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">[Xout]</span> = <span class="hljs-title">MatrixDeal_MP</span><span class="hljs-params">(x,M,K)</span></span><br><span class="hljs-comment">%UNTITLED 此处提供此函数的摘要</span><br><span class="hljs-comment">%   此处提供详细说明</span><br><br><br><span class="hljs-comment">%构造(x(n) - m)矩阵，m从0到M-1, 矩阵大小为xLength*M</span><br>xm = x;<br>xmLength = <span class="hljs-built_in">length</span>(xm);<br><span class="hljs-keyword">for</span> m = <span class="hljs-number">0</span> : M - <span class="hljs-number">1</span><br>    xm(M:xmLength , m+<span class="hljs-number">1</span>) = xm(M-m:xmLength-m , <span class="hljs-number">1</span>) ;<span class="hljs-comment">%有效数据从第M行开始</span><br><span class="hljs-keyword">end</span><br>xm_fix = xm; <span class="hljs-comment">%保存(x(n) - m)矩阵</span><br><br><span class="hljs-comment">%构造(x(n) - m) * |x(n) - m|^k 矩阵，矩阵大小为(xLength-M+1)*（M*K）</span><br>xmAbs = <span class="hljs-built_in">abs</span>(xm_fix);<span class="hljs-comment">%保存|x - m|矩阵</span><br><span class="hljs-keyword">for</span> k = <span class="hljs-number">1</span> : K<span class="hljs-number">-1</span><br>    mid = (xmAbs.^ k) .* xm_fix;<br>    xm = <span class="hljs-built_in">cat</span>(<span class="hljs-number">2</span>, xm, mid);<br><span class="hljs-keyword">end</span><br>xmk = xm(M:xmLength,:);<br><br><span class="hljs-comment">%矩阵大小为(xLength-M) * (M*K)</span><br>Xout = xmk;<br><br><br><span class="hljs-keyword">end</span><br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="2、毕设论文1-绘图函数"><a href="#2、毕设论文1-绘图函数" class="headerlink" title="2、毕设论文1_绘图函数"></a>2、毕设论文1_绘图函数</h3><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><code class="hljs matlab"><span class="hljs-function"><span class="hljs-keyword">function</span>   <span class="hljs-title">paCharPlot</span><span class="hljs-params">(paInput,paOutput,paOutputFit,Type)</span></span><br><br>paInputMagnitude = <span class="hljs-built_in">abs</span>(paInput) ;<br>paOutputMagnitude = <span class="hljs-built_in">abs</span>(paOutput) ;<br>paOutputMagnitudeFit = <span class="hljs-built_in">abs</span>(paOutputFit) ;<br><br>idxToDiscard = paOutputMagnitudeFit &gt; <span class="hljs-number">1</span> | paOutputMagnitude &gt; <span class="hljs-number">1</span>;<br>paInputMagnitude(idxToDiscard) = [];<br>paOutputMagnitude(idxToDiscard) = [];<br>paOutputMagnitudeFit(idxToDiscard) = [];<br><br>paGain = paOutputMagnitude - paInputMagnitude;<br>paGainFit = paOutputMagnitudeFit - paInputMagnitude;<br><br><br><span class="hljs-comment">%AM/PM图绘制</span><br>paInputPhase = <span class="hljs-built_in">angle</span>(paInput);<br>paOutputPhase = <span class="hljs-built_in">angle</span>(paOutput);<br>paOutputPhaseFit = <span class="hljs-built_in">angle</span>(paOutputFit);<br><br>paInputPhase(idxToDiscard) = [];<br>paOutputPhase(idxToDiscard) = [];<br>paOutputPhaseFit(idxToDiscard) = [];<br><br>paPhaseChange =  paInputPhase - paOutputPhase;<br>paPhaseChangeFit =paInputPhase - paOutputPhaseFit;<br><br><span class="hljs-comment">%将角度数据集中在-pi-pi之间</span><br>lambdaWrapped = wrapToPi(paPhaseChange);<br>lambdaWrappedFit = wrapToPi(paPhaseChangeFit);    <br><br><span class="hljs-comment">% lambdaWrapped = rad2deg(lambdaWrapped);</span><br><span class="hljs-comment">% lambdaWrapped2 = rad2deg(lambdaWrapped2);</span><br><br><br><span class="hljs-keyword">switch</span> Type<br>    <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;AM/AM&#x27;</span><br>        <span class="hljs-built_in">figure</span>;<br>        <span class="hljs-built_in">plot</span>(paInputMagnitude, paOutputMagnitude, <span class="hljs-string">&#x27;.&#x27;</span>, paInputMagnitude,paOutputMagnitudeFit, <span class="hljs-string">&#x27;.&#x27;</span>)<br>        grid on<br>        xlabel(<span class="hljs-string">&#x27;Input Magnitude&#x27;</span>)<br>        ylabel(<span class="hljs-string">&#x27;Output Magnitude&#x27;</span>)<br>        <span class="hljs-built_in">legend</span>(&#123;<span class="hljs-string">&#x27;Actual&#x27;</span>,<span class="hljs-string">&#x27;Model/Linear&#x27;</span>&#125;,<span class="hljs-string">&#x27;Location&#x27;</span>,<span class="hljs-string">&#x27;northwest&#x27;</span>)<br>        title(<span class="hljs-string">&#x27;AM/AM&#x27;</span>)<br><br><br>    <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;PM/AM&#x27;</span><br>        <span class="hljs-built_in">figure</span>;<br>        <span class="hljs-built_in">plot</span>(paInputMagnitude, lambdaWrapped, <span class="hljs-string">&#x27;.&#x27;</span>, paInputMagnitude,lambdaWrappedFit, <span class="hljs-string">&#x27;.&#x27;</span>)<br>        grid on<br>        xlabel(<span class="hljs-string">&#x27;Input Magnitude&#x27;</span>)<br>        ylabel(<span class="hljs-string">&#x27;Phase Change&#x27;</span>)<br>        <span class="hljs-built_in">legend</span>(&#123;<span class="hljs-string">&#x27;Actual&#x27;</span>,<span class="hljs-string">&#x27;Model/Linear&#x27;</span>&#125;,<span class="hljs-string">&#x27;Location&#x27;</span>,<span class="hljs-string">&#x27;northwest&#x27;</span>)<br>        title(<span class="hljs-string">&#x27;AM/PM&#x27;</span>)<br><br>       <br>    <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;Gain&#x27;</span><br>        <span class="hljs-built_in">figure</span>;<br>        <span class="hljs-built_in">plot</span>(paInputMagnitude, paGain, <span class="hljs-string">&#x27;.&#x27;</span>, paInputMagnitude,paGainFit, <span class="hljs-string">&#x27;.&#x27;</span>)<br>        grid on<br>        xlabel(<span class="hljs-string">&#x27;Input Magnitude&#x27;</span>)<br>        ylabel(<span class="hljs-string">&#x27;Gain&#x27;</span>)<br>        <span class="hljs-built_in">legend</span>(&#123;<span class="hljs-string">&#x27;Actual&#x27;</span>,<span class="hljs-string">&#x27;Model/Linear&#x27;</span>&#125;,<span class="hljs-string">&#x27;Location&#x27;</span>,<span class="hljs-string">&#x27;northwest&#x27;</span>)<br>        title(<span class="hljs-string">&#x27;PA Gain&#x27;</span>)<br><br><br>    <span class="hljs-keyword">case</span> <span class="hljs-string">&#x27;Couple&#x27;</span><br>        yyaxis left;<br>        <span class="hljs-built_in">plot</span>(paInputPowerdBm, paOutputPowerdBm, <span class="hljs-string">&#x27;o&#x27;</span>, paInputPowerdBm,paOutputPowerFitdBm, <span class="hljs-string">&#x27;.&#x27;</span>);<br>        yyaxis right;<br>        <span class="hljs-built_in">plot</span>(paInputPowerdBm, lambdaWrapped, <span class="hljs-string">&#x27;o&#x27;</span>, paInputPowerdBm,lambdaWrapped2, <span class="hljs-string">&#x27;.&#x27;</span>);<br>        <span class="hljs-built_in">hold</span> on<br><br><span class="hljs-keyword">end</span><br><br><br><span class="hljs-keyword">end</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="3、毕设论文1-模型建立"><a href="#3、毕设论文1-模型建立" class="headerlink" title="3、毕设论文1_模型建立"></a>3、毕设论文1_模型建立</h3><h4 id="1、改进后模型-1"><a href="#1、改进后模型-1" class="headerlink" title="1、改进后模型"></a>1、改进后模型</h4><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br></pre></td><td class="code"><pre><code class="hljs matlab"><span class="hljs-comment">%本例使用NXP Airfast LDMOS Doherty PA，工作频率3.6-3.8 GHz，增益29 dB。</span><br><span class="hljs-comment">%带宽100MHZ    100000000</span><br><span class="hljs-comment">%采样率sampleRate = 860160000</span><br><span class="hljs-comment">%信号类型OFDM</span><br><span class="hljs-comment">%If testSignal is &quot;OFDM&quot;, this example uses a 5G-like OFDM waveform with 64-QAM modulated signals for each subcarrier.</span><br><span class="hljs-comment">% If testSignal is &quot;Tones&quot;, this example uses two tones at 1.8 MHz and 2.6 MHz, to test the intermodulation caused by the PA.</span><br><br><br>sampleRate = <span class="hljs-number">860160000</span>;<br><span class="hljs-comment">% sampleRate = 430080000;</span><br>testSignal = <span class="hljs-string">&#x27;OFDM&#x27;</span>;<br><br><span class="hljs-comment">%读取数据</span><br><span class="hljs-comment">% x = (0 : 5);</span><br>x = paInput;<br><span class="hljs-comment">% x = txData1;</span><br><span class="hljs-comment">% x = paInput_40MHZ;</span><br>x = x(:);<br>xLength = <span class="hljs-built_in">length</span>(x);<br><span class="hljs-comment">%使用前半部分数据用于参数提取，后半部分数据用于模型验证</span><br>half = <span class="hljs-built_in">round</span>(xLength/<span class="hljs-number">2</span>);<br><br><span class="hljs-comment">% y = (2 : 7);</span><br>y = paOutput;<br><span class="hljs-comment">% y = tout;</span><br><span class="hljs-comment">% y = paOutput_40MHZ;</span><br>y = y(:);<br>yLength = <span class="hljs-built_in">length</span>(y);<br><br><span class="hljs-comment">%将数据归一化</span><br><span class="hljs-comment">% x = x / abs(max(x));</span><br><span class="hljs-comment">% y = y / abs(max(y));</span><br><br>M = <span class="hljs-number">2</span>;<br>K = <span class="hljs-number">8</span>;<br><br><span class="hljs-comment">%计算PA系数矩阵，矩阵大小为（M*K*4+M） * 1</span><br><br><span class="hljs-comment">%使用前一半数据估计参数，将数据归一化</span><br>XcoefPA = x(<span class="hljs-number">1</span>:half) / <span class="hljs-built_in">abs</span> ( <span class="hljs-built_in">max</span>(x(<span class="hljs-number">1</span>:half)) );  <br>YcoefPA = y(<span class="hljs-number">1</span>:half) / <span class="hljs-built_in">abs</span> ( <span class="hljs-built_in">max</span>(y(<span class="hljs-number">1</span>:half)) );  <br><br><span class="hljs-comment">% XcoefPA = x(1:half);  </span><br><span class="hljs-comment">% YcoefPA = y(1:half);  </span><br><br><span class="hljs-comment">%去除多余数据</span><br>YcoefPA = YcoefPA(M+<span class="hljs-number">1</span>:half) ;                   <span class="hljs-comment">%经过处理后，数据去除掉前M个</span><br>coefPA = MatrixDeal(XcoefPA,M,K) \ YcoefPA;<br><br><span class="hljs-comment">%最小二乘算法</span><br><span class="hljs-comment">% coefPA  = inv( (XcoefPA&#x27;) *XcoefPA ) * (XcoefPA&#x27;) * YcoefPA;</span><br><span class="hljs-comment">% coefPA  = ( (XcoefPA&#x27;) *XcoefPA ) \ (XcoefPA&#x27;) * YcoefPA;</span><br><br><span class="hljs-comment">%带入验证PA模型输出，矩阵大小为xLength*1</span><br>XmodelPA = x(half:xLength) / <span class="hljs-built_in">abs</span> ( <span class="hljs-built_in">max</span>(x(half:xLength)) );      <span class="hljs-comment">%使用后一半的数据验证模型，将数据归一化</span><br>YmodelPA = y(half:xLength) / <span class="hljs-built_in">abs</span> ( <span class="hljs-built_in">max</span>(y(half:xLength)) ); <br><br><span class="hljs-comment">% XmodelPA = x(half:xLength);      %使用后一半的数据验证模型，将数据归一化</span><br><span class="hljs-comment">% YmodelPA = y(half:xLength); </span><br><br>YmodelFitPA = MatrixDeal(XmodelPA,M,K) * coefPA;   <span class="hljs-comment">%计算模型输出（输出后的数据减少前M个）</span><br><br><span class="hljs-comment">%去除多余数据</span><br>XmodelPA = XmodelPA(M+<span class="hljs-number">1</span>:<span class="hljs-built_in">length</span>(XmodelPA));<br>YmodelPA = YmodelPA(M+<span class="hljs-number">1</span>:<span class="hljs-built_in">length</span>(YmodelPA));<br><br><span class="hljs-comment">%通过归一化均方误差衡量功放的建模精度</span><br>NMSE = <span class="hljs-number">10</span> * <span class="hljs-built_in">log10</span>( sum ( (<span class="hljs-built_in">abs</span>(YmodelPA - YmodelFitPA)).^<span class="hljs-number">2</span> ) / sum ( (<span class="hljs-built_in">abs</span>(YmodelPA)).^<span class="hljs-number">2</span> ) ) ;<br><br><span class="hljs-comment">%计算未线性化的EVM</span><br>EVM_withoutDPD = <span class="hljs-built_in">sqrt</span> (  sum ( (<span class="hljs-built_in">abs</span>(YmodelPA - XmodelPA)).^<span class="hljs-number">2</span> ) / sum ( (<span class="hljs-built_in">abs</span>(XmodelPA)).^<span class="hljs-number">2</span>) ) * <span class="hljs-number">100</span> ;<br><span class="hljs-built_in">disp</span>([<span class="hljs-string">&#x27;The EVM_withoutDPD is &#x27;</span> num2str(EVM_withoutDPD) <span class="hljs-string">&#x27;%&#x27;</span>]);<br><br><span class="hljs-comment">%绘图</span><br>paCharPlot(XmodelPA,YmodelPA,YmodelFitPA,<span class="hljs-string">&#x27;AM/AM&#x27;</span>);<br><span class="hljs-comment">% paCharPlot(XmodelPA,YmodelPA,XmodelPA,&#x27;AM/AM&#x27;);</span><br>paCharPlot(XmodelPA,YmodelPA,YmodelFitPA,<span class="hljs-string">&#x27;PM/AM&#x27;</span>);<br><span class="hljs-comment">% paCharPlot(XmodelPA,YmodelPA,YmodelFitPA,&#x27;Gain&#x27;);</span><br><br><br><span class="hljs-comment">%观察频谱</span><br><span class="hljs-comment">%sa = helperPACharPlotSpectrum([YmodelPA  YmodelFitPA],&#123;&#x27;Actual PA Output&#x27;, &#x27;Model PA Output&#x27;&#125;, sampleRate,testSignal);</span><br><br><span class="hljs-comment">%预失真器建立</span><br><br><span class="hljs-comment">%预失真器参数提取</span><br>XcoefDPD = x(<span class="hljs-number">1</span>:half) / <span class="hljs-built_in">abs</span> ( <span class="hljs-built_in">max</span>(x(<span class="hljs-number">1</span>:half)) );  <span class="hljs-comment">%使用前一半数据估计参数，将数据归一化</span><br>YcoefDPD = y(<span class="hljs-number">1</span>:half) / <span class="hljs-built_in">abs</span> ( <span class="hljs-built_in">max</span>(y(<span class="hljs-number">1</span>:half)) );  <br><br><span class="hljs-comment">% XcoefDPD = x(1:half);  %使用前一半数据估计参数，将数据归一化</span><br><span class="hljs-comment">% YcoefDPD = y(1:half);  </span><br><br>XcoefDPD = XcoefDPD(M+<span class="hljs-number">1</span>:half);                     <span class="hljs-comment">%将PA实际输入数据作为输出数据，取前一半数据</span><br>coefDPD = MatrixDeal(YcoefDPD,M,K) \ XcoefDPD;      <span class="hljs-comment">%计算得到DPD参数模型，与PA行为模型一致</span><br><br><span class="hljs-comment">%计算DPD模型输出</span><br>XmodelDPD = x(half:xLength) / <span class="hljs-built_in">abs</span> ( <span class="hljs-built_in">max</span>(x(half:xLength)) );         <span class="hljs-comment">%使用后一半数据进行DPD模型验证</span><br>YmodelDPD = y(half:xLength) / <span class="hljs-built_in">abs</span> ( <span class="hljs-built_in">max</span>(y(half:xLength)) ); <br><br><span class="hljs-comment">% XmodelDPD = x(half:xLength);         %使用后一半数据进行DPD模型验证</span><br><span class="hljs-comment">% YmodelDPD = y(half:xLength); </span><br><br>YmodelFitDPD = MatrixDeal(XmodelDPD,M,K) * coefDPD;  <span class="hljs-comment">%计算得到DPD输出（输出数据减少M个）</span><br><br><br><span class="hljs-comment">%去除多余数据</span><br><span class="hljs-comment">% %对比PA模型与DPD模型的非线性特性</span><br><span class="hljs-comment">% XmodelDPD = x(half+M:xLength,:);         %实际用于DPD模型验证的输入数据(去除前M个)</span><br><span class="hljs-comment">% YmodelDPD = y(half+M:yLength,:);         %实际的DPD模型的输出数据（去除前M个）</span><br><span class="hljs-comment">% paCharPlot(XmodelDPD,YmodelFitPA,YmodelFitDPD,&#x27;AM/AM&#x27;);</span><br><br><br><span class="hljs-comment">%将DPD模型输出，输入到PA模型中</span><br>Ylinear = MatrixDeal(YmodelFitDPD,M,K) * coefPA;<br><br><span class="hljs-comment">%计算误差向量幅度EVM</span><br>XDPDPA = XmodelDPD(M+M+<span class="hljs-number">1</span>:<span class="hljs-built_in">length</span>(XmodelDPD));<br>YDPDPA = YmodelDPD(M+M+<span class="hljs-number">1</span>:<span class="hljs-built_in">length</span>(YmodelDPD));<br><br>EVM_withDPD = <span class="hljs-built_in">sqrt</span> (  sum ( (<span class="hljs-built_in">abs</span>(Ylinear - XDPDPA)).^<span class="hljs-number">2</span> ) / sum ( (<span class="hljs-built_in">abs</span>(XDPDPA)).^<span class="hljs-number">2</span>) ) * <span class="hljs-number">100</span> ;<br><span class="hljs-built_in">disp</span>([<span class="hljs-string">&#x27;The EVM_withDPD is &#x27;</span> num2str(EVM_withDPD) <span class="hljs-string">&#x27;%&#x27;</span>]);<br><br><span class="hljs-comment">%绘图</span><br>paCharPlot(XDPDPA,YDPDPA,Ylinear,<span class="hljs-string">&#x27;AM/AM&#x27;</span>);<br><span class="hljs-comment">% % paCharPlot(XDPDPA,XDPDPA,Ylinear,&#x27;AM/AM&#x27;);</span><br>paCharPlot(XDPDPA,YDPDPA,Ylinear,<span class="hljs-string">&#x27;PM/AM&#x27;</span>);<br><span class="hljs-comment">% paCharPlot(XDPDPA,YDPDPA,Ylinear,&#x27;Gain&#x27;);</span><br><br><span class="hljs-comment">%邻信道功率比ACPR</span><br><span class="hljs-comment">%sa = helperPACharPlotSpectrum([YDPDPA  Ylinear],&#123;&#x27;Actual PA Output&#x27;, &#x27;with DPD Output&#x27;&#125;, sampleRate,testSignal);</span><br><br><br></code></pre></td></tr></table></figure>
+
+<h4 id="2、DVR模型-1"><a href="#2、DVR模型-1" class="headerlink" title="2、DVR模型"></a>2、DVR模型</h4><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br></pre></td><td class="code"><pre><code class="hljs matlab"><span class="hljs-comment">%本例使用NXP Airfast LDMOS Doherty PA，工作频率3.6-3.8 GHz，增益29 dB。</span><br><span class="hljs-comment">%带宽100MHZ</span><br><span class="hljs-comment">%采样率sampleRate = 860160000</span><br><span class="hljs-comment">%信号类型OFDM</span><br><span class="hljs-comment">%If testSignal is &quot;OFDM&quot;, this example uses a 5G-like OFDM waveform with 64-QAM modulated signals for each subcarrier.</span><br><span class="hljs-comment">% If testSignal is &quot;Tones&quot;, this example uses two tones at 1.8 MHz and 2.6 MHz, to test the intermodulation caused by the PA.</span><br><br><br>sampleRate = <span class="hljs-number">860160000</span>;<br><span class="hljs-comment">% sampleRate = 430080000;</span><br>testSignal = <span class="hljs-string">&#x27;OFDM&#x27;</span>;<br><br><span class="hljs-comment">%读取数据</span><br><span class="hljs-comment">% x = (0 : 5);</span><br>x = paInput;<br><span class="hljs-comment">% x = txData1;</span><br><span class="hljs-comment">% x = paInput_40MHZ;</span><br>x = x(:);<br>xLength = <span class="hljs-built_in">length</span>(x);<br><span class="hljs-comment">%使用前半部分数据用于参数提取，后半部分数据用于模型验证</span><br>half = <span class="hljs-built_in">round</span>(xLength/<span class="hljs-number">2</span>);<br><br><span class="hljs-comment">% y = (2 : 7);</span><br>y = paOutput;<br><span class="hljs-comment">% y = tout;</span><br><span class="hljs-comment">% y = paOutput_40MHZ;</span><br>y = y(:);<br>yLength = <span class="hljs-built_in">length</span>(y);<br><br><span class="hljs-comment">%将数据归一化</span><br><span class="hljs-comment">% x = x / abs(max(x));</span><br><span class="hljs-comment">% y = y / abs(max(y));</span><br><br><br><br>M = <span class="hljs-number">2</span>;<br>K = <span class="hljs-number">8</span>;<br><br><span class="hljs-comment">%计算PA系数矩阵，矩阵大小为（M*K*4+M） * 1</span><br><br><span class="hljs-comment">%使用前一半数据估计参数，将数据归一化</span><br>XcoefPA = x(<span class="hljs-number">1</span>:half) / <span class="hljs-built_in">abs</span> ( <span class="hljs-built_in">max</span>(x(<span class="hljs-number">1</span>:half)) );  <br>YcoefPA = y(<span class="hljs-number">1</span>:half) / <span class="hljs-built_in">abs</span> ( <span class="hljs-built_in">max</span>(y(<span class="hljs-number">1</span>:half)) );  <br><br><span class="hljs-comment">% XcoefPA = x(1:half);  </span><br><span class="hljs-comment">% YcoefPA = y(1:half);  </span><br><br><span class="hljs-comment">%去除多余数据</span><br>YcoefPA = YcoefPA(M+<span class="hljs-number">1</span>:half) ;                   <span class="hljs-comment">%经过处理后，数据去除掉前M个</span><br>coefPA = MatrixDeal_DVR(XcoefPA,M,K) \ YcoefPA;<br><br><span class="hljs-comment">%最小二乘算法</span><br><span class="hljs-comment">% coefPA  = inv( (XcoefPA&#x27;) *XcoefPA ) * (XcoefPA&#x27;) * YcoefPA;</span><br><span class="hljs-comment">% coefPA  = ( (XcoefPA&#x27;) *XcoefPA ) \ (XcoefPA&#x27;) * YcoefPA;</span><br><br><span class="hljs-comment">%带入验证PA模型输出，矩阵大小为xLength*1</span><br>XmodelPA = x(half:xLength) / <span class="hljs-built_in">abs</span> ( <span class="hljs-built_in">max</span>(x(half:xLength)) );      <span class="hljs-comment">%使用后一半的数据验证模型，将数据归一化</span><br>YmodelPA = y(half:xLength) / <span class="hljs-built_in">abs</span> ( <span class="hljs-built_in">max</span>(y(half:xLength)) ); <br><br><span class="hljs-comment">% XmodelPA = x(half:xLength);      %使用后一半的数据验证模型，将数据归一化</span><br><span class="hljs-comment">% YmodelPA = y(half:xLength); </span><br><br>YmodelFitPA = MatrixDeal_DVR(XmodelPA,M,K) * coefPA;   <span class="hljs-comment">%计算模型输出（输出后的数据减少前M个）</span><br><br><span class="hljs-comment">%去除多余数据</span><br>XmodelPA = XmodelPA(M+<span class="hljs-number">1</span>:<span class="hljs-built_in">length</span>(XmodelPA));<br>YmodelPA = YmodelPA(M+<span class="hljs-number">1</span>:<span class="hljs-built_in">length</span>(YmodelPA));<br><br><span class="hljs-comment">%通过归一化均方误差衡量功放的建模精度</span><br>NMSE = <span class="hljs-number">10</span> * <span class="hljs-built_in">log10</span>( sum ( (<span class="hljs-built_in">abs</span>(YmodelPA - YmodelFitPA)).^<span class="hljs-number">2</span> ) / sum ( (<span class="hljs-built_in">abs</span>(YmodelPA)).^<span class="hljs-number">2</span> ) ) ;<br><br><span class="hljs-comment">%计算未线性化的EVM</span><br>EVM_withoutDPD = <span class="hljs-built_in">sqrt</span> (  sum ( (<span class="hljs-built_in">abs</span>(YmodelPA - XmodelPA)).^<span class="hljs-number">2</span> ) / sum ( (<span class="hljs-built_in">abs</span>(XmodelPA)).^<span class="hljs-number">2</span>) ) * <span class="hljs-number">100</span> ;<br><span class="hljs-built_in">disp</span>([<span class="hljs-string">&#x27;The EVM_withoutDPD is &#x27;</span> num2str(EVM_withoutDPD) <span class="hljs-string">&#x27;%&#x27;</span>]);<br><br><span class="hljs-comment">%绘图</span><br>paCharPlot(XmodelPA,YmodelPA,YmodelFitPA,<span class="hljs-string">&#x27;AM/AM&#x27;</span>);<br><span class="hljs-comment">% paCharPlot(XmodelPA,YmodelPA,XmodelPA,&#x27;AM/AM&#x27;);</span><br>paCharPlot(XmodelPA,YmodelPA,YmodelFitPA,<span class="hljs-string">&#x27;PM/AM&#x27;</span>);<br><br><br><span class="hljs-comment">%观察频谱</span><br><span class="hljs-comment">%sa = helperPACharPlotSpectrum([YmodelPA  YmodelFitPA],&#123;&#x27;Actual PA Output&#x27;, &#x27;Model PA Output&#x27;&#125;, sampleRate,testSignal);</span><br><br><br><span class="hljs-comment">%预失真器建立</span><br><br><span class="hljs-comment">%预失真器参数提取</span><br>XcoefDPD = x(<span class="hljs-number">1</span>:half) / <span class="hljs-built_in">abs</span> ( <span class="hljs-built_in">max</span>(x(<span class="hljs-number">1</span>:half)) );  <span class="hljs-comment">%使用前一半数据估计参数，将数据归一化</span><br>YcoefDPD = y(<span class="hljs-number">1</span>:half) / <span class="hljs-built_in">abs</span> ( <span class="hljs-built_in">max</span>(y(<span class="hljs-number">1</span>:half)) );  <br><br><span class="hljs-comment">% XcoefDPD = x(1:half);  %使用前一半数据估计参数，将数据归一化</span><br><span class="hljs-comment">% YcoefDPD = y(1:half);  </span><br><br>XcoefDPD = XcoefDPD(M+<span class="hljs-number">1</span>:half);                     <span class="hljs-comment">%将PA实际输入数据作为输出数据，取前一半数据</span><br>coefDPD = MatrixDeal_DVR(YcoefDPD,M,K) \ XcoefDPD;      <span class="hljs-comment">%计算得到DPD参数模型，与PA行为模型一致</span><br><br><span class="hljs-comment">%计算DPD模型输出</span><br>XmodelDPD = x(half:xLength) / <span class="hljs-built_in">abs</span> ( <span class="hljs-built_in">max</span>(x(half:xLength)) );         <span class="hljs-comment">%使用后一半数据进行DPD模型验证</span><br>YmodelDPD = y(half:xLength) / <span class="hljs-built_in">abs</span> ( <span class="hljs-built_in">max</span>(y(half:xLength)) ); <br><br><span class="hljs-comment">% XmodelDPD = x(half:xLength);         %使用后一半数据进行DPD模型验证</span><br><span class="hljs-comment">% YmodelDPD = y(half:xLength); </span><br><br>YmodelFitDPD = MatrixDeal_DVR(XmodelDPD,M,K) * coefDPD;  <span class="hljs-comment">%计算得到DPD输出（输出数据减少M个）</span><br><br><br><span class="hljs-comment">%去除多余数据</span><br><span class="hljs-comment">% %对比PA模型与DPD模型的非线性特性</span><br><span class="hljs-comment">% XmodelDPD = x(half+M:xLength,:);         %实际用于DPD模型验证的输入数据(去除前M个)</span><br><span class="hljs-comment">% YmodelDPD = y(half+M:yLength,:);         %实际的DPD模型的输出数据（去除前M个）</span><br><span class="hljs-comment">% paCharPlot(XmodelDPD,YmodelFitPA,YmodelFitDPD,&#x27;AM/AM&#x27;);</span><br><br><br><span class="hljs-comment">%将DPD模型输出，输入到PA模型中</span><br>Ylinear = MatrixDeal_DVR(YmodelFitDPD,M,K) * coefPA;<br><br><span class="hljs-comment">%计算误差向量幅度EVM</span><br>XDPDPA = XmodelDPD(M+M+<span class="hljs-number">1</span>:<span class="hljs-built_in">length</span>(XmodelDPD));<br>YDPDPA = YmodelDPD(M+M+<span class="hljs-number">1</span>:<span class="hljs-built_in">length</span>(YmodelDPD));<br><br>EVM_withDPD = <span class="hljs-built_in">sqrt</span> (  sum ( (<span class="hljs-built_in">abs</span>(Ylinear - XDPDPA)).^<span class="hljs-number">2</span> ) / sum ( (<span class="hljs-built_in">abs</span>(XDPDPA)).^<span class="hljs-number">2</span>) ) * <span class="hljs-number">100</span> ;<br><span class="hljs-built_in">disp</span>([<span class="hljs-string">&#x27;The EVM_withDPD is &#x27;</span> num2str(EVM_withDPD) <span class="hljs-string">&#x27;%&#x27;</span>]);<br><br><span class="hljs-comment">%绘图</span><br>paCharPlot(XDPDPA,YDPDPA,Ylinear,<span class="hljs-string">&#x27;AM/AM&#x27;</span>);<br><span class="hljs-comment">% paCharPlot(XDPDPA,XDPDPA,Ylinear,&#x27;AM/AM&#x27;);</span><br>paCharPlot(XDPDPA,YDPDPA,Ylinear,<span class="hljs-string">&#x27;PM/AM&#x27;</span>);<br><br><span class="hljs-comment">%邻信道功率比ACPR</span><br><span class="hljs-comment">%sa = helperPACharPlotSpectrum([YDPDPA  Ylinear],&#123;&#x27;Actual PA Output&#x27;, &#x27;with DPD Output&#x27;&#125;, sampleRate,testSignal);</span><br><br><br></code></pre></td></tr></table></figure>
+
+<h4 id="3、MP模型"><a href="#3、MP模型" class="headerlink" title="3、MP模型"></a>3、MP模型</h4><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br></pre></td><td class="code"><pre><code class="hljs matlab"><span class="hljs-comment">% % 为了表征AM/AM传递函数，计算输入功率值范围内的平均输出功率。</span><br><span class="hljs-comment">% % 测量的单位是伏，总体阻抗为100欧姆，</span><br><span class="hljs-comment">% % 在发射器和接收器之间划分。</span><br><span class="hljs-comment">% % 将测量的基带样本转换为dBm的功率值。</span><br><span class="hljs-comment">% % +30 dB项用于dBW到dBm的转换，</span><br><span class="hljs-comment">% % -20 dB项用于100欧姆阻抗。</span><br><span class="hljs-comment">% </span><br><span class="hljs-comment">% %mag2db函数用于将振幅转换为dB </span><br><span class="hljs-comment">% %原始输入输出数据是复数，绝对值转换为功率</span><br><span class="hljs-comment">% paInputdBm  = mag2db(abs(paInput)) + 30 - 20;</span><br><span class="hljs-comment">% paOutputdBm  = mag2db(abs(paOutput)) + 30 - 20;</span><br><br><br><span class="hljs-comment">% modType = &#x27;memPoly&#x27;;</span><br><span class="hljs-comment">% </span><br><span class="hljs-comment">% memLen = 3;</span><br><span class="hljs-comment">% degLen = 5;</span><br><span class="hljs-comment">% </span><br><span class="hljs-comment">% numDataPts = length(paInput);</span><br><span class="hljs-comment">% halfDataPts = round(numDataPts/2);</span><br><span class="hljs-comment">% </span><br><span class="hljs-comment">% fitCoefMatMem = helperPACharMemPolyModel(&#x27;coefficientFinder&#x27;, paInput(1:halfDataPts),paOutput(1:halfDataPts),memLen,degLen,modType);</span><br><span class="hljs-comment">% </span><br><span class="hljs-comment">% disp(abs(fitCoefMatMem));</span><br><span class="hljs-comment">% </span><br><span class="hljs-comment">% rmsErrorTimeMem = helperPACharMemPolyModel(&#x27;errorMeasure&#x27;, paInput, paOutput, fitCoefMatMem, modType);</span><br><span class="hljs-comment">% </span><br><span class="hljs-comment">% disp([&#x27;Percent RMS error in time domain is &#x27; num2str(rmsErrorTimeMem) &#x27;%&#x27;]);</span><br><span class="hljs-comment">% paOutputFitMem = helperPACharMemPolyModel(&#x27;signalGenerator&#x27;,  paInput, fitCoefMatMem, modType);</span><br><span class="hljs-comment">%   </span><br><span class="hljs-comment">% helperPACharPlotTime(paOutput, paOutputFitMem, sampleRate);</span><br><span class="hljs-comment">% helperPACharPlotGain(paInput, paOutput, paOutputFitMem);</span><br><br><br><br><br><span class="hljs-comment">%本例使用NXP Airfast LDMOS Doherty PA，工作频率3.6-3.8 GHz，增益29 dB。</span><br><span class="hljs-comment">%带宽100MHZ</span><br><span class="hljs-comment">%采样率sampleRate = 860160000</span><br><span class="hljs-comment">%信号类型OFDM</span><br><span class="hljs-comment">%If testSignal is &quot;OFDM&quot;, this example uses a 5G-like OFDM waveform with 64-QAM modulated signals for each subcarrier.</span><br><span class="hljs-comment">% If testSignal is &quot;Tones&quot;, this example uses two tones at 1.8 MHz and 2.6 MHz, to test the intermodulation caused by the PA.</span><br><br><br>sampleRate = <span class="hljs-number">860160000</span>;<br><span class="hljs-comment">% sampleRate = 430080000;</span><br>testSignal = <span class="hljs-string">&#x27;OFDM&#x27;</span>;<br><br><span class="hljs-comment">%读取数据</span><br><span class="hljs-comment">% x = (0 : 5);</span><br>x = paInput;<br><span class="hljs-comment">% x = txData1;</span><br><span class="hljs-comment">% x = paInput_40MHZ;</span><br>x = x(:);<br>xLength = <span class="hljs-built_in">length</span>(x);<br><span class="hljs-comment">%使用前半部分数据用于参数提取，后半部分数据用于模型验证</span><br>half = <span class="hljs-built_in">round</span>(xLength/<span class="hljs-number">2</span>);<br><br><span class="hljs-comment">% y = (2 : 7);</span><br>y = paOutput;<br><span class="hljs-comment">% y = tout;</span><br><span class="hljs-comment">% y = paOutput_40MHZ;</span><br>y = y(:);<br>yLength = <span class="hljs-built_in">length</span>(y);<br><br><span class="hljs-comment">%将数据归一化</span><br><span class="hljs-comment">% x = x / abs(max(x));</span><br><span class="hljs-comment">% y = y / abs(max(y));</span><br><br>M = <span class="hljs-number">2</span>;<br>K = <span class="hljs-number">8</span>;<br><br><br><span class="hljs-comment">%使用前一半数据用于PA参数提取</span><br>XcoefPA = x(<span class="hljs-number">1</span>:half) / <span class="hljs-built_in">abs</span> ( <span class="hljs-built_in">max</span>(x(<span class="hljs-number">1</span>:half)) );  <br>YcoefPA = y(<span class="hljs-number">1</span>:half) / <span class="hljs-built_in">abs</span> ( <span class="hljs-built_in">max</span>(y(<span class="hljs-number">1</span>:half)) );  <br><br><span class="hljs-comment">% XcoefPA = x(1:half);  </span><br><span class="hljs-comment">% YcoefPA = y(1:half);  </span><br><br>YcoefPA = YcoefPA(M:half) ;                   <span class="hljs-comment">%经过处理后，数据去除掉前M个</span><br>coefPA = MatrixDeal_MP(XcoefPA,M,K) \ YcoefPA;<br><br><span class="hljs-comment">%使用后一半数据用于PA模型验证</span><br>XmodelPA = x(half:xLength) / <span class="hljs-built_in">abs</span> ( <span class="hljs-built_in">max</span>(x(half:xLength)) );      <span class="hljs-comment">%使用后一半的数据验证模型，将数据归一化</span><br>YmodelPA = y(half:xLength) / <span class="hljs-built_in">abs</span> ( <span class="hljs-built_in">max</span>(y(half:xLength)) ); <br><span class="hljs-comment">% XmodelPA = x(half:xLength);      %使用后一半的数据验证模型，将数据归一化</span><br><span class="hljs-comment">% YmodelPA = y(half:xLength); </span><br><br>YmodelFitPA = MatrixDeal_MP(XmodelPA,M,K) * coefPA;   <span class="hljs-comment">%计算模型输出（输出后的数据减少前M个）</span><br><br><span class="hljs-comment">%去除多余数据</span><br>XmodelPA = XmodelPA(M:<span class="hljs-built_in">length</span>(XmodelPA));<br>YmodelPA = YmodelPA(M:<span class="hljs-built_in">length</span>(YmodelPA));<br><br><span class="hljs-comment">%计算未线性化的EVM</span><br>EVM_withoutDPD = <span class="hljs-built_in">sqrt</span> (  sum ( (<span class="hljs-built_in">abs</span>(YmodelPA - XmodelPA)).^<span class="hljs-number">2</span> ) / sum ( (<span class="hljs-built_in">abs</span>(XmodelPA)).^<span class="hljs-number">2</span>) ) * <span class="hljs-number">100</span> ;<br><span class="hljs-built_in">disp</span>([<span class="hljs-string">&#x27;The EVM_withoutDPD is &#x27;</span> num2str(EVM_withoutDPD) <span class="hljs-string">&#x27;%&#x27;</span>]);<br><br><span class="hljs-comment">%计算NMSE</span><br>NMSE = <span class="hljs-number">10</span> * <span class="hljs-built_in">log10</span>( sum ( (<span class="hljs-built_in">abs</span>(YmodelPA - YmodelFitPA)).^<span class="hljs-number">2</span> ) / sum ( (<span class="hljs-built_in">abs</span>(YmodelPA)).^<span class="hljs-number">2</span> ) ) ;<br><br><span class="hljs-comment">%绘图</span><br>paCharPlot(XmodelPA,YmodelPA,YmodelFitPA,<span class="hljs-string">&#x27;AM/AM&#x27;</span>);<br>paCharPlot(XmodelPA,YmodelPA,YmodelFitPA,<span class="hljs-string">&#x27;PM/AM&#x27;</span>);<br><br><br><br><span class="hljs-comment">%使用前一半数据估计参数，将数据归一化</span><br>XcoefDPD = x(<span class="hljs-number">1</span>:half) / <span class="hljs-built_in">abs</span> ( <span class="hljs-built_in">max</span>(x(<span class="hljs-number">1</span>:half)) );  <span class="hljs-comment">%使用前一半数据估计参数，将数据归一化</span><br>YcoefDPD = y(<span class="hljs-number">1</span>:half) / <span class="hljs-built_in">abs</span> ( <span class="hljs-built_in">max</span>(y(<span class="hljs-number">1</span>:half)) );  <br><br><span class="hljs-comment">% XcoefDPD = x(1:half);  %使用前一半数据估计参数，将数据归一化</span><br><span class="hljs-comment">% YcoefDPD = y(1:half);  </span><br><br><br>XcoefDPD = XcoefDPD(M:half);                     <span class="hljs-comment">%将PA实际输入数据作为输出数据，取前一半数据</span><br>coefDPD = MatrixDeal_MP(YcoefDPD,M,K) \ XcoefDPD;      <span class="hljs-comment">%计算得到DPD参数模型，与PA行为模型一致</span><br><br><br><span class="hljs-comment">%模型验证</span><br>XmodelDPD = x(half:xLength) / <span class="hljs-built_in">abs</span> ( <span class="hljs-built_in">max</span>(x(half:xLength)) );         <span class="hljs-comment">%使用后一半数据进行DPD模型验证</span><br>YmodelDPD = y(half:xLength) / <span class="hljs-built_in">abs</span> ( <span class="hljs-built_in">max</span>(y(half:xLength)) ); <br><br><span class="hljs-comment">% XmodelDPD = x(half:xLength);         %使用后一半数据进行DPD模型验证</span><br><span class="hljs-comment">% YmodelDPD = y(half:xLength); </span><br><br>YmodelFitDPD = MatrixDeal_MP(XmodelDPD,M,K) * coefDPD;  <span class="hljs-comment">%计算得到DPD输出（输出数据减少M个）</span><br><br>Ylinear = MatrixDeal_MP(YmodelFitDPD,M,K) * coefPA;<br><br><span class="hljs-comment">%计算误差向量幅度EVM</span><br>XDPDPA = XmodelDPD(M+M<span class="hljs-number">-1</span>:<span class="hljs-built_in">length</span>(XmodelDPD));<br>YDPDPA = YmodelDPD(M+M<span class="hljs-number">-1</span>:<span class="hljs-built_in">length</span>(YmodelDPD));<br><br>EVM_withDPD = <span class="hljs-built_in">sqrt</span> (  sum ( (<span class="hljs-built_in">abs</span>(Ylinear - XDPDPA)).^<span class="hljs-number">2</span> ) / sum ( (<span class="hljs-built_in">abs</span>(XDPDPA)).^<span class="hljs-number">2</span>) ) * <span class="hljs-number">100</span> ;<br><span class="hljs-built_in">disp</span>([<span class="hljs-string">&#x27;The EVM_withDPD is &#x27;</span> num2str(EVM_withDPD) <span class="hljs-string">&#x27;%&#x27;</span>]);<br><br><span class="hljs-comment">%绘图</span><br>paCharPlot(XDPDPA,YDPDPA,Ylinear,<span class="hljs-string">&#x27;AM/AM&#x27;</span>);<br>paCharPlot(XDPDPA,YDPDPA,Ylinear,<span class="hljs-string">&#x27;PM/AM&#x27;</span>);<br><br><span class="hljs-comment">%邻信道功率比ACPR</span><br>sa = helperPACharPlotSpectrum([YDPDPA  Ylinear],&#123;<span class="hljs-string">&#x27;Actual PA Output&#x27;</span>, <span class="hljs-string">&#x27;with DPD Output&#x27;</span>&#125;, sampleRate,testSignal);<br><br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Matlab/" class="category-chain-item">Matlab</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Matlab/">#Matlab</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>毕设Matlab笔记</div>
+      <div>http://vinters-v.github.io/2023/06/26/毕设Matlab笔记/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Vinters-v</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年6月26日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/25/hello-world/" title="Hello World">
+                        <span class="hidden-mobile">Hello World</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
