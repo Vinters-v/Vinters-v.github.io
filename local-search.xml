@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>Microblze软核的概述</title>
+    <link href="/2023/07/08/Microblaze%E8%BD%AF%E6%A0%B8%E7%9A%84%E6%A6%82%E8%BF%B0/"/>
+    <url>/2023/07/08/Microblaze%E8%BD%AF%E6%A0%B8%E7%9A%84%E6%A6%82%E8%BF%B0/</url>
+    
+    <content type="html"><![CDATA[<p>对Microblaze软核作简单概述，列举软核开发流程</p><span id="more"></span><h1 id="Microblaze软核的概述"><a href="#Microblaze软核的概述" class="headerlink" title="Microblaze软核的概述"></a>Microblaze软核的概述</h1><p>FPGA(Field Programmable Gate Array)即现场可编程门列，属于可编程逻辑器件的一种。是当今实现数字系统的主流平台之一。</p><p>FPGA具有硬件可编程的特点，它的内部有大量的逻辑门组成，可以通过编程实现基本电路的之间的连接，从而构成各种数字电路模块，进而设计复杂的数字系统。</p><p>然而，FPGA在设计数字电路上具有优势，对于需要进行控制，或者需要程序串行运行的场合就显得笨拙。对此，通过在FPGA器件内部部署软处理器核来解决这个问题。这里介绍Microblaze软处理器核。</p><p>软处理器核简称“软核”，即处理器并不是固定在FPGA器件内部的 ，当需要使用处理器进行设计时，则使用FPGA的逻辑资源例化一个Microblaze软核，这样FPGA内部就有了一个CPU和其他可以自由配置的逻辑资源，CPU与逻辑电路在FPGA内部连接，使设计更加方便灵活。</p><p>MicroBlaze™ CPU 是嵌入式、可修改预置 32 位 &#x2F; 64 位 RISC 微处理器配置系列。系统设计者可在没有任何 FPGA 经验的情况下，利用 2019.2 中的 Vitis™ Core 开发套件或使用 2019.1 或更早版本中基于 Eclipse 的 Xilinx 软件开发套件 (SDK)，进行MicroBlaze 处理器的开发。</p><p>这里采用的Vivado版本为2081.3，使用SDK进行Microblaze软核的开发。</p><p>开发的流程如下：</p><h2 id="1-添加Microblaze软处理器核"><a href="#1-添加Microblaze软处理器核" class="headerlink" title="1.添加Microblaze软处理器核"></a>1.添加Microblaze软处理器核</h2><h2 id="2-配置处理器必需的硬件如时钟产生模块，复位模块，存储器模块等。"><a href="#2-配置处理器必需的硬件如时钟产生模块，复位模块，存储器模块等。" class="headerlink" title="2.配置处理器必需的硬件如时钟产生模块，复位模块，存储器模块等。"></a>2.配置处理器必需的硬件如时钟产生模块，复位模块，存储器模块等。</h2><h2 id="3-添加设计所需要的IP核"><a href="#3-添加设计所需要的IP核" class="headerlink" title="3.添加设计所需要的IP核"></a>3.添加设计所需要的IP核</h2><p>Vivado提供了众多的IP核用于嵌入式开发，如GPIO控制器、串口UART、中断控制器、块RAM接口控制器、中央DMA控制器、ADC\DAC、IIC总线接口等等。</p><p>此外，对于自己设计的逻辑电路也可以配置为IP核，与Microblaze软处理器连接，实现处理器对电路的控制。</p><h2 id="4-进行管脚约束"><a href="#4-进行管脚约束" class="headerlink" title="4. 进行管脚约束"></a>4. 进行管脚约束</h2><h2 id="5-完成硬件设计，导出硬件设计文件"><a href="#5-完成硬件设计，导出硬件设计文件" class="headerlink" title="5.完成硬件设计，导出硬件设计文件"></a>5.完成硬件设计，导出硬件设计文件</h2><h2 id="6-进行SDK软件开发"><a href="#6-进行SDK软件开发" class="headerlink" title="6.进行SDK软件开发"></a>6.进行SDK软件开发</h2><h2 id="7-下载硬件设计到FPGA，调试软件代码"><a href="#7-下载硬件设计到FPGA，调试软件代码" class="headerlink" title="7.下载硬件设计到FPGA，调试软件代码"></a>7.下载硬件设计到FPGA，调试软件代码</h2>]]></content>
+    
+    
+    <categories>
+      
+      <category>FPGA</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>FPGA</tag>
+      
+      <tag>Verilog，Microblaze</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>FPGA常用基础模块</title>
     <link href="/2023/07/03/FPGA%E6%95%B0%E5%AD%97%E7%94%B5%E8%B7%AF%E5%B8%B8%E7%94%A8%E5%9F%BA%E7%A1%80%E6%A8%A1%E5%9D%97/"/>
     <url>/2023/07/03/FPGA%E6%95%B0%E5%AD%97%E7%94%B5%E8%B7%AF%E5%B8%B8%E7%94%A8%E5%9F%BA%E7%A1%80%E6%A8%A1%E5%9D%97/</url>
