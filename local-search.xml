@@ -4,6 +4,35 @@
   
   
   <entry>
+    <title>Microblze软核的应用（GPIO&amp;UART）</title>
+    <link href="/2023/07/09/Microblaze%E8%BD%AF%E6%A0%B8%E7%9A%84%E5%BA%94%E7%94%A8%EF%BC%88GPIO&amp;UART%EF%BC%89/"/>
+    <url>/2023/07/09/Microblaze%E8%BD%AF%E6%A0%B8%E7%9A%84%E5%BA%94%E7%94%A8%EF%BC%88GPIO&amp;UART%EF%BC%89/</url>
+    
+    <content type="html"><![CDATA[<p>介绍Microblaze软核开发的具体流程，以GPIO与UART外设为例。</p><span id="more"></span><h1 id="Microblaze软核的应用（GPIO-amp-UART）"><a href="#Microblaze软核的应用（GPIO-amp-UART）" class="headerlink" title="Microblaze软核的应用（GPIO&amp;UART）"></a>Microblaze软核的应用（GPIO&amp;UART）</h1><p>使用Vivado软件部署Microblaze软核，并添加GPIO外设与URAT外设，完成整个流程的设计与验证。</p><p>首先新建一个新的RTL工程，选择合适的FPGA器件，这里选择 ，不添加任何的设计文件。</p><h2 id="1-添加Microblaze软处理器核"><a href="#1-添加Microblaze软处理器核" class="headerlink" title="1.添加Microblaze软处理器核"></a>1.添加Microblaze软处理器核</h2><p>在Vivado软件界面，在左侧功能栏中，选择Create Block Design,新建一个BD设计文件。点击“+”，向BD设计中添加IP核，选择Microblaze，将软处理器核添加到设计。</p><p><img src="/img/article_img/Microblaze_GPIO/1.png"></p><h2 id="2-配置处理器必需的硬件如时钟产生模块，复位模块，存储器模块等。"><a href="#2-配置处理器必需的硬件如时钟产生模块，复位模块，存储器模块等。" class="headerlink" title="2.配置处理器必需的硬件如时钟产生模块，复位模块，存储器模块等。"></a>2.配置处理器必需的硬件如时钟产生模块，复位模块，存储器模块等。</h2><p>添加时钟产生模块Clocking Wizard,根据开发板的手册选择输入时钟的频率，输入时钟的频率要与开发板外部时钟源频率一致。模块的复位端口reset默认为高电平有效，一般修改为低电平有效，根据设计需要设置输出时钟的个数和频率大小。</p><p><img src="/img/article_img/Microblaze_GPIO/2.png"></p><p>时钟模块添加后，点击BD设计文件上方的Run Block Automain，软件自动生成处理器必须的外围电路模块，并完成一部分连线。</p><h2 id="3-添加设计所需要的IP核"><a href="#3-添加设计所需要的IP核" class="headerlink" title="3.添加设计所需要的IP核"></a>3.添加设计所需要的IP核</h2><p>添加AXI GPIO模块，同一种用途的IO可以添加一组GPIO，例如，用于LED的IO添加一组GPIO_0，用于按钮开关的添加一组GPIO_1。设置每一组GPIO的输出位数，也就是IO个数。还有数据的输入输出方向。需要用到中断时，则可以是能中断。</p><p><img src="/img/article_img/Microblaze_GPIO/3.png"></p><p>添加AXI Uartlite模块，一般只需要设置波特率即可。</p><p><img src="/img/article_img/Microblaze_GPIO/4.png"></p><p>所有IP核添加完成后，点击BD设计文件上方的Run Connection Automation进行模块之间的自动连接。</p><p>设计完成后点击Validate Design按钮对设计进行检查，没有error即可。</p><h2 id="4-进行管脚约束"><a href="#4-进行管脚约束" class="headerlink" title="4. 进行管脚约束"></a>4. 进行管脚约束</h2><p>对系统中的时钟，复位，以及需要的其他外设的接口进行管脚约束文件的编写，一般直接在Constrains文件中新建约束文件编写代码即可。</p><h2 id="5-完成硬件设计，导出硬件设计文件"><a href="#5-完成硬件设计，导出硬件设计文件" class="headerlink" title="5.完成硬件设计，导出硬件设计文件"></a>5.完成硬件设计，导出硬件设计文件</h2><p>与FPGA中逻辑设计的步骤相同，对硬件设计依次进行综合、实现、比特流文件生成。则完成了硬件电路的设计。</p><p>选择File-&gt;Export-&gt;Export Hardware，导入硬件设计文件，勾选include bitstream。</p><p><img src="/img/article_img/Microblaze_GPIO/5.png"></p><h2 id="6-进行SDK软件开发"><a href="#6-进行SDK软件开发" class="headerlink" title="6.进行SDK软件开发"></a>6.进行SDK软件开发</h2><p>选择File-&gt;Launch SDK，连接到SDK软件，软件会自动添加好刚刚设计好并导出的硬件信息。</p><p>在进行SDK软件开发时，有两种方法。</p><p>一是，选择File-&gt;New-&gt;Application Project，新建一个新的应用工程，采用hello world模板，这个模板是包含了最简单的代码结构。对于自己设计封装的IP核，只能采用这种方式。</p><p>二是，进入system.mss文件，这个文件包含了硬件所支持的开发包，对于每一个添加系统中的IP核，如GPIO，UART等等，都会有一个说明文件Documention与例程文件。对于Vivado中自带的IP核，可以直接导入例程文件Import Examples，在此基础上进行软件开发。</p><p><img src="/img/article_img/Microblaze_GPIO/6.png"></p><h2 id="7-下载硬件设计到FPGA，调试软件代码"><a href="#7-下载硬件设计到FPGA，调试软件代码" class="headerlink" title="7.下载硬件设计到FPGA，调试软件代码"></a>7.下载硬件设计到FPGA，调试软件代码</h2><p>完成软件设计后，连接FPGA，首先点击Program FPGA，将硬件设计下载到FPGA中。然后在应用工程总的文件夹上右键，选择Run As-&gt;Launch on Hardware(System Debugger)将软件代码下载到CPU中，进行软件代码的调试。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>FPGA</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>FPGA</tag>
+      
+      <tag>Verilog</tag>
+      
+      <tag>Microblaze</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Microblze软核的概述</title>
     <link href="/2023/07/08/Microblaze%E8%BD%AF%E6%A0%B8%E7%9A%84%E6%A6%82%E8%BF%B0/"/>
     <url>/2023/07/08/Microblaze%E8%BD%AF%E6%A0%B8%E7%9A%84%E6%A6%82%E8%BF%B0/</url>
