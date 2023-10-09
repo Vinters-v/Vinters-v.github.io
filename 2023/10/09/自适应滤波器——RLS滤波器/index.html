@@ -16,16 +16,16 @@
   <meta name="author" content="Vinters-v">
   <meta name="keywords" content="">
   
-    <meta name="description" content="简单介绍离散傅里叶变换与其快速算法的原理">
+    <meta name="description" content="简单介绍RLS滤波器的原理">
 <meta property="og:type" content="article">
-<meta property="og:title" content="数字信号处理之傅里叶变换">
-<meta property="og:url" content="http://vinters-v.github.io/2023/08/10/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2/index.html">
+<meta property="og:title" content="自适应滤波器——RLS滤波器">
+<meta property="og:url" content="http://vinters-v.github.io/2023/10/09/%E8%87%AA%E9%80%82%E5%BA%94%E6%BB%A4%E6%B3%A2%E5%99%A8%E2%80%94%E2%80%94RLS%E6%BB%A4%E6%B3%A2%E5%99%A8/index.html">
 <meta property="og:site_name" content="Vinters-v">
-<meta property="og:description" content="简单介绍离散傅里叶变换与其快速算法的原理">
+<meta property="og:description" content="简单介绍RLS滤波器的原理">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://vinters-v.github.io/img/blog_img/DSP.png">
-<meta property="article:published_time" content="2023-08-10T11:02:17.462Z">
-<meta property="article:modified_time" content="2023-09-19T08:20:57.403Z">
+<meta property="article:published_time" content="2023-10-09T09:02:34.059Z">
+<meta property="article:modified_time" content="2023-10-09T11:00:15.703Z">
 <meta property="article:author" content="Vinters-v">
 <meta property="article:tag" content="DSP">
 <meta name="twitter:card" content="summary_large_image">
@@ -33,7 +33,7 @@
   
   
   
-  <title>数字信号处理之傅里叶变换 - Vinters-v</title>
+  <title>自适应滤波器——RLS滤波器 - Vinters-v</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -211,7 +211,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="数字信号处理之傅里叶变换"></span>
+            <span id="subtitle" data-typed-text="自适应滤波器——RLS滤波器"></span>
           
         </div>
 
@@ -222,8 +222,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-08-10 19:02" pubdate>
-          2023年8月10日 晚上
+        <time datetime="2023-10-09 17:02" pubdate>
+          2023年10月9日 下午
         </time>
       </span>
     
@@ -234,7 +234,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.8k 字
+          2k 字
         
       </span>
     
@@ -287,62 +287,55 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">数字信号处理之傅里叶变换</h1>
+            <h1 style="display: none">自适应滤波器——RLS滤波器</h1>
             
             
               <div class="markdown-body">
                 
-                <p>简单介绍离散傅里叶变换与其快速算法的原理</p>
+                <p>简单介绍RLS滤波器的原理</p>
 <span id="more"></span>
 
-<h1 id="数字信号处理之傅里叶变换"><a href="#数字信号处理之傅里叶变换" class="headerlink" title="数字信号处理之傅里叶变换"></a>数字信号处理之傅里叶变换</h1><p>有限长序列在数字信号处理中是很重要的一种序列，研究有限长序列的一种有用的工具是离散傅里叶变换（DFT）。</p>
-<p>离散傅里叶变换是有限长序列的一种傅里叶表示法，在理论上十分重要。而且存在计算离散傅里叶变换的有效快速算法，即快速傅里叶变换（FFT）。</p>
-<h2 id="离散傅里叶变换"><a href="#离散傅里叶变换" class="headerlink" title="离散傅里叶变换"></a>离散傅里叶变换</h2><p>离散傅里叶变换在时域和频域都是离散的，DFT的变换对为：<br>$$<br>X(k) &#x3D; \sum_{n&#x3D;0}^{N-1} x(n)W_N^{nk} \qquad k&#x3D;0,1,2,\cdots,N-1<br>$$</p>
-<p>$$<br>x(n) &#x3D; \frac{1}{N} \sum_{k&#x3D;0}^{N-1}X(k)W_N^{-nk}  \qquad n&#x3D;0,1,2,\cdots,N-1<br>$$</p>
-<p>其中<br>$$<br>W_N &#x3D; e^{-j \frac{2\pi}{N}}<br>$$<br>时域抽样间隔为T时，频域周期$ \Omega_s &#x3D; 2\pi&#x2F;T $，时域周期为$ T_1 $时，频域抽样间隔为$ \Omega_1 &#x3D; 2\pi &#x2F; T_1 $。</p>
-<h3 id="物理意义"><a href="#物理意义" class="headerlink" title="物理意义"></a>物理意义</h3><p>序列x(n)的n点DFT是x(n)的z变换在单位圆上的N点等间隔采样。是x(n)的傅里叶变换在区间$ [0,2\pi] $上的N点等间隔采样。</p>
-<h3 id="采样定理"><a href="#采样定理" class="headerlink" title="采样定理"></a>采样定理</h3><p>时域采样定理：当采样频率大于等于信号中最大频率分量的2倍时，可以由时域采样信号恢复原来的连续信号。</p>
-<p>频域采样定理：当采样点数N大于等于序列长度M时，可以由频域采样X(k)来表示X(z)，否则会发生混叠现象。</p>
-<h3 id="谱分析存在的问题"><a href="#谱分析存在的问题" class="headerlink" title="谱分析存在的问题"></a>谱分析存在的问题</h3><p>1.栅栏效应</p>
-<p>只能看见N个离散采样点的谱特性，看不到全部的频谱特性，由于栅栏效应，有可能漏掉大的频谱分量。可以采用在原序列尾部补零的方法，改变序列长度N（即该百年DFT变换区间长度），从而增加频域采样点数和采样点为止，使原来漏掉的某些频谱分量被检测出来。</p>
-<p>2.频率相应的混叠失真及参数选择</p>
-<p>根据时域抽样定理，抽样频率$ f_s &gt;2f_c $，否则会产生频率响应的混叠失真。对于DFT来说，抽样间隔为F，时域周期为$ T_p &#x3D; 1&#x2F;F $，F为频率分辨率，F越小，谱分析的结果就越接近原连续信号的频谱。</p>
-<p>当N保持不变，要提高谱的分辨率，必须降低$ f_s  $，但是受到时域采样定理的限制；当$ f_s $保持不变，为提高频率分辨率可以增加采样点数N。</p>
-<p>3.截断效应</p>
-<p>在持续时间无限长的信号中截取有限长个数据，就相当于在时域乘一个矩形窗函数，窗内的数据并不改变。时域中相乘，频域中相当于卷积，卷积的结果和原来的频谱不相同，有失真。这种失真最主要的是造成频谱的”扩散“，也就是所谓的”频谱泄漏“。并且泄露也会造成混叠。</p>
-<p>减小泄漏的方法，一方面是取更长的数据，也就是窗宽加宽；另一方面是数据不要突然截断，要缓慢截断，也就是不加矩形窗，而是加如三角形窗、升余弦窗等，使得窗谱的旁瓣能量更小，卷积后造成的泄漏减小。</p>
-<h2 id="快速傅里叶变换FFT"><a href="#快速傅里叶变换FFT" class="headerlink" title="快速傅里叶变换FFT"></a>快速傅里叶变换FFT</h2><p>直接按照离散傅里叶变换的定义计算N点DFT时，总计算量需要$ N(N-1) $次复数加法和$ N^2 $次复数乘法。</p>
-<h3 id="按时间抽取的基-2FFT算法"><a href="#按时间抽取的基-2FFT算法" class="headerlink" title="按时间抽取的基-2FFT算法"></a>按时间抽取的基-2FFT算法</h3><p>将原序列按n的奇偶分为两组，通过不断将N点DFT分解为N&#x2F;2点DFT，最后分解为最简单的2点DFT。</p>
-<h3 id="按频率抽取的基-2FFT算法"><a href="#按频率抽取的基-2FFT算法" class="headerlink" title="按频率抽取的基-2FFT算法"></a>按频率抽取的基-2FFT算法</h3><p>将原序列写成前后两部分，通过不断将N点DFT分解为N&#x2F;2点DFT，最后分解为最简单的2点DFT。</p>
-<p>两种算的计算量完全相同，具体计算原理和过程有所区别，这里省略详细的推导过程。</p>
-<h3 id="计算量分析"><a href="#计算量分析" class="headerlink" title="计算量分析"></a>计算量分析</h3><p>对于N点DFT，</p>
-<p>$ \log_2 N $级蝶形运算，每一级都由$ N&#x2F;2 $个蝶形运算构成。</p>
-<p>复数乘法：$ \frac{N}{2} \log_2N $</p>
-<p>复数加法：$ N\log_2 N $</p>
-<p>DFT与FFT计算量对比</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>DFT</th>
-<th>FFT</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>复数乘法</td>
-<td>$ N^2 $</td>
-<td>$ \frac{N}{2} \log_2N $</td>
-</tr>
-<tr>
-<td>复数加法</td>
-<td>$ N(N-1) $</td>
-<td>$ N\log_2 N $</td>
-</tr>
-</tbody></table>
-<h3 id="混合基FFT算法"><a href="#混合基FFT算法" class="headerlink" title="混合基FFT算法"></a>混合基FFT算法</h3><p>基-2FFT算法，需要满足$ N &#x3D; 2^L $的条件，因为需要经过多次分解，将N点DFT分解为多个2点DFT。</p>
-<p>当N不满足这个条件时，一般有一下方法：</p>
-<p>一方面，将序列x(n)使用补零的方法延长，使N增长到最近的$ N &#x3D; 2^L $的数值。因为有限长序列补零后并不影响其频谱，只是增加频谱的采样点数。因此，如果只是为了了解整个频谱而不是特定频率点，则可以使用这种方法。</p>
-<p>另一方面，如果要求特定频率点的频谱，则N不能改变，可以使用以任意数为基数的FFT算法。</p>
+<h1 id="RLS滤波器"><a href="#RLS滤波器" class="headerlink" title="RLS滤波器"></a>RLS滤波器</h1><h2 id="RLS自适应滤波器"><a href="#RLS自适应滤波器" class="headerlink" title="RLS自适应滤波器"></a>RLS自适应滤波器</h2><p><strong>线性方程组解的形式：</strong></p>
+<p>具有N个方程M个未知量的线性方程组表示成矩阵形式：$ Ax &#x3D; b $ </p>
+<p>如果$M&#x3D;N$，且矩阵A可逆，则该线性方程组为<strong>适定方程组</strong>,则可确定一个满足该方程组的唯一解：$ x &#x3D; A^{-1}b $</p>
+<p>如果$M &lt; N$，$A$是一“高矩阵”，且设矩阵A是列满秩的，则称线性方程组为<strong>超定线性方程组</strong>。此时该线性方程组无解。可找到一个$\hat{x}$，使得估计误差向量在某种意义下取得极小值。$ e &#x3D; A\hat{x} - b $</p>
+<p>在最小二乘（LS，Least Squares）意义下，使估计误差的模的平方和取得极小值，所得到的解称为最小二乘解，记作$ \hat{x}_{LS} $</p>
+<p>$ \hat{x}_{LS} &#x3D; (A^TA)^{-1} A^T b $</p>
+<p>如果$M &lt; N$，$A$是一“扁矩阵”， 且设矩阵A是行满秩的，则称线性方程组为<strong>欠定线性方程组</strong>。此时该线性方程组有无穷多个解。</p>
+<p>在最小范数（minimum norm）意义下，可以确定唯一解$ \hat{x}_{F} &#x3D; A^T (AA^T)^{-1} b $</p>
+<p>求解最小二乘解的方法：</p>
+<p>定义代价函数为误差信号的模的平方和：$ J &#x3D; \sum_{n &#x3D; M}^{N} |e(n)|^2 &#x3D; e^Te$</p>
+<p>求$J$关于$w$的梯度，$ \nabla_j  &#x3D; 0$，得到$ w &#x3D; (A^TA)^{-1} A^T b $</p>
+<p>![4](D:\Software\Hexo\Hexo\hexo-blog0\source\img\article_img\Digital Filter\4.png)</p>
+<p><strong>递归最小二乘算法</strong></p>
+<p>加权最小二乘：$ \zeta(n) &#x3D; \sum_{i&#x3D;1}^{n} \lambda^{n-i}|e(i)|^2 $</p>
+<p>考虑到输入噪声的影响，尤其是在n&#x3D;0时的影响，可采用如下正则化处理：</p>
+<p>$ \zeta(n) &#x3D; \sum_{i&#x3D;1}^{n} \lambda^{n-i}|e(i)|^2 + \delta \lambda^n ||\hat(w(n))||^2 $</p>
+<p>$ R_x(n) &#x3D; \sum_{i&#x3D;1}^{n} \lambda^{n-1} x(i)x(i)^H + \delta \lambda^n I $</p>
+<p>$ r(n) &#x3D; \sum_{i&#x3D;1}^{n} \lambda^{n-1}  x(i)d^*(n) $</p>
+<p>将自相关和互相关矩阵重新表示：</p>
+<p>$ R_x(n) &#x3D; \lambda R_x(n-1) + x(n)x^H(n) $</p>
+<p>$ r(n) &#x3D; \lambda r(n-1) + x(n)d^*(n) $</p>
+<p>逆相关矩阵：$ P(n) &#x3D; R_x^{-1}(n) $</p>
+<p>增益矢量：$ k(n) $</p>
+<p>根据矩阵求逆引理，可以写出逆相关矩阵的递推公式：</p>
+<p>$ P(n) &#x3D; \lambda^{-1}P(n-1) - \lambda^{-1}k(n)x^H(n)P(n-1) $</p>
+<p>$ k(n) &#x3D; P(n)x(n) $</p>
+<p>则权系数更新的递推公式为：</p>
+<p>$ \hat{W(n)} &#x3D; R_x^{-1}(n) r(n) &#x3D; P(n)r(n) $</p>
+<p>$ \hat{W(n)} &#x3D; \hat{W(n-1)} + k(n)\eta^*(n)$</p>
+<p>其中$\eta^*(n)$为先验误差：$\eta^*(n) &#x3D; d(n) - \hat{w^H(n-1)}x(n)$</p>
+<p>写出后验误差：$ e(n) &#x3D; d(n) - \hat{w^H(n)}x(n) $</p>
+<p>则收敛因子为：$ \gamma(n) &#x3D; \frac{e(n)}{\eta(n)} &#x3D; 1 - k^H(n)x(n)$</p>
+<p>当收敛因子等于1时，即先验误差等于后验误差时，滤波器的权系数达到稳定。</p>
+<p>一般取初始条件：$ \hat{w(0)} &#x3D; 0  P(0) &#x3D; \delta^{-1}I$</p>
+<p>参数选择：</p>
+<p>遗忘因子$\lambda $：接近1但小于1的正常数，$0.95&lt;λ&lt;1$。$λ&#x3D;1$即平稳输入，无限记忆；输入过程的非平稳程度越严重， 则$λ$越小。 </p>
+<p>正则化参数$δ$：$ \alpha_{\mu}^2 \mu^{\alpha} $   $ \mu &#x3D; 1- \lambda $  $\alpha_{\mu}^2  $为输入过程方差</p>
+<p><strong>RLS算法的收敛性：</strong></p>
+<p>RLS算法约经过$n&#x3D;2M$次迭代，即可使均方误差达到最小误差的1.5倍，而LMS算法达此水平至少需20M次迭代。 因此，RLS比LMS至少快一个数量级。 </p>
+<p>若n趋于无限大，在不考虑量化误差的条件下，RLS算法无失调。而LMS始终存在与步长有关的失调。  </p>
+<p>RLS算法的主要问题之一是每次迭代中的计算量与阶数M的平方成正比。虽然比之最小二乘法(M的三次方成正比) 好，但比LMS算法(M成正比)要差。</p>
 
                 
               </div>
@@ -388,8 +381,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>数字信号处理之傅里叶变换</div>
-      <div>http://vinters-v.github.io/2023/08/10/数字信号处理之傅里叶变换/</div>
+      <div>自适应滤波器——RLS滤波器</div>
+      <div>http://vinters-v.github.io/2023/10/09/自适应滤波器——RLS滤波器/</div>
     </div>
     <div class="license-meta">
       
@@ -401,7 +394,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年8月10日</div>
+          <div>2023年10月9日</div>
         </div>
       
       
@@ -433,18 +426,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/08/22/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E5%AD%97%E6%BB%A4%E6%B3%A2%E5%99%A8/" title="数字信号处理之数字滤波器">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">数字信号处理之数字滤波器</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/07/19/Microblaze%E8%BD%AF%E6%A0%B8%E7%9A%84%E5%BA%94%E7%94%A8%EF%BC%88%E8%87%AA%E5%AE%9A%E4%B9%89IP_PWM%EF%BC%89/" title="Microblze软核的应用（自定义IP_PWM）">
-                        <span class="hidden-mobile">Microblze软核的应用（自定义IP_PWM）</span>
+                      <a href="/2023/10/09/%E8%87%AA%E9%80%82%E5%BA%94%E6%BB%A4%E6%B3%A2%E5%99%A8%E2%80%94%E2%80%94LMS%E6%BB%A4%E6%B3%A2%E5%99%A8/" title="自适应滤波器——LMS滤波器">
+                        <span class="hidden-mobile">自适应滤波器——LMS滤波器</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

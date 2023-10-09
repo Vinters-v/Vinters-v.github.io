@@ -16,16 +16,16 @@
   <meta name="author" content="Vinters-v">
   <meta name="keywords" content="">
   
-    <meta name="description" content="简单介绍离散傅里叶变换与其快速算法的原理">
+    <meta name="description" content="简单介绍维纳滤波器的原理">
 <meta property="og:type" content="article">
-<meta property="og:title" content="数字信号处理之傅里叶变换">
-<meta property="og:url" content="http://vinters-v.github.io/2023/08/10/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E5%82%85%E9%87%8C%E5%8F%B6%E5%8F%98%E6%8D%A2/index.html">
+<meta property="og:title" content="维纳滤波器">
+<meta property="og:url" content="http://vinters-v.github.io/2023/10/09/%E7%8E%B0%E4%BB%A3%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E2%80%94%E2%80%94%E7%BB%B4%E7%BA%B3%E6%BB%A4%E6%B3%A2%E5%99%A8/index.html">
 <meta property="og:site_name" content="Vinters-v">
-<meta property="og:description" content="简单介绍离散傅里叶变换与其快速算法的原理">
+<meta property="og:description" content="简单介绍维纳滤波器的原理">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://vinters-v.github.io/img/blog_img/DSP.png">
-<meta property="article:published_time" content="2023-08-10T11:02:17.462Z">
-<meta property="article:modified_time" content="2023-09-19T08:20:57.403Z">
+<meta property="article:published_time" content="2023-10-09T08:57:06.464Z">
+<meta property="article:modified_time" content="2023-10-09T09:00:54.366Z">
 <meta property="article:author" content="Vinters-v">
 <meta property="article:tag" content="DSP">
 <meta name="twitter:card" content="summary_large_image">
@@ -33,7 +33,7 @@
   
   
   
-  <title>数字信号处理之傅里叶变换 - Vinters-v</title>
+  <title>维纳滤波器 - Vinters-v</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -211,7 +211,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="数字信号处理之傅里叶变换"></span>
+            <span id="subtitle" data-typed-text="维纳滤波器"></span>
           
         </div>
 
@@ -222,8 +222,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-08-10 19:02" pubdate>
-          2023年8月10日 晚上
+        <time datetime="2023-10-09 16:57" pubdate>
+          2023年10月9日 下午
         </time>
       </span>
     
@@ -234,7 +234,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.8k 字
+          780 字
         
       </span>
     
@@ -287,62 +287,29 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">数字信号处理之傅里叶变换</h1>
+            <h1 style="display: none">维纳滤波器</h1>
             
             
               <div class="markdown-body">
                 
-                <p>简单介绍离散傅里叶变换与其快速算法的原理</p>
+                <p>简单介绍维纳滤波器的原理</p>
 <span id="more"></span>
 
-<h1 id="数字信号处理之傅里叶变换"><a href="#数字信号处理之傅里叶变换" class="headerlink" title="数字信号处理之傅里叶变换"></a>数字信号处理之傅里叶变换</h1><p>有限长序列在数字信号处理中是很重要的一种序列，研究有限长序列的一种有用的工具是离散傅里叶变换（DFT）。</p>
-<p>离散傅里叶变换是有限长序列的一种傅里叶表示法，在理论上十分重要。而且存在计算离散傅里叶变换的有效快速算法，即快速傅里叶变换（FFT）。</p>
-<h2 id="离散傅里叶变换"><a href="#离散傅里叶变换" class="headerlink" title="离散傅里叶变换"></a>离散傅里叶变换</h2><p>离散傅里叶变换在时域和频域都是离散的，DFT的变换对为：<br>$$<br>X(k) &#x3D; \sum_{n&#x3D;0}^{N-1} x(n)W_N^{nk} \qquad k&#x3D;0,1,2,\cdots,N-1<br>$$</p>
-<p>$$<br>x(n) &#x3D; \frac{1}{N} \sum_{k&#x3D;0}^{N-1}X(k)W_N^{-nk}  \qquad n&#x3D;0,1,2,\cdots,N-1<br>$$</p>
-<p>其中<br>$$<br>W_N &#x3D; e^{-j \frac{2\pi}{N}}<br>$$<br>时域抽样间隔为T时，频域周期$ \Omega_s &#x3D; 2\pi&#x2F;T $，时域周期为$ T_1 $时，频域抽样间隔为$ \Omega_1 &#x3D; 2\pi &#x2F; T_1 $。</p>
-<h3 id="物理意义"><a href="#物理意义" class="headerlink" title="物理意义"></a>物理意义</h3><p>序列x(n)的n点DFT是x(n)的z变换在单位圆上的N点等间隔采样。是x(n)的傅里叶变换在区间$ [0,2\pi] $上的N点等间隔采样。</p>
-<h3 id="采样定理"><a href="#采样定理" class="headerlink" title="采样定理"></a>采样定理</h3><p>时域采样定理：当采样频率大于等于信号中最大频率分量的2倍时，可以由时域采样信号恢复原来的连续信号。</p>
-<p>频域采样定理：当采样点数N大于等于序列长度M时，可以由频域采样X(k)来表示X(z)，否则会发生混叠现象。</p>
-<h3 id="谱分析存在的问题"><a href="#谱分析存在的问题" class="headerlink" title="谱分析存在的问题"></a>谱分析存在的问题</h3><p>1.栅栏效应</p>
-<p>只能看见N个离散采样点的谱特性，看不到全部的频谱特性，由于栅栏效应，有可能漏掉大的频谱分量。可以采用在原序列尾部补零的方法，改变序列长度N（即该百年DFT变换区间长度），从而增加频域采样点数和采样点为止，使原来漏掉的某些频谱分量被检测出来。</p>
-<p>2.频率相应的混叠失真及参数选择</p>
-<p>根据时域抽样定理，抽样频率$ f_s &gt;2f_c $，否则会产生频率响应的混叠失真。对于DFT来说，抽样间隔为F，时域周期为$ T_p &#x3D; 1&#x2F;F $，F为频率分辨率，F越小，谱分析的结果就越接近原连续信号的频谱。</p>
-<p>当N保持不变，要提高谱的分辨率，必须降低$ f_s  $，但是受到时域采样定理的限制；当$ f_s $保持不变，为提高频率分辨率可以增加采样点数N。</p>
-<p>3.截断效应</p>
-<p>在持续时间无限长的信号中截取有限长个数据，就相当于在时域乘一个矩形窗函数，窗内的数据并不改变。时域中相乘，频域中相当于卷积，卷积的结果和原来的频谱不相同，有失真。这种失真最主要的是造成频谱的”扩散“，也就是所谓的”频谱泄漏“。并且泄露也会造成混叠。</p>
-<p>减小泄漏的方法，一方面是取更长的数据，也就是窗宽加宽；另一方面是数据不要突然截断，要缓慢截断，也就是不加矩形窗，而是加如三角形窗、升余弦窗等，使得窗谱的旁瓣能量更小，卷积后造成的泄漏减小。</p>
-<h2 id="快速傅里叶变换FFT"><a href="#快速傅里叶变换FFT" class="headerlink" title="快速傅里叶变换FFT"></a>快速傅里叶变换FFT</h2><p>直接按照离散傅里叶变换的定义计算N点DFT时，总计算量需要$ N(N-1) $次复数加法和$ N^2 $次复数乘法。</p>
-<h3 id="按时间抽取的基-2FFT算法"><a href="#按时间抽取的基-2FFT算法" class="headerlink" title="按时间抽取的基-2FFT算法"></a>按时间抽取的基-2FFT算法</h3><p>将原序列按n的奇偶分为两组，通过不断将N点DFT分解为N&#x2F;2点DFT，最后分解为最简单的2点DFT。</p>
-<h3 id="按频率抽取的基-2FFT算法"><a href="#按频率抽取的基-2FFT算法" class="headerlink" title="按频率抽取的基-2FFT算法"></a>按频率抽取的基-2FFT算法</h3><p>将原序列写成前后两部分，通过不断将N点DFT分解为N&#x2F;2点DFT，最后分解为最简单的2点DFT。</p>
-<p>两种算的计算量完全相同，具体计算原理和过程有所区别，这里省略详细的推导过程。</p>
-<h3 id="计算量分析"><a href="#计算量分析" class="headerlink" title="计算量分析"></a>计算量分析</h3><p>对于N点DFT，</p>
-<p>$ \log_2 N $级蝶形运算，每一级都由$ N&#x2F;2 $个蝶形运算构成。</p>
-<p>复数乘法：$ \frac{N}{2} \log_2N $</p>
-<p>复数加法：$ N\log_2 N $</p>
-<p>DFT与FFT计算量对比</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>DFT</th>
-<th>FFT</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>复数乘法</td>
-<td>$ N^2 $</td>
-<td>$ \frac{N}{2} \log_2N $</td>
-</tr>
-<tr>
-<td>复数加法</td>
-<td>$ N(N-1) $</td>
-<td>$ N\log_2 N $</td>
-</tr>
-</tbody></table>
-<h3 id="混合基FFT算法"><a href="#混合基FFT算法" class="headerlink" title="混合基FFT算法"></a>混合基FFT算法</h3><p>基-2FFT算法，需要满足$ N &#x3D; 2^L $的条件，因为需要经过多次分解，将N点DFT分解为多个2点DFT。</p>
-<p>当N不满足这个条件时，一般有一下方法：</p>
-<p>一方面，将序列x(n)使用补零的方法延长，使N增长到最近的$ N &#x3D; 2^L $的数值。因为有限长序列补零后并不影响其频谱，只是增加频谱的采样点数。因此，如果只是为了了解整个频谱而不是特定频率点，则可以使用这种方法。</p>
-<p>另一方面，如果要求特定频率点的频谱，则N不能改变，可以使用以任意数为基数的FFT算法。</p>
+<h1 id="维纳滤波器"><a href="#维纳滤波器" class="headerlink" title="维纳滤波器"></a>维纳滤波器</h1><h2 id="维纳滤波器-1"><a href="#维纳滤波器-1" class="headerlink" title="维纳滤波器"></a>维纳滤波器</h2><p>滤波器输出信号为：$ x(n) &#x3D; s(n) + v(n) $</p>
+<p>滤波器输出信号为：$ y(n) &#x3D; \hat{s}(n) &#x3D;\sum_{m} h(m)x(n-m) $</p>
+<p>误差为：$ e(n) &#x3D; s(n) - y(n) $</p>
+<p>维纳滤波器的分析思路就是在<strong>均方误差最小</strong>的前提下，求得系统的单位脉冲响应$ h(n) $或传递函数$ H(z) $，即代价函数$ J（n） $为最小均方误差。</p>
+<p>最小均方误差为：$ E(| e(n) |^2)_{min} $</p>
+<p><strong>正交原理</strong>：若使滤波器的均方误差达到最小， 则误差信号与输入信号正交。</p>
+<p>$ \nabla_k {J(n)} &#x3D; 0 $           $ E(x^*(n-k)e_{opt}(n)) &#x3D; 0 $</p>
+<p>将误差信号使用输出信号和参考信号表示，得到<strong>维纳-霍夫方程</strong>。</p>
+<p>$ r_{xd}(k) &#x3D; \sum_{i&#x3D;0}^{+\infty}h_{opt,i} r_{xx}(k-i) $</p>
+<p>$r_{xd}(k)  r_{xx}(k-i) $分别为输入信号与参考信号的互相关和输入信号的自相关。</p>
+<p><strong>FIR维纳滤波器的维纳-霍夫方程</strong>  </p>
+<p>当$ h(n) $是一个长度为$M $的因果序列时，FIR维纳滤波器的维纳-霍夫方程表述为$ r_{xd}(k) &#x3D; \sum_{i&#x3D;0}^{M-1}h(i) r_{xx}(k-i) $</p>
+<p>表达为矩阵形式：$ R_{xd} &#x3D; R_{xx}h $ </p>
+<p>得到：$ h &#x3D; R_{xx}^{-1} R_{xd} $</p>
+<p>维纳-霍夫自适应是单步算法，不需要反馈，并可用于解决以前的任何系统识别问题，逆系统辨识，噪声消除等。维纳-霍夫算法并不是实时的算法，该结构需要大量的计算。当$x(n)$和$s(n) $的统计特性发生变化，就需要重新计算滤波器，此时算法将失去跟踪功能。因此，在实时数学信号处理中，直接使用维纳-霍夫算法是不可行的。</p>
 
                 
               </div>
@@ -388,8 +355,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>数字信号处理之傅里叶变换</div>
-      <div>http://vinters-v.github.io/2023/08/10/数字信号处理之傅里叶变换/</div>
+      <div>维纳滤波器</div>
+      <div>http://vinters-v.github.io/2023/10/09/现代数字信号处理——维纳滤波器/</div>
     </div>
     <div class="license-meta">
       
@@ -401,7 +368,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年8月10日</div>
+          <div>2023年10月9日</div>
         </div>
       
       
@@ -433,9 +400,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/08/22/%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E4%B9%8B%E6%95%B0%E5%AD%97%E6%BB%A4%E6%B3%A2%E5%99%A8/" title="数字信号处理之数字滤波器">
+                      <a href="/2023/10/09/%E7%8E%B0%E4%BB%A3%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E2%80%94%E2%80%94%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/" title="卡尔曼滤波器">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">数字信号处理之数字滤波器</span>
+                        <span class="hidden-mobile">卡尔曼滤波器</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -443,8 +410,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/07/19/Microblaze%E8%BD%AF%E6%A0%B8%E7%9A%84%E5%BA%94%E7%94%A8%EF%BC%88%E8%87%AA%E5%AE%9A%E4%B9%89IP_PWM%EF%BC%89/" title="Microblze软核的应用（自定义IP_PWM）">
-                        <span class="hidden-mobile">Microblze软核的应用（自定义IP_PWM）</span>
+                      <a href="/2023/10/09/%E7%8E%B0%E4%BB%A3%E6%95%B0%E5%AD%97%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86%E2%80%94%E2%80%94%E5%8C%B9%E9%85%8D%E6%BB%A4%E6%B3%A2%E5%99%A8/" title="匹配滤波器">
+                        <span class="hidden-mobile">匹配滤波器</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
