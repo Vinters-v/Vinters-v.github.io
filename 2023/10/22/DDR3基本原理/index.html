@@ -16,24 +16,24 @@
   <meta name="author" content="Vinters-v">
   <meta name="keywords" content="">
   
-    <meta name="description" content="简单介绍RLS滤波器的原理">
+    <meta name="description" content="简单介绍DDR3的基本原理">
 <meta property="og:type" content="article">
-<meta property="og:title" content="自适应滤波器——RLS滤波器">
-<meta property="og:url" content="http://vinters-v.github.io/2023/10/09/%E8%87%AA%E9%80%82%E5%BA%94%E6%BB%A4%E6%B3%A2%E5%99%A8%E2%80%94%E2%80%94RLS%E6%BB%A4%E6%B3%A2%E5%99%A8/index.html">
+<meta property="og:title" content="DDR3基本原理">
+<meta property="og:url" content="http://vinters-v.github.io/2023/10/22/DDR3%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/index.html">
 <meta property="og:site_name" content="Vinters-v">
-<meta property="og:description" content="简单介绍RLS滤波器的原理">
+<meta property="og:description" content="简单介绍DDR3的基本原理">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://vinters-v.github.io/img/blog_img/DSP.png">
-<meta property="article:published_time" content="2023-10-09T09:02:34.059Z">
-<meta property="article:modified_time" content="2023-10-09T11:05:58.692Z">
+<meta property="og:image" content="http://vinters-v.github.io/img/blog_img/DDR3.jpg">
+<meta property="article:published_time" content="2023-10-22T09:07:46.170Z">
+<meta property="article:modified_time" content="2023-10-22T09:20:23.758Z">
 <meta property="article:author" content="Vinters-v">
-<meta property="article:tag" content="DSP">
+<meta property="article:tag" content="FPGA IC DDR3">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://vinters-v.github.io/img/blog_img/DSP.png">
+<meta name="twitter:image" content="http://vinters-v.github.io/img/blog_img/DDR3.jpg">
   
   
   
-  <title>自适应滤波器——RLS滤波器 - Vinters-v</title>
+  <title>DDR3基本原理 - Vinters-v</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -211,7 +211,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="自适应滤波器——RLS滤波器"></span>
+            <span id="subtitle" data-typed-text="DDR3基本原理"></span>
           
         </div>
 
@@ -222,8 +222,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-10-09 17:02" pubdate>
-          2023年10月9日 下午
+        <time datetime="2023-10-22 17:07" pubdate>
+          2023年10月22日 下午
         </time>
       </span>
     
@@ -234,7 +234,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.9k 字
+          2.4k 字
         
       </span>
     
@@ -287,55 +287,49 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">自适应滤波器——RLS滤波器</h1>
+            <h1 style="display: none">DDR3基本原理</h1>
             
             
               <div class="markdown-body">
                 
-                <p>简单介绍RLS滤波器的原理</p>
+                <p>简单介绍DDR3的基本原理</p>
 <span id="more"></span>
 
-<h1 id="RLS滤波器"><a href="#RLS滤波器" class="headerlink" title="RLS滤波器"></a>RLS滤波器</h1><h2 id="RLS自适应滤波器"><a href="#RLS自适应滤波器" class="headerlink" title="RLS自适应滤波器"></a>RLS自适应滤波器</h2><p><strong>线性方程组解的形式：</strong></p>
-<p>具有N个方程M个未知量的线性方程组表示成矩阵形式：$ Ax &#x3D; b $ </p>
-<p>如果$M&#x3D;N$，且矩阵A可逆，则该线性方程组为<strong>适定方程组</strong>,则可确定一个满足该方程组的唯一解：$ x &#x3D; A^{-1}b $</p>
-<p>如果$M &lt; N$，$A$是一“高矩阵”，且设矩阵A是列满秩的，则称线性方程组为<strong>超定线性方程组</strong>。此时该线性方程组无解。可找到一个$\hat{x}$，使得估计误差向量在某种意义下取得极小值。$ e &#x3D; A\hat{x} - b $</p>
-<p>在最小二乘（LS，Least Squares）意义下，使估计误差的模的平方和取得极小值，所得到的解称为最小二乘解，记作$ \hat{x}_{LS} $</p>
-<p>$ \hat{x}_{LS} &#x3D; (A^TA)^{-1} A^T b $</p>
-<p>如果$M &lt; N$，$A$是一“扁矩阵”， 且设矩阵A是行满秩的，则称线性方程组为<strong>欠定线性方程组</strong>。此时该线性方程组有无穷多个解。</p>
-<p>在最小范数（minimum norm）意义下，可以确定唯一解$ \hat{x}_{F} &#x3D; A^T (AA^T)^{-1} b $</p>
-<p>求解最小二乘解的方法：</p>
-<p>定义代价函数为误差信号的模的平方和：$ J &#x3D; \sum_{n &#x3D; M}^{N} |e(n)|^2 &#x3D; e^Te$</p>
-<p>求$J$关于$w$的梯度，$ \nabla_j  &#x3D; 0$，得到$ w &#x3D; (A^TA)^{-1} A^T b $</p>
-<p><img src="/img/article_img/Digital_Filter/4.png" srcset="/img/blog_img/loading.gif" lazyload></p>
-<p><strong>递归最小二乘算法</strong></p>
-<p>加权最小二乘：$ \zeta(n) &#x3D; \sum_{i&#x3D;1}^{n} \lambda^{n-i}|e(i)|^2 $</p>
-<p>考虑到输入噪声的影响，尤其是在n&#x3D;0时的影响，可采用如下正则化处理：</p>
-<p>$ \zeta(n) &#x3D; \sum_{i&#x3D;1}^{n} \lambda^{n-i}|e(i)|^2 + \delta \lambda^n ||\hat(w(n))||^2 $</p>
-<p>$ R_x(n) &#x3D; \sum_{i&#x3D;1}^{n} \lambda^{n-1} x(i)x(i)^H + \delta \lambda^n I $</p>
-<p>$ r(n) &#x3D; \sum_{i&#x3D;1}^{n} \lambda^{n-1}  x(i)d^*(n) $</p>
-<p>将自相关和互相关矩阵重新表示：</p>
-<p>$ R_x(n) &#x3D; \lambda R_x(n-1) + x(n)x^H(n) $</p>
-<p>$ r(n) &#x3D; \lambda r(n-1) + x(n)d^*(n) $</p>
-<p>逆相关矩阵：$ P(n) &#x3D; R_x^{-1}(n) $</p>
-<p>增益矢量：$ k(n) $</p>
-<p>根据矩阵求逆引理，可以写出逆相关矩阵的递推公式：</p>
-<p>$ P(n) &#x3D; \lambda^{-1}P(n-1) - \lambda^{-1}k(n)x^H(n)P(n-1) $</p>
-<p>$ k(n) &#x3D; P(n)x(n) $</p>
-<p>则权系数更新的递推公式为：</p>
-<p>$ \hat{W(n)} &#x3D; R_x^{-1}(n) r(n) &#x3D; P(n)r(n) $</p>
-<p>$ \hat{W(n)} &#x3D; \hat{W(n-1)} + k(n)\eta^*(n)$</p>
-<p>其中$\eta^*(n)$为先验误差：$\eta^*(n) &#x3D; d(n) - \hat{w^H(n-1)}x(n)$</p>
-<p>写出后验误差：$ e(n) &#x3D; d(n) - \hat{w^H(n)}x(n) $</p>
-<p>则收敛因子为：$ \gamma(n) &#x3D; \frac{e(n)}{\eta(n)} &#x3D; 1 - k^H(n)x(n)$</p>
-<p>当收敛因子等于1时，即先验误差等于后验误差时，滤波器的权系数达到稳定。</p>
-<p>一般取初始条件：$ \hat{w(0)} &#x3D; 0  P(0) &#x3D; \delta^{-1}I$</p>
-<p>参数选择：</p>
-<p>遗忘因子$\lambda $：接近1但小于1的正常数，$0.95&lt;λ&lt;1$。$λ&#x3D;1$即平稳输入，无限记忆；输入过程的非平稳程度越严重， 则$λ$越小。 </p>
-<p>正则化参数$δ$：$ \alpha_{\mu}^2 \mu^{\alpha} $   $ \mu &#x3D; 1- \lambda $  $\alpha_{\mu}^2  $为输入过程方差</p>
-<p><strong>RLS算法的收敛性：</strong></p>
-<p>RLS算法约经过$n&#x3D;2M$次迭代，即可使均方误差达到最小误差的1.5倍，而LMS算法达此水平至少需20M次迭代。 因此，RLS比LMS至少快一个数量级。 </p>
-<p>若n趋于无限大，在不考虑量化误差的条件下，RLS算法无失调。而LMS始终存在与步长有关的失调。  </p>
-<p>RLS算法的主要问题之一是每次迭代中的计算量与阶数M的平方成正比。虽然比之最小二乘法(M的三次方成正比) 好，但比LMS算法(M成正比)要差。</p>
+<h1 id="DDR3"><a href="#DDR3" class="headerlink" title="DDR3"></a>DDR3</h1><p>第三代双倍数据率同步动态随机存取存储器</p>
+<p>（Double-Data-Rate Three Synchronous Dynamic Random Access Memory，一般称为DDR3 SDRAM）</p>
+<p>DDR3是应用在计算机及电子产品领域的一种高带宽并行数据总线，属于SDRAM类存储器。</p>
+<p>DDR3，在时钟信号的上升沿和下降沿均传输数据，因此相比较SDR可以达到双倍的速率。</p>
+<h2 id="Prefrech技术："><a href="#Prefrech技术：" class="headerlink" title="Prefrech技术："></a>Prefrech技术：</h2><p>Prefetch 简单的说就是在一个<strong>内核时钟周期</strong>同时寻址多个存储单元并将这些数据以并行的方式统一传输到 IO Buffer 中，之后以更高的外传速度将 IO Buffer 中的数据传输出去。</p>
+<p><img src="/img/article_img/DDR3/DDR3_prefrech.png" srcset="/img/blog_img/loading.gif" lazyload></p>
+<p>这个寻址的单元个数称为预取数，DDR1 预取数为2，DDR2 预取数为4，DDR3预取数为8。在一个内部时钟周期内，DDR3要完成所有预取数据的向外传输。</p>
+<p>内核时钟为DDR3芯片内部进行逻辑处理的时钟（<strong>核心频率</strong>）</p>
+<p>还有另外一个时钟，是芯片的外部接口时钟，也就是clock管脚上的时钟频率（<strong>工作频率</strong>）</p>
+<p>数据在由buffer传输出去时，以外部时钟参考，在时钟上升沿、下降沿传输数据，因此数据的<strong>传输速率</strong>为工作频率的两倍。</p>
+<p><strong>三者的关系</strong>为：</p>
+<p>传输速率 &#x3D; 工作频率 * 2；</p>
+<p>核心频率 &#x3D; 传输频率 &#x2F; 预取数；</p>
+<h2 id="存储地址"><a href="#存储地址" class="headerlink" title="存储地址"></a>存储地址</h2><p>DDR3内部的存储结构，可以看作是由很多层二维存储阵列组成，称为Bank。</p>
+<p><img src="/img/article_img/DDR3/DDR3_bank.png" srcset="/img/blog_img/loading.gif" lazyload></p>
+<p>DDR3内部的Bank可以看做是一个NxN的一个阵列，B代表Bank编号，C代表列地址编号，R代表行地址编号。</p>
+<p>寻址的流程也就是先指定Bank地址，再指定行地址，然后指定列地址最终的确寻址单元。</p>
+<p>如果寻址命令是B1、R2、C6，就能确定地址是图中红格的位置。</p>
+<p>容量计算：Bank数量 * 行数 * 列数</p>
+<p>例如：MT41J128M8 的数据宽度是8位，每个bank有16k的行数，1k的列数，所以寻址空间是16k*1k&#x3D;16M，每个芯片有8个bank，所以单块芯片的容量是8 * (16k1k) *8bit&#x3D;1G bit。</p>
+<h2 id="tRCD"><a href="#tRCD" class="headerlink" title="tRCD"></a>tRCD</h2><p>在实际工作中，逻辑Bank地址与相应的行地址是同时发出的，此时这个命令称之为“行激活”（Row Active）。在此之后，将发送列地址寻址命令与具体的操作命令（是读还是写），这两个命令也是同时发出的，所以一般都会以“读&#x2F;写命令”来表示列寻址。根据相关的标准，从行有效到读&#x2F;写命令发出之间的间隔被定义为tRCD，即RAS to CAS Delay（RAS至CAS延迟，RAS就是行地址选通脉冲，CAS就是列地址选通脉冲）。</p>
+<p>tRCD是DDR的一个重要时序参数，广义的tRCD以核心时钟周期（tCK，Clock Time）数为单位，比如tRCD&#x3D;3，就代表延迟周期为两个时钟周期，具体到确切的时间，则要根据时钟频率而定。</p>
+<p><img src="/img/article_img/DDR3/DDR3_tRCD.png" srcset="/img/blog_img/loading.gif" lazyload></p>
+<p>上图是tRCD&#x3D;3的时序图，NOP&#x3D;Not Operation，表示无操作，灰色区域表示Don’t Care。</p>
+<h2 id="CL"><a href="#CL" class="headerlink" title="CL"></a>CL</h2><p>相关的列地址被选中以后，将会触发数据传输，但从存储单元中输出到真正出现在内存芯片的I&#x2F;O接口之间还需要一定的时间(数据触发本身就有延时，而且还需要进行信号放大)，这段时间就是列地址脉冲选通潜伏期(CAS Latency,CL)，CL的数值与tRCD一样，以时钟周期数表示。CL只针对读取操作有效。</p>
+<h2 id="tAC"><a href="#tAC" class="headerlink" title="tAC"></a>tAC</h2><p>由于芯片体积的原因，存储单元中的电容容量很小，所以信号要经过放大来保证其有效的识别性，这个放大&#x2F;驱动工作由Sense Amplifier负责，一个存储体对应一个Sense Amplifier通道。它要有一个准备时间才能保证信号的发送强度（事前还要进行电压比较以进行逻辑电平的判断）。</p>
+<p>从数据I&#x2F;O总线上有数据到数据输出之前的一个时钟上升沿开始，数据即已传向Sense Amplifier，也就是说此时数据已经被触发，经过一定的驱动时间最终传向数据I&#x2F;O总线进行输出，这段时间称为tAC（Access Time from CLK，时钟触发后的访问时间）。</p>
+<p><img src="/img/article_img/DDR3/DDR3_tAC.png" srcset="/img/blog_img/loading.gif" lazyload></p>
+<h2 id="突发长度"><a href="#突发长度" class="headerlink" title="突发长度"></a>突发长度</h2><p>突发（Burst）是指在同一行中相邻的存储单元连续进行数据传输的方式，连续传输的周期数就是突发长度（Burst Lengths，简称BL）。在进行突发传输时，只要指定起始列地址与突发长度，内存就会依次地自动对后面相应数量的存储单元进行读&#x2F;写操作而不再需要控制器连续地提供列地址。这样，除了第一组数据的传输需要若干个周期（主要是之前的延迟，一般的是tRCD+CL）外，其后每个数据只需一个周期的即可获得。</p>
+<p>DDR3 的 Burst Length 一般都是 8。</p>
+<p><img src="/img/article_img/DDR3/DDR3_BL.png" srcset="/img/blog_img/loading.gif" lazyload></p>
+<h2 id="tRP"><a href="#tRP" class="headerlink" title="tRP"></a>tRP</h2><p>在数据读取完之后，为了腾出读出放大器以供同一Bank内其他行的寻址并传输数据，内存芯片将进行预充电的操作来关闭当前工作行。从开始关闭现有的工作行，到可以打开新的工作行之间的间隔就是tRP（Row Precharge command Period，行预充电有效周期），单位也是时钟周期数。</p>
+<p>假设当前寻址的存储单元是B1、R2、C6。如果接下来的寻址命令是B1、R2、C4，则不用预充电，因为读出放大器正在为这一行服务。但如果地址命令是B1、R4、C4，由于是同一Bank的不同行，那么就必须要先把R2关闭，才能对R4寻址。</p>
+<h2 id="数据选取脉冲（DQS）"><a href="#数据选取脉冲（DQS）" class="headerlink" title="数据选取脉冲（DQS）"></a>数据选取脉冲（DQS）</h2><p>DQS 是DDR中的重要功能，它的功能主要用来在一个时钟周期内准确的区分出每个传输周期，并便于接收方准确接收数据。每一颗芯片都有一个DQS信号线，它是双向的，在写入时它用来传送由北桥发来的DQS信号，读取时，则由芯片生成DQS向北桥发送。可以说，它就是数据的同步信号。</p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/liujinggang/p/9782796.html">【接口时序】8、DDR3驱动原理与FPGA实现（一、DDR的基本原理） - jgliu - 博客园 (cnblogs.com)</a></p>
 
                 
               </div>
@@ -354,7 +348,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/DSP/" class="category-chain-item">DSP</a>
+  <a href="/categories/FPGA/" class="category-chain-item">FPGA</a>
   
   
 
@@ -369,7 +363,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/DSP/">#DSP</a>
+        <a href="/tags/FPGA-IC-DDR3/">#FPGA IC DDR3</a>
       
     </div>
   
@@ -381,8 +375,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>自适应滤波器——RLS滤波器</div>
-      <div>http://vinters-v.github.io/2023/10/09/自适应滤波器——RLS滤波器/</div>
+      <div>DDR3基本原理</div>
+      <div>http://vinters-v.github.io/2023/10/22/DDR3基本原理/</div>
     </div>
     <div class="license-meta">
       
@@ -394,7 +388,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年10月9日</div>
+          <div>2023年10月22日</div>
         </div>
       
       
@@ -426,18 +420,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/10/22/%E5%AD%98%E5%82%A8%E5%99%A8%E6%A6%82%E8%BF%B0/" title="存储器概述">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">存储器概述</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/10/09/%E8%87%AA%E9%80%82%E5%BA%94%E6%BB%A4%E6%B3%A2%E5%99%A8%E2%80%94%E2%80%94LMS%E6%BB%A4%E6%B3%A2%E5%99%A8/" title="自适应滤波器——LMS滤波器">
-                        <span class="hidden-mobile">自适应滤波器——LMS滤波器</span>
+                      <a href="/2023/10/22/%E5%AD%98%E5%82%A8%E5%99%A8%E6%A6%82%E8%BF%B0/" title="存储器概述">
+                        <span class="hidden-mobile">存储器概述</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
