@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>机器学习之极大似然估计</title>
+    <link href="/2024/03/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94%E6%9E%81%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1/"/>
+    <url>/2024/03/13/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94%E6%9E%81%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1/</url>
+    
+    <content type="html"><![CDATA[<p>简单介绍机器学习中极大似然估计的原理</p><span id="more"></span><h1 id="极大似然估计"><a href="#极大似然估计" class="headerlink" title="极大似然估计"></a>极大似然估计</h1><p>极大似然估计(Maximum Likelihood Estimation,简称MLE)，这是根据数据采样来估计概率分布参数的经典方法。</p><p>估计类条件概率的一种常用策略是先假定其具有某种确定的概率分布形式，再基于训练样本对概率分布的参数进行估计。</p><p>极大似然估计，说的是已知某个随机样本满足某种概率分布，但是其中具体的参数并不知道，参数估计就是通过若干次实验，观察其结果，利用结果推出参数的估计值。极大似然估计的思想就是：已知某个参数使这个样本出现的概率最大，那么就将这个参数作为参数估计的真实值。</p><h2 id="样本集"><a href="#样本集" class="headerlink" title="样本集"></a>样本集</h2><p>假设这些样本是独立同分布的，记为 D，为100次抽样的结果<br>$$<br>D &#x3D; x_1, x_2, x_3,\dots, x_{100}<br>$$</p><h2 id="联合概率"><a href="#联合概率" class="headerlink" title="联合概率"></a>联合概率</h2><p>$  \theta $ 为要估计的参数，参数$ \theta $与样本$D$互相影响</p><p>则联合概率$ P(D | \theta)$称为相对于样本空间$D &#x3D; x_1, x_2, x_3,\dots, x_{100} $关于$\theta $的似然函数<br>$$<br>\begin {split} l(\theta) &amp; &#x3D; P(D | \theta) \ &amp; &#x3D; P (x_1, x_2, x_3,\dots, x_{100}| \theta) \ &amp;&#x3D;  \prod_{i&#x3D;1}^{100} P(x_i| \theta) \end{split}<br>$$</p><h2 id="极大似然函数的估计值"><a href="#极大似然函数的估计值" class="headerlink" title="极大似然函数的估计值"></a>极大似然函数的估计值</h2><p>记$ \hat{\theta} &#x3D; x_1, x_2, x_3,\dots, x_{100}$为极大似然函数的估计值<br>$$<br>\begin {split} \hat{\theta} &amp;&#x3D;  argmax_{\theta}  l(\theta) \&amp; &#x3D; argmax_{\theta} \prod_{i&#x3D;1}^{n} P(x_i|\theta)\end{split}<br>$$</p><h2 id="推导"><a href="#推导" class="headerlink" title="推导"></a>推导</h2><p>求极大似然函数值，就是要求似然函数的导数，导数的极值点就是似然函数的最大值。</p><p>（此处要对似然函数取对数，因为连乘形式求导不方便，取对数之后变为连加形式）<br>$$<br>ln \frac{\partial l(\theta) }{ \partial \theta}  &#x3D; \sum_{i&#x3D;1}^{n} lnP(x_i | \theta)<br>$$<br>此时只需要知道联合概率函数$P$服从什么分布。</p><p>例如，在连续属性情形下，假设概率密度函数服从正态分布，即$ P(x_i|\theta) \sim N(\mu,\sigma^2) $</p><h2 id="求极大似然函数的一般步骤"><a href="#求极大似然函数的一般步骤" class="headerlink" title="求极大似然函数的一般步骤"></a>求极大似然函数的一般步骤</h2><ol><li>写出似然函数</li><li>对似然函数取对数</li><li>求导</li><li>解似然方程</li></ol>]]></content>
+    
+    
+    <categories>
+      
+      <category>算法</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>机器学习，算法</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>DDR3基本原理</title>
     <link href="/2023/10/22/DDR3%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/"/>
     <url>/2023/10/22/DDR3%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86/</url>
