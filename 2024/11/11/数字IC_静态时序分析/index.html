@@ -1,0 +1,785 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/blog_img/avatar_my.jpg">
+  <link rel="icon" href="/img/blog_img/avatar_my.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Vinters-v">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="静态时序分析基础">
+<meta property="og:type" content="article">
+<meta property="og:title" content="静态时序分析基础">
+<meta property="og:url" content="http://vinters-v.github.io/2024/11/11/%E6%95%B0%E5%AD%97IC_%E9%9D%99%E6%80%81%E6%97%B6%E5%BA%8F%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="Vinters-v">
+<meta property="og:description" content="静态时序分析基础">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://vinters-v.github.io/img/article_img/IC/IC.jpg">
+<meta property="article:published_time" content="2024-11-11T11:38:25.273Z">
+<meta property="article:modified_time" content="2024-11-11T12:22:34.498Z">
+<meta property="article:author" content="Vinters-v">
+<meta property="article:tag" content="IC DC">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://vinters-v.github.io/img/article_img/IC/IC.jpg">
+  
+  
+  
+  <title>静态时序分析基础 - Vinters-v</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"vinters-v.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/blog_img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Vinters-v</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/blog_img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="静态时序分析基础"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-11-11 19:38" pubdate>
+          2024年11月11日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.8k 字
+        
+      </span>
+    
+
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="padding-left: 2rem; margin-right: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">静态时序分析基础</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>静态时序分析基础</p>
+<span id="more"></span>
+
+<h1 id="静态时序分析"><a href="#静态时序分析" class="headerlink" title="静态时序分析"></a>静态时序分析</h1><p>静态时序分析是一种重要的逻辑验证方法，设计者通过静态时序分析结果来修改和优化逻辑，直到满足要求为止。在电路设计的各个阶段都需要进行静态时序分析。</p>
+<p><img src="/img/article_img/STA/STA%E5%9B%BE.png" srcset="/img/blog_img/loading.gif" lazyload></p>
+<p>静态时序分析可以不通过动态仿真就确定电路是否满足时间的约束。静态时序分析主要包括3个主要步骤。</p>
+<p>1）把设计分解成时间路径的集合；</p>
+<p>2）计算每一条路径的延迟；</p>
+<p>3）所有的路径延迟都要做检查，把它与时间的约束比较，看它们是否满足约束的要求。</p>
+<p>在进行综合时，DC用内建的静态时序分析工具Design Time来估算路径的延迟以指导优化，并用Design Time来产生时序报告。</p>
+<p>静态时序工具一般将时序路径分为4种。</p>
+<p><img src="/img/article_img/STA/%E6%97%B6%E5%BA%8F%E8%B7%AF%E5%BE%84%E5%88%86%E7%B1%BB.png" srcset="/img/blog_img/loading.gif" lazyload></p>
+<h2 id="建立时间、保持时间、亚稳态"><a href="#建立时间、保持时间、亚稳态" class="headerlink" title="建立时间、保持时间、亚稳态"></a>建立时间、保持时间、亚稳态</h2><p>建立时间和保持时间都是针对触发器的。</p>
+<p><img src="/img/article_img/STA/setuphold.png" srcset="/img/blog_img/loading.gif" lazyload></p>
+<p><strong>建立时间</strong>：指输入信号在时钟沿到来之前必须稳定保持的最短时间。</p>
+<p>换句话说，在时钟信号的上升沿（或下降沿）到来之前，输入信号（通常是数据）必须在触发器的输入端保持稳定，以确保数据能被正确采样。</p>
+<p><strong>保持时间</strong>：指输入信号在时钟沿到来之后必须继续保持稳定的最短时间。</p>
+<p>换句话说，在时钟信号的上升沿（或下降沿）到来之后，输入信号（通常是数据）不能立即变化，而需要在触发器的输入端继续保持稳定一段时间，以确保数据能被正确锁存。</p>
+<p><strong>亚稳态</strong>：每个触发器都有规定的建立时间和保持时间参数，这些参数存放在由制造厂商提供的工艺库文件中。假如触发器由时钟的上升沿触发，在这个时间参数范围内，输入的数据信号是不允许发生变化的。否则在信号建立或保持时间中对其采样，得到的结果是不可预知的，有可能是“0” “1” “Z” 或 “X”，这就是<strong>亚稳态</strong>。在数字前段综合中，一般只考虑建立时间(Setup Time)。保持时间(Hold Time)在后端设计中考虑。</p>
+<p><strong>裕量</strong>：当计算结果为正值时，表示设计有足够的裕量满足时序要求。当计算结果为负值时，表示设计没有足够的裕量，这通常会导致时序违例（Violation）。</p>
+<p><strong>Skew</strong>：时钟传播延迟造成的相位差，指同一个时钟信号到达不同寄存器（触发器、锁存器）时，其到达时间的差异。</p>
+<p>这种偏斜是由时钟树中的互连线延迟和时钟缓冲器的不匹配导致的。</p>
+<p><strong>Jitter</strong>：时钟抖动，时钟的上升沿或下降沿并未在规定时间内变化，而是随机的提前或滞后。</p>
+<p>Jitter 通常是由电源噪声、温度波动、工艺变化等因素引起的，表现为时钟沿在不同周期内的到达时间不稳定。</p>
+<h2 id="单周期时序路径的检查"><a href="#单周期时序路径的检查" class="headerlink" title="单周期时序路径的检查"></a>单周期时序路径的检查</h2><h3 id="建立时间"><a href="#建立时间" class="headerlink" title="建立时间"></a>建立时间</h3><p>路径分为发射路径和捕获路径</p>
+<p>检查数据捕获路径的边沿比发射路径的边沿要晚一个时钟周期。</p>
+<h4 id="触发器到触发器"><a href="#触发器到触发器" class="headerlink" title="触发器到触发器"></a>触发器到触发器</h4><p><img src="/img/article_img/STA/DFFtoDFF.png" srcset="/img/blog_img/loading.gif" lazyload></p>
+<p><img src="/img/article_img/STA/DFFtoDFF%E6%B3%A2%E5%BD%A2%E5%9B%BE.png" srcset="/img/blog_img/loading.gif" lazyload></p>
+<p>$$<br>T_{latch}+T_{ck2q}+T{dp} &lt; T{capture}+T_{cycle}-T{setup}<br>$$<br><img src="/img/article_img/STA/DFFtoDFF%E6%8A%A5%E5%91%8A.png" srcset="/img/blog_img/loading.gif" lazyload></p>
+<h4 id="输入到触发器"><a href="#输入到触发器" class="headerlink" title="输入到触发器"></a>输入到触发器</h4><p><img src="/img/article_img/STA/IntoDFF.png" srcset="/img/blog_img/loading.gif" lazyload></p>
+<p>使用输入端口的延时，来模拟前级触发器ck2q的时间和组合电路的延时</p>
+<p>$$<br>T_{latch}+T_{ck2q}+T{dp} &lt; T{capture}+T_{cycle}-T{setup}<br>$$</p>
+<p><img src="/img/article_img/STA/IntoDFF%E6%8A%A5%E5%91%8A.png" srcset="/img/blog_img/loading.gif" lazyload></p>
+<h4 id="触发器到输出"><a href="#触发器到输出" class="headerlink" title="触发器到输出"></a>触发器到输出</h4><p><img src="/img/article_img/STA/DFFtoOut.png" srcset="/img/blog_img/loading.gif" lazyload></p>
+<p>使用输入端口的延时，来模拟前级触发器ck2q的时间和组合电路的延时</p>
+<p>$$<br>T_{latch}+T_{ck2q}+T{dp} &lt; T{capture}+T_{cycle}-T{setup}<br>$$</p>
+<p><img src="/img/article_img/STA/DFFtoOut%E6%8A%A5%E5%91%8A.png" srcset="/img/blog_img/loading.gif" lazyload></p>
+<h4 id="输入到输出"><a href="#输入到输出" class="headerlink" title="输入到输出"></a>输入到输出</h4><p><img src="/img/article_img/STA/IntoOut.png" srcset="/img/blog_img/loading.gif" lazyload></p>
+<p>使用输出端口的延时，来模拟后级触发器组合电路的延时和建立时间</p>
+<p>$$<br>T_{latch}+T_{ck2q}+T{dp} &lt; T{capture}+T_{cycle}-T{setup}<br>$$</p>
+<p><img src="/img/article_img/STA/IntoOut%E6%8A%A5%E5%91%8A.png" srcset="/img/blog_img/loading.gif" lazyload></p>
+<h3 id="保持时间"><a href="#保持时间" class="headerlink" title="保持时间"></a>保持时间</h3><p>与建立时间不同的是，保持时间的检查，捕获路径与发射路径使用相同的时钟边沿。</p>
+<h4 id="触发器到触发器-1"><a href="#触发器到触发器-1" class="headerlink" title="触发器到触发器"></a>触发器到触发器</h4><p><img src="/img/article_img/STA/%E4%BF%9D%E6%8C%81%E6%97%B6%E9%97%B4%E6%B3%A2%E5%BD%A2.png" srcset="/img/blog_img/loading.gif" lazyload></p>
+<p>$$<br>T_{latch}+T_{ck2q}+T{dp} &gt; T{capture}+T{hold}<br>$$<br><img src="/img/article_img/STA/%E4%BF%9D%E6%8C%81%E6%97%B6%E9%97%B4%E6%8A%A5%E5%91%8A.png" srcset="/img/blog_img/loading.gif" lazyload></p>
+<p>其余路径与建立时间类似。</p>
+<h2 id="快慢时钟交互检查建立时间和保持时间"><a href="#快慢时钟交互检查建立时间和保持时间" class="headerlink" title="快慢时钟交互检查建立时间和保持时间"></a>快慢时钟交互检查建立时间和保持时间</h2><h4 id="慢时钟到快时钟"><a href="#慢时钟到快时钟" class="headerlink" title="慢时钟到快时钟"></a>慢时钟到快时钟</h4><p>最严苛的建立时间的检查路径为数据从慢时钟的0时刻发射，在快时钟的第一个时钟周期检查。</p>
+<p><img src="/img/article_img/STA/SlowtoFast%E6%B3%A2%E5%BD%A2%E5%9B%BE.png" srcset="/img/blog_img/loading.gif" lazyload></p>
+<p>实际的电路里，慢时钟域中组合逻辑的延迟较大。因此，可以指定建立时间的检查边沿。</p>
+<p>下面命令指定建立时间的检查在快时钟的第4个时钟周期。</p>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs tcl">set_multicycle_path <span class="hljs-number">4</span> -setup from [get_clocks CLKM] -to [get_clocks CLKP] -end<br></code></pre></td></tr></table></figure>
+
+<p>此时保持时间检查的点在建立时间检查点的前一个时钟周期。</p>
+<p>下面命令指定保持时间的检查在默认的基础上向前移动三个时钟周期，这样更加贴合实际情况。</p>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs tcl">set_multicycle_path <span class="hljs-number">3</span> -setup from [get_clocks CLKM] -to [get_clocks CLKP] -end<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/article_img/STA/SlowtoFastSetup%E6%8A%A5%E5%91%8A.png" srcset="/img/blog_img/loading.gif" lazyload></p>
+<p><img src="/img/article_img/STA/SlowtoFastHold%E6%8A%A5%E5%91%8A.png" srcset="/img/blog_img/loading.gif" lazyload></p>
+<h4 id="快时钟到慢时钟"><a href="#快时钟到慢时钟" class="headerlink" title="快时钟到慢时钟"></a>快时钟到慢时钟</h4><p>最严苛的建立时间的检查路径为数据从快时钟的第4个时钟周期发射，在慢时钟检查。</p>
+<p>而最严苛的保持时间检查路径为数据从0时刻发射，在相同的边沿检查。</p>
+<p><img src="/img/article_img/STA/FasttoSlow.png" srcset="/img/blog_img/loading.gif" lazyload></p>
+<p>下面命令指定建立时间的检查，将发射路径开始的时间点设置为默认的前一个周期。</p>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs tcl">set_multicycle_path <span class="hljs-number">2</span> -setup from [get_clocks CLKP] -to [get_clocks CLKM] -start<br></code></pre></td></tr></table></figure>
+
+<p>下面命令指定保持时间的检查，将发射路径开始的时间点仍为默认。</p>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs tcl">set_multicycle_path <span class="hljs-number">1</span> -hold from [get_clocks CLKP] -to [get_clocks CLKM] -start<br></code></pre></td></tr></table></figure>
+
+<p><img src="/img/article_img/STA/FasttoSlowSetup%E6%8A%A5%E5%91%8A.png" srcset="/img/blog_img/loading.gif" lazyload></p>
+<p><img src="/img/article_img/STA/FasttoSlowHold%E6%8A%A5%E5%91%8A.png" srcset="/img/blog_img/loading.gif" lazyload></p>
+<h2 id="多时钟交互路径检查建立时间和保持时间"><a href="#多时钟交互路径检查建立时间和保持时间" class="headerlink" title="多时钟交互路径检查建立时间和保持时间"></a>多时钟交互路径检查建立时间和保持时间</h2><h3 id="整数关系"><a href="#整数关系" class="headerlink" title="整数关系"></a>整数关系</h3><p>当时钟周期之间的倍数是整数关系，多时钟之间的时序检查与上述快慢时间交互检查类似。</p>
+<h3 id="非整数关系"><a href="#非整数关系" class="headerlink" title="非整数关系"></a>非整数关系</h3><p>当时钟周期之间的倍数不是整数关系，首先求时钟周期的最小公倍数。</p>
+<p><img src="/img/article_img/STA/%E9%9D%9E%E6%95%B4%E6%95%B0.png" srcset="/img/blog_img/loading.gif" lazyload></p>
+<p>以上图为例，将所有时钟从0时刻开始翻转，</p>
+<p>如果数据发射时钟为CLKP，捕获时钟为CLKM，则从15时刻发射，16时刻接收，对于建立时间的检查最严格。</p>
+<p>如果数据发射时钟为CLKM，捕获时钟为CLKP，则从24时刻发射，25时刻接收，对于建立时间的检查最严格。</p>
+<p>保持时间则都从0时刻开始。</p>
+<h3 id="Phase-Shifted"><a href="#Phase-Shifted" class="headerlink" title="Phase Shifted"></a>Phase Shifted</h3><p>当捕获时钟与发射时钟有相位差时</p>
+<p><img src="/img/article_img/STA/%E7%9B%B8%E4%BD%8D%E5%B7%AE.png" srcset="/img/blog_img/loading.gif" lazyload></p>
+<p>以上图为例，数据捕获路径比发射路径晚90°</p>
+<p>建立时间检查，数据从0时刻发射，0.5时刻接收</p>
+<p>保持时间检查，数据从2时刻发射，0.5时刻接收</p>
+<h3 id="Half-Cycle-Path"><a href="#Half-Cycle-Path" class="headerlink" title="Half Cycle Path"></a>Half Cycle Path</h3><p> 半周期路径（路径中同时存在正边沿触发和负边沿触发的触发器）</p>
+<p><img src="/img/article_img/STA/%E5%8D%8A%E5%91%A8%E6%9C%9F.png" srcset="/img/blog_img/loading.gif" lazyload></p>
+<p>以上图为例，数据发射触发器为上升沿触发，接收为下降沿触发</p>
+<p>建立时间检查，数据从6时刻发射，12时刻接收</p>
+<p>保持时间检查，数据从6时刻发射，0时刻接收</p>
+<h3 id="False-Path"><a href="#False-Path" class="headerlink" title="False Path"></a>False Path</h3><p>虚假路径</p>
+<p>在实际电路中有些时序路径是不存在的，则可以将这个路径设置为虚假路径，降低静态时序分析的时间，减少不必要的错误。</p>
+<p>例如：</p>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs tcl">set_false_path -from [get_clocks CLK] to [get_clocks CORE_CLK]<br>set_false_path -through [get_pins xx]<br></code></pre></td></tr></table></figure>
+
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://www.icourse163.org/learn/SWJTU-1207492806?tid=1470116659#/learn/content?type=detail&id=1253638068&cid=1284287450&replay=true">芯动力——硬件加速设计方法_中国大学MOOC(慕课)</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/IC/" class="category-chain-item">IC</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/IC-DC/">#IC DC</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>静态时序分析基础</div>
+      <div>http://vinters-v.github.io/2024/11/11/数字IC_静态时序分析/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Vinters-v</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年11月11日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/09/24/%E6%95%B0%E5%AD%97IC_DC%E7%BB%BC%E5%90%88/" title="DC综合环境的搭建">
+                        <span class="hidden-mobile">DC综合环境的搭建</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
