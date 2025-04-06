@@ -1,0 +1,767 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/blog_img/avatar_my.jpg">
+  <link rel="icon" href="/img/blog_img/avatar_my.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Vinters-v">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="电路知识补充">
+<meta property="og:type" content="article">
+<meta property="og:title" content="知识补充">
+<meta property="og:url" content="http://vinters-v.github.io/2025/04/06/%E6%95%B0%E5%AD%97IC_%E7%9F%A5%E8%AF%86%E8%A1%A5%E5%85%85/index.html">
+<meta property="og:site_name" content="Vinters-v">
+<meta property="og:description" content="电路知识补充">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://vinters-v.github.io/img/article_img/IC/IC.jpg">
+<meta property="article:published_time" content="2025-04-06T07:45:18.185Z">
+<meta property="article:modified_time" content="2025-04-06T07:46:08.672Z">
+<meta property="article:author" content="Vinters-v">
+<meta property="article:tag" content="IC">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://vinters-v.github.io/img/article_img/IC/IC.jpg">
+  
+  
+  
+  <title>知识补充 - Vinters-v</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"vinters-v.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/blog_img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Vinters-v</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/blog_img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="知识补充"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-04-06 15:45" pubdate>
+          2025年4月6日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.4k 字
+        
+      </span>
+    
+
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="padding-left: 2rem; margin-right: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">知识补充</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>电路知识补充</p>
+<span id="more"></span>
+
+
+
+<h1 id="AXI4协议"><a href="#AXI4协议" class="headerlink" title="AXI4协议"></a>AXI4协议</h1><p>AXI总线作为一种总线，可以挂载若干个主设备（master）和从设备（slave），AXI总线协议定义了主设备和从设备之间如何进行通信。</p>
+<p>主设备可以向从设备发起读事务（Read Transaction）和写事务（Write Transaction），从设备只能被动接受主设备发起的请求并作出响应。</p>
+<p>AXI4总线协议支持以下三种类型的<strong>接口</strong>（Interface）：</p>
+<ol>
+<li>AXI4（有时候也叫AXI4-full）：高性能存储映射接口，数据位宽可以是 32,64,128,256,512,1024bits，最大256突发传输，地址位宽可以是64bits &#x2F; 32bits</li>
+<li>AXI4-Lite：简化版的AXI4接口，用于较少数据量的存储映射通信，数据位宽32bits，地址位宽时32bits</li>
+<li>AXI4-Steam：用于高速数据流传输，非存储映射接口</li>
+</ol>
+<p>（所谓存储映射，就是主设备访问从设备时需要给出访问的地址，即从设备是对应一段内存空间地址的，和IO统一编址类似）</p>
+<p>AXI4-full接口支持突发传输，主要用于处理器访问存储器等需要指定地址的高速数据传输场景。AXI4-Lite接口为外设提供单个数据传输，主要用于访问一些低速外设中的寄存器。而AXI-Steam接口则向FIFO一样，数据传输时不需要地址，在主从设备之间直接连续读写数据，主要用于如视频、高速AD、PCIe、DMA接口等需要高速数据传输的场合。</p>
+<p>AXI4-Full 接口和 Lite 接口的一个不同点在于，前者支持 Transaction Identififiers，也就是给每个读&#x2F;写事务赋予一个 ID，具有相同 ID 的事务的顺序不能打乱，不同 ID 的事务的顺序可以打乱（即重排序），这个东西的作用是即使当前还有事务没有完成，Master 可以发出新事务（新事物的ID和未完成事务的ID要不一样），可以提高系统性能。</p>
+<h2 id="AXI4-full"><a href="#AXI4-full" class="headerlink" title="AXI4-full"></a>AXI4-full</h2><p>详细接口设计见设计文档。</p>
+<p>AXI4接口由五个独立的通道构成：</p>
+<ol>
+<li>读地址</li>
+<li>读数据</li>
+<li>写地址</li>
+<li>写数据</li>
+<li>写响应</li>
+</ol>
+<h2 id="AXI的握手机制"><a href="#AXI的握手机制" class="headerlink" title="AXI的握手机制"></a>AXI的握手机制</h2><p>在AXI协议中，请求的发起方是Master，接受方是Slave。</p>
+<p>在每个通道的数据传输控制都是通过主从间的握手机制实现的，具体由两个关键信号完成。</p>
+<ul>
+<li><p>VALID：由发送方驱动，表示数据、地址或者控制信息已经准备就绪，并且相关信号已经稳定。<strong>VALID信号必须保持高电平，直到数据传输完成</strong>。</p>
+</li>
+<li><p>READY：由接收方驱动，表示接收方可以接收数据。READY信号可以在VALID之前或之后拉高。</p>
+</li>
+</ul>
+<p>当VALID和READY同时为高时，握手成功，数据在这一拍完成传输。</p>
+<p>握手机制有效解决了发送方和接收方速率不一致的问题，确保了数据传输的可靠性。</p>
+<h2 id="突发传输"><a href="#突发传输" class="headerlink" title="突发传输"></a>突发传输</h2><p>对于AXI4-Full接口，一次写事务中，Master发出一个地址后，可以连续发出多个数据，Slave可以从该地址开始连续写多个地址处的数据，这便是所谓的突发传输。读事务同理。</p>
+<p>三种突发类型：</p>
+<ul>
+<li><strong>FIXED（0b00）</strong><br>每次传输的地址保持不变，适用于重复访问同一位置（如写入FIFO）。</li>
+<li><strong>INCR（0b01）</strong> (incrementing)<br>地址线性递增，每次增加值为 <strong>AxSIZE</strong> 定义的字节数（如AxSIZE&#x3D;4字节，地址+4）。此时，给出的地址必须是对齐的。<br>适用于顺序访问数据块（如内存读写）。</li>
+<li><strong>WRAP（0b10）</strong>(wrapping)<br>地址递增，但达到特定边界时回绕到起始地址。<br>常用于缓存行填充（Cache Line Fill），需满足：边界地址 &#x3D; 起始地址 + (传输次数 × 字节数)；传输次数必须是2的幂（如4、8次）。根据起始地址和传输大小，可以计算出一个 lower address 和 upper address，Wrapping Burst 下每次传输地址的计算和 Incrementing Burst 是相似的，除了当地址增加到 upper address 时，下次传输的地址需要回落到 lower address 。</li>
+</ul>
+<p>在AXI4协议中，一个突发传输（burst transfer）不能跨越这个4KB的边界，这是为了避免一个突发事务访问两个不同的slave设备，因为每个slave设备通常是4KB对齐的。如果一个突发传输跨越了4KB边界，可能会导致数据被错误地写入到另一个slave设备，从而引发传输错误。1K为2的10次方</p>
+<h2 id="交易标识符-ID"><a href="#交易标识符-ID" class="headerlink" title="交易标识符 ID"></a>交易标识符 ID</h2><p>AXI交易标识符ID，主机用这些ID来判别必须按顺序返回的交易。</p>
+<p>同一ID的交易必须按顺序返回，不同ID的交易可以乱序 。</p>
+<p>AXI通过使用ID，主机可以不等待一笔交易完成就发起多笔交易。起到提升系统性能的作用，实现多笔交易的并行处理。</p>
+<p>从机需要返回合适的BID或者RID来响应主机的ID。</p>
+<p>有以下几个ID信号：写地址ID，写数据ID（只有AXI3，AXI4删除），写响应ID，读地址ID，读响应ID</p>
+<p><strong>乱序 out of order传输</strong></p>
+<p>乱序传输：表示当有多个事务在传输时，有的事务可能先准备好，因此可以先发送在总线上，通过ID号来区分数据和响应来自哪一个事务，乱序指得是事务乱序，而不是说的master，即多个不同master可以发起多个不同的事务，单个master也可以发起多个不同的事务</p>
+<p>说明：</p>
+<p>不同事务的AxID如果一致，那么这些事务就不能实现out of order，只能进行顺序完成。</p>
+<p>如果不同事务AxID不同，那么这些事务之间可以乱序。那么不同AxID事务的数据，对于AXI读来说，如何判断返回的数据属于哪个事务呢，是通过RID来进行匹配的，也就是说，在完成乱序传输的时候，需要RID和ARID保持一致，以标识不同事务的数据</p>
+<p>那么对于实际情况来说，在实际传输中，可能有的事务AxID是不同的，有的是相同的，这是如何解决的？答：对于ID相同的就顺序完成，对于ID不同的可以乱序。</p>
+<p>特殊的写乱序：在AXI4中取消了WID，所以写地址和写数据的顺序必须一致</p>
+<h2 id="OutStanding"><a href="#OutStanding" class="headerlink" title="OutStanding"></a>OutStanding</h2><p><strong>不需要等待前一笔传输完成就可以发送下一笔操作</strong>。AXI因为是通道分离的所以master不需要等待前一笔操作A响应完成就可以发送下一笔操作请求B，这样可以有效提升通路利用率，提升系统性能</p>
+<p>outstanding 就是发出去的地址数量，未处理的地址可以先存放在AXI总线的缓存中，等完成一次传输事务之后，无需再握手传输地址，即可进行下一次的数据传输。所以 outstanding 的本质是为了实现数据传输的pipeline，outstanding 能力即AXI4 Master 不需要等到response 就可以持续发写命令的个数。</p>
+<h2 id="交织interleaving-传输"><a href="#交织interleaving-传输" class="headerlink" title="交织interleaving 传输"></a>交织interleaving 传输</h2><p>交织传输：表示实现不同transaction中的beat的交替传输，但同一transaction的beat是需要按照顺序进行传输的， AXI4不再支持写交织。(依然需要根据ID号来判断数据属于哪个事务)</p>
+<p>例如事务A指令为A，数据是a0，a1，a2,事务B指令是B，数据是b0，b1，b2,</p>
+<p>支持交织数据总线数据顺序就可以是a0，b0，a1，b1，a2，b2(或者其他顺序)</p>
+<p>不支持交织数据总线数据顺序就只能是a0，a1，a2，b0，b1，b2或者b0，b1，b2，a0，a1，a2</p>
+<h2 id="总线带宽的计算"><a href="#总线带宽的计算" class="headerlink" title="总线带宽的计算"></a>总线带宽的计算</h2><p>不考虑缓存大小的前提下，最佳outstanding能力 &#x3D; latency_cycle &#x2F; burst_length</p>
+<p>不考虑访问延迟和outstanding的情况下，</p>
+<p>一次突发传输，传输的数据量为：总线位宽 × 突发传输个数</p>
+<p>一次突发传输，消耗的时间为：突发传输个数 &#x2F; 时钟频率</p>
+<p>因此带宽为，数据量 &#x2F; 时间 &#x3D; 总线位宽 × 时钟频率</p>
+<p>考虑访问延迟和outstanding</p>
+<p>传输的数据量为：总线位宽 × 突发传输个数 × outstandings</p>
+<p>消耗的时间为：突发传输个数 &#x2F; 时钟频率 × outstandings + 访问延迟</p>
+<p>因此带宽为，数据量 &#x2F; 时间 &#x3D; 总线位宽 × 时钟频率</p>
+<p>例：在一个AXI总线系统中，总线位宽为128bit,频率为500MHz，允许的最大Outstanding为8、最大Burst为16,Slave的访问至时为200ns。 那么该AXI总线最大传输带宽是多少？请给出推理过程，并计算最终结果。</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/554026947">AXI outstanding传输带宽计算 - 知乎</a></p>
+<h1 id="FIFO深度计算"><a href="#FIFO深度计算" class="headerlink" title="FIFO深度计算"></a>FIFO深度计算</h1><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_40483920/article/details/108233399">FPGA&#x2F;IC笔试面试（一）：异步FIFO最小深度计算-CSDN博客</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/IC/" class="category-chain-item">IC</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/IC/">#IC</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>知识补充</div>
+      <div>http://vinters-v.github.io/2025/04/06/数字IC_知识补充/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Vinters-v</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年4月6日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/04/02/%E6%95%B0%E5%AD%97IC_%E7%94%B5%E8%B7%AF%E6%A8%A1%E5%9D%97/" title="电路模块">
+                        <span class="hidden-mobile">电路模块</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
