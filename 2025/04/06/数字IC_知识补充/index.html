@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://vinters-v.github.io/img/article_img/IC/IC.jpg">
 <meta property="article:published_time" content="2025-04-06T07:45:18.185Z">
-<meta property="article:modified_time" content="2025-04-06T07:46:08.672Z">
+<meta property="article:modified_time" content="2025-04-26T08:33:15.583Z">
 <meta property="article:author" content="Vinters-v">
 <meta property="article:tag" content="IC">
 <meta name="twitter:card" content="summary_large_image">
@@ -234,7 +234,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.4k 字
+          19k 字
         
       </span>
     
@@ -365,6 +365,337 @@
 <p>例：在一个AXI总线系统中，总线位宽为128bit,频率为500MHz，允许的最大Outstanding为8、最大Burst为16,Slave的访问至时为200ns。 那么该AXI总线最大传输带宽是多少？请给出推理过程，并计算最终结果。</p>
 <p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/554026947">AXI outstanding传输带宽计算 - 知乎</a></p>
 <h1 id="FIFO深度计算"><a href="#FIFO深度计算" class="headerlink" title="FIFO深度计算"></a>FIFO深度计算</h1><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_40483920/article/details/108233399">FPGA&#x2F;IC笔试面试（一）：异步FIFO最小深度计算-CSDN博客</a></p>
+<h1 id="PPA"><a href="#PPA" class="headerlink" title="PPA"></a>PPA</h1><h2 id="一、面向性能的设计方法"><a href="#一、面向性能的设计方法" class="headerlink" title="一、面向性能的设计方法"></a>一、面向性能的设计方法</h2><p>决定性能的因素有很多，比如算法策略，操作数预处理，批量处理，并行处理，输入延迟等等。</p>
+<p>本文主要想讲的是 HDL 层面，所以举如下例子：</p>
+<h3 id="1-信号延迟"><a href="#1-信号延迟" class="headerlink" title="1.信号延迟"></a>1.信号延迟</h3><figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs verilog">   <span class="hljs-keyword">module</span> addr_comp(<br>    <span class="hljs-keyword">input</span>[<span class="hljs-number">7</span>:<span class="hljs-number">0</span>]	A_addr,<br>	<span class="hljs-keyword">input</span>[<span class="hljs-number">7</span>:<span class="hljs-number">0</span>]	B_addr,<br>	<span class="hljs-keyword">input</span>[<span class="hljs-number">7</span>:<span class="hljs-number">0</span>]	ptr_in,<br>	<span class="hljs-keyword">input</span> 	control,<br>	<span class="hljs-keyword">output</span>[<span class="hljs-number">15</span>:<span class="hljs-number">0</span>]	addr_cout<br>);<br><span class="hljs-keyword">parameter</span> [<span class="hljs-number">7</span>:<span class="hljs-number">0</span>] addr_base = <span class="hljs-number">8&#x27;b10000000</span>;<br><span class="hljs-keyword">reg</span> [<span class="hljs-number">7</span>:<span class="hljs-number">0</span>] ptr_temp;<br><span class="hljs-keyword">wire</span>[<span class="hljs-number">15</span>:<span class="hljs-number">0</span>] addr_reg;<br><br><span class="hljs-keyword">assign</span> prt = control? ptr_in:<span class="hljs-number">8&#x27;h0</span>;<br><span class="hljs-keyword">assign</span> ptr_temp = addr_base - prt;<br><span class="hljs-keyword">assign</span> addr_reg = A_addr-ptr_temp;<br><span class="hljs-keyword">assign</span> addr_cout = addr_reg + B_addr;<br><br><span class="hljs-keyword">endmodule</span><br></code></pre></td></tr></table></figure>
+
+<p>在本例中，心中的电路一定是：一个control控制的2选1 MUX，MUX 输出后面接着几级加法器。</p>
+<p>那么这里问题就来了，加入control信号因为路径太长，或者经历的组合逻辑太多导致延迟到来，那会发生什么？</p>
+<p>很明显，会导致其他输入信号只能等你control信号过来了再依次进行运算，这就降低了整个电路的性能。</p>
+<p>即假设ptr_in和其他相关的输入先到了，control最慢到来，那这个电路要怎么设计？（这里就体现了虽然RTL写的代码思想上是并行的，但实际电路中是带有各种延迟）</p>
+<p>这是我按照上述信号到来顺序设计的代码：</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs verilog"><span class="hljs-keyword">module</span> addr_comp(<br>    <span class="hljs-keyword">input</span>[<span class="hljs-number">7</span>:<span class="hljs-number">0</span>]	A_addr,<br>	<span class="hljs-keyword">input</span>[<span class="hljs-number">7</span>:<span class="hljs-number">0</span>]	B_addr,<br>	<span class="hljs-keyword">input</span>[<span class="hljs-number">7</span>:<span class="hljs-number">0</span>]	ptr_in,<br>	<span class="hljs-keyword">input</span> 	control,<br>	<span class="hljs-keyword">output</span>[<span class="hljs-number">15</span>:<span class="hljs-number">0</span>]	addr_cout<br>);<br><span class="hljs-keyword">parameter</span> [<span class="hljs-number">7</span>:<span class="hljs-number">0</span>] addr_base = <span class="hljs-number">8&#x27;b10000000</span>;<br><span class="hljs-keyword">reg</span> [<span class="hljs-number">7</span>:<span class="hljs-number">0</span>] ptr_temp;<br><span class="hljs-keyword">wire</span>[<span class="hljs-number">15</span>:<span class="hljs-number">0</span>] addr_reg1,addr_reg2;<br><span class="hljs-keyword">wire</span>[<span class="hljs-number">15</span>:<span class="hljs-number">0</span>] count_temp1,count_temp2;<br><br><span class="hljs-keyword">assign</span> ptr_temp = addr_base - prt;<br><span class="hljs-keyword">assign</span> addr_reg1 = A_addr-ptr_temp;<br><span class="hljs-keyword">assign</span> addr_reg2 = A_addr-addr_base;<br><span class="hljs-keyword">assign</span> count_temp1 = addr_reg1 + B_addr;<br><span class="hljs-keyword">assign</span> count_temp2 = addr_reg2 + B_addr;<br><br><span class="hljs-keyword">assign</span> addr_cout = control?addr_reg1:addr_reg1;<br><span class="hljs-keyword">endmodule</span><br></code></pre></td></tr></table></figure>
+
+<p>因为知道control最慢来，我就提前将数据计算好，只要control来了马上释放结果，这样就不需要等control来了再进行一系列运算才能输出结果。</p>
+<p>此类体现的思想是：面积换运算速率，关键信号延迟放最靠近输出的一级；</p>
+<p>第二个例子是：</p>
+<h3 id="2-并行处理和流水线"><a href="#2-并行处理和流水线" class="headerlink" title="2.并行处理和流水线"></a>2.并行处理和流水线</h3><p>假设我们要实现a<em>b，a</em>b可以视为temp&#x3D;b[i]?a&lt;&lt;i:0;然后把temp加起来即可。</p>
+<p>所以其RTL为：</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs verilog">   <span class="hljs-keyword">module</span> addr_comp(<br>        <span class="hljs-keyword">input</span>[<span class="hljs-number">7</span>:<span class="hljs-number">0</span>]  a,<br>	<span class="hljs-keyword">input</span>[<span class="hljs-number">7</span>:<span class="hljs-number">0</span>]  b,<br>	<span class="hljs-keyword">output</span>[<span class="hljs-number">15</span>:<span class="hljs-number">0</span>]d<br>	<br>);<br><span class="hljs-keyword">reg</span>[<span class="hljs-number">91</span>:<span class="hljs-number">0</span>] temp;<br><br>	<span class="hljs-keyword">assign</span> temp[<span class="hljs-number">7</span>:<span class="hljs-number">0</span>] = b[<span class="hljs-number">0</span>]?a&lt;&lt;<span class="hljs-number">0</span>:<span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">assign</span> temp[<span class="hljs-number">16</span>:<span class="hljs-number">8</span>] = b[<span class="hljs-number">1</span>]?a&lt;&lt;<span class="hljs-number">1</span>:<span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">assign</span> temp[<span class="hljs-number">26</span>:<span class="hljs-number">17</span>] = b[<span class="hljs-number">2</span>]?a&lt;&lt;<span class="hljs-number">2</span>:<span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">assign</span> temp[<span class="hljs-number">37</span>:<span class="hljs-number">27</span>] = b[<span class="hljs-number">3</span>]?a&lt;&lt;<span class="hljs-number">3</span>:<span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">assign</span> temp[<span class="hljs-number">49</span>:<span class="hljs-number">38</span>] = b[<span class="hljs-number">4</span>]?a&lt;&lt;<span class="hljs-number">4</span>:<span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">assign</span> temp[<span class="hljs-number">62</span>:<span class="hljs-number">50</span>] = b[<span class="hljs-number">5</span>]?a&lt;&lt;<span class="hljs-number">5</span>:<span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">assign</span> temp[<span class="hljs-number">76</span>:<span class="hljs-number">63</span>] = b[<span class="hljs-number">6</span>]?a&lt;&lt;<span class="hljs-number">6</span>:<span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">assign</span> temp[<span class="hljs-number">91</span>:<span class="hljs-number">77</span>] = b[<span class="hljs-number">7</span>]?a&lt;&lt;<span class="hljs-number">7</span>:<span class="hljs-number">0</span>;<br><br><br>	<span class="hljs-keyword">assign</span> d &lt;= temp[<span class="hljs-number">7</span>:<span class="hljs-number">0</span>] + temp[<span class="hljs-number">16</span>:<span class="hljs-number">8</span>]+ temp[<span class="hljs-number">26</span>:<span class="hljs-number">17</span>]+ temp[<span class="hljs-number">37</span>:<span class="hljs-number">27</span>]+ temp[<span class="hljs-number">49</span>:<span class="hljs-number">38</span>]+ temp[<span class="hljs-number">62</span>:<span class="hljs-number">50</span>]+ temp[<span class="hljs-number">76</span>:<span class="hljs-number">63</span>]+ temp[<span class="hljs-number">91</span>:<span class="hljs-number">77</span>];<br><br><span class="hljs-keyword">endmodule</span><br></code></pre></td></tr></table></figure>
+
+<p>这样采用了并行设计的思想，运算速率倒是挺快的，但是这样搞，组合逻辑太多了（主要是在加法那里），频率就会上不去。所以我们需要将其拆开做流水处理。这里心里想出来的电路应该是，8个MUX（输入为做移位的组合逻辑和0）的输出连到8输入加法器身上，当然8输入加法器也是由多级1bit全加器组成，这样延时就会很长了，导致数据到达FF的时间会很慢。</p>
+<p>插入流水线之后的 RTL 代码：</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><code class="hljs verilog">   <span class="hljs-keyword">module</span> addr_comp(<br>    <span class="hljs-keyword">input</span> 		clk,<br>    <span class="hljs-keyword">input</span>[<span class="hljs-number">7</span>:<span class="hljs-number">0</span>]	a,<br>	<span class="hljs-keyword">input</span>[<span class="hljs-number">7</span>:<span class="hljs-number">0</span>]  b,<br>	<span class="hljs-keyword">output</span>[<span class="hljs-number">15</span>:<span class="hljs-number">0</span>]d<br>	<br>);<br><span class="hljs-keyword">reg</span>[<span class="hljs-number">91</span>:<span class="hljs-number">0</span>] temp;<br><br>	<span class="hljs-keyword">assign</span> temp[<span class="hljs-number">7</span>:<span class="hljs-number">0</span>] = b[<span class="hljs-number">0</span>]?a&lt;&lt;<span class="hljs-number">0</span>:<span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">assign</span> temp[<span class="hljs-number">16</span>:<span class="hljs-number">8</span>] = b[<span class="hljs-number">1</span>]?a&lt;&lt;<span class="hljs-number">1</span>:<span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">assign</span> temp[<span class="hljs-number">26</span>:<span class="hljs-number">17</span>] = b[<span class="hljs-number">2</span>]?a&lt;&lt;<span class="hljs-number">2</span>:<span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">assign</span> temp[<span class="hljs-number">37</span>:<span class="hljs-number">27</span>] = b[<span class="hljs-number">3</span>]?a&lt;&lt;<span class="hljs-number">3</span>:<span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">assign</span> temp[<span class="hljs-number">49</span>:<span class="hljs-number">38</span>] = b[<span class="hljs-number">4</span>]?a&lt;&lt;<span class="hljs-number">4</span>:<span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">assign</span> temp[<span class="hljs-number">62</span>:<span class="hljs-number">50</span>] = b[<span class="hljs-number">5</span>]?a&lt;&lt;<span class="hljs-number">5</span>:<span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">assign</span> temp[<span class="hljs-number">76</span>:<span class="hljs-number">63</span>] = b[<span class="hljs-number">6</span>]?a&lt;&lt;<span class="hljs-number">6</span>:<span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">assign</span> temp[<span class="hljs-number">91</span>:<span class="hljs-number">77</span>] = b[<span class="hljs-number">7</span>]?a&lt;&lt;<span class="hljs-number">7</span>:<span class="hljs-number">0</span>;<br><br><br><span class="hljs-comment">//先将数据存放到FF中，此时计算了最低个数据的加法进位，所以此处为第一级流水</span><br><span class="hljs-keyword">reg</span>[<span class="hljs-number">9</span>:<span class="hljs-number">0</span>] data_temp0;<br><span class="hljs-keyword">reg</span>[<span class="hljs-number">11</span>:<span class="hljs-number">0</span>] data_temp1;<br><span class="hljs-keyword">reg</span>[<span class="hljs-number">13</span>:<span class="hljs-number">0</span>] data_temp2;<br><span class="hljs-keyword">reg</span>[<span class="hljs-number">15</span>:<span class="hljs-number">0</span>] data_temp3;<br><span class="hljs-keyword">always</span> @(<span class="hljs-keyword">posedge</span> clk)<br><span class="hljs-keyword">begin</span><br>	data_temp0 &lt;= temp[<span class="hljs-number">7</span>:<span class="hljs-number">0</span>]   + temp[<span class="hljs-number">16</span>:<span class="hljs-number">8</span>]；<span class="hljs-comment">//8bit+9bit,10bit保留进位</span><br>	data_temp1 &lt;= temp[<span class="hljs-number">26</span>:<span class="hljs-number">17</span>] + temp[<span class="hljs-number">37</span>:<span class="hljs-number">27</span>];<span class="hljs-comment">//10bit +11bit 12bit保留进位</span><br>	data_temp2 &lt;= temp[<span class="hljs-number">49</span>:<span class="hljs-number">38</span>] + temp[<span class="hljs-number">62</span>:<span class="hljs-number">50</span>];<span class="hljs-comment">//12bit +13bit 14bit保留进位</span><br>	data_temp3 &lt;= temp[<span class="hljs-number">76</span>:<span class="hljs-number">63</span>] + temp[<span class="hljs-number">91</span>:<span class="hljs-number">77</span>];<span class="hljs-comment">//14bit +15bit 16bit保留进位</span><br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">//传递进位-第二级流水,将data_temp0的进位传递出去</span><br><span class="hljs-keyword">reg</span>[<span class="hljs-number">11</span>:<span class="hljs-number">0</span>] pipe_temp1;<br><span class="hljs-keyword">reg</span>[<span class="hljs-number">13</span>:<span class="hljs-number">0</span>] data_temp22;<br><span class="hljs-keyword">reg</span>[<span class="hljs-number">15</span>:<span class="hljs-number">0</span>] data_temp23;<br><span class="hljs-keyword">always</span>@(<span class="hljs-keyword">posedge</span> clk)<br><span class="hljs-keyword">begin</span><br>	data_temp22 &lt;= data_temp2;<br>	data_temp23 &lt;= data_temp3;<br>	pipe_temp1 &lt;= data_temp1 + data_temp0;<br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">//传递进位-第三级流水</span><br><span class="hljs-keyword">reg</span>[<span class="hljs-number">15</span>:<span class="hljs-number">0</span>] data_temp33<br><span class="hljs-keyword">reg</span>[<span class="hljs-number">13</span>:<span class="hljs-number">0</span>] pipe_temp2；<br><span class="hljs-keyword">always</span>@(<span class="hljs-keyword">posedge</span> clk)<br><span class="hljs-keyword">begin</span><br>	data_temp33 &lt;= data_temp23;<br>	pipe_temp2 &lt;= data_temp22 + pipe_temp1;<br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">//传递进位-第四级流水</span><br><span class="hljs-keyword">reg</span>[<span class="hljs-number">15</span>:<span class="hljs-number">0</span>] pipe_temp3；<br><span class="hljs-keyword">always</span>@(<span class="hljs-keyword">posedge</span> clk)<br><span class="hljs-keyword">begin</span><br>	pipe_temp3 &lt;= data_temp33 + pipe_temp2;<br><span class="hljs-keyword">end</span><br><br><span class="hljs-keyword">assign</span> d =  pipe_temp3;<br><span class="hljs-keyword">endmodule</span><br></code></pre></td></tr></table></figure>
+
+<p>用了4级流水，流水主要是将进位传递，这里再度思考下电路变成什么样了？</p>
+<p>主要是在加法器这里，将前面的8输入加法器转换成了2输入加法器，并且每个加法器的输出将其进位保留在FF中，这样虽然增大了输出延迟，但是保证了数据不会在一条路上耽搁太久就进入了FF，根据setup slack计算公式，缩短了数据路径，从而提升了系统整体的运行频率。</p>
+<p>此类体现的思想是：面积换运行频率；<a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=199273436&content_type=Article&match_order=1&q=%E6%B5%81%E6%B0%B4%E7%BA%BF%E8%AE%BE%E8%AE%A1&zd_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ6aGlkYV9zZXJ2ZXIiLCJleHAiOjE3NDQ4NTk2NzcsInEiOiLmtYHmsLTnur_orr7orqEiLCJ6aGlkYV9zb3VyY2UiOiJlbnRpdHkiLCJjb250ZW50X2lkIjoxOTkyNzM0MzYsImNvbnRlbnRfdHlwZSI6IkFydGljbGUiLCJtYXRjaF9vcmRlciI6MSwiemRfdG9rZW4iOm51bGx9.DN0u_V-cWdfw5OSO62jvZ8F7o0hcFcVE2Y4B-TU5B4c&zhida_source=entity">流水线设计</a>；并行设计。</p>
+<h2 id="二、面向功耗的设计方法"><a href="#二、面向功耗的设计方法" class="headerlink" title="二、面向功耗的设计方法"></a>二、面向功耗的设计方法</h2><p>本文主要还是针对RTL级的优化，并不针对工艺的功耗优化。RTL级的功耗优化主要针对的是动态功耗，要尽可能减小信号的翻转频率，基于这一点，本文总结一些几点优化方式：</p>
+<h3 id="1-门控时钟"><a href="#1-门控时钟" class="headerlink" title="1.门控时钟"></a>1.<a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=199273436&content_type=Article&match_order=1&q=%E9%97%A8%E6%8E%A7%E6%97%B6%E9%92%9F&zd_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ6aGlkYV9zZXJ2ZXIiLCJleHAiOjE3NDQ4NTk2NzcsInEiOiLpl6jmjqfml7bpkp8iLCJ6aGlkYV9zb3VyY2UiOiJlbnRpdHkiLCJjb250ZW50X2lkIjoxOTkyNzM0MzYsImNvbnRlbnRfdHlwZSI6IkFydGljbGUiLCJtYXRjaF9vcmRlciI6MSwiemRfdG9rZW4iOm51bGx9.Bh3FV2_d1v16k400pRdz1eZR-8bltWGtiJCSSJxHSNw&zhida_source=entity">门控时钟</a></h3><p>门控时钟就是控制时钟的启停，一旦时钟停止，则该时钟域下的所有操作均保持静止，不再翻转。虽然在综合的时候综合工具会自动帮我们生成门控时钟，但是存在一些情况，综合工具无法生成门控时钟。</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs verilog"><span class="hljs-keyword">reg</span> a;<br><span class="hljs-keyword">always</span> @(<span class="hljs-keyword">posedge</span> clk)<br><span class="hljs-keyword">begin</span><br>  <span class="hljs-keyword">if</span>(valid)<br>      a&lt;= <span class="hljs-number">1</span>;<br>  <span class="hljs-keyword">else</span><br>      a&lt;= <span class="hljs-number">0</span>; <br><span class="hljs-keyword">end</span><br></code></pre></td></tr></table></figure>
+
+<p>上面这种情况就没办法做门控，因为门控时钟的含有是在你这个模块完成了对应的功能之后，将时钟gate住，这样所有值都保持住了。上面这种情况a在valid为0是，还会进行翻转，这样综合工具就认为你这模块还没完成对应功能，所以不会做门控。</p>
+<p>推荐的写法如下</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs verilog"><span class="hljs-keyword">reg</span> a;<br><span class="hljs-keyword">always</span> @(<span class="hljs-keyword">posedge</span> clk)<br><span class="hljs-keyword">begin</span><br>  <span class="hljs-keyword">if</span>(valid)<br>      a&lt;= <span class="hljs-number">1</span>; <br><span class="hljs-keyword">end</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="2-操作数隔离"><a href="#2-操作数隔离" class="headerlink" title="2.操作数隔离"></a>2.操作数隔离</h3><p>如果在某一段时间内，数据通路的输出是无用的，则将它的输入置成个固定值，这样，数据通路部分没有翻转，功耗就会降低。会增大面积并且影响DFT。例如下题</p>
+<p><img src="https://pic1.zhimg.com/v2-b03cb07870c5d6f4e0cf9c3111461eea_1440w.jpg" srcset="/img/blog_img/loading.gif" lazyload alt="img"></p>
+<p>注意ENABLE的选择器，没选到加法器则加法器那里的功耗就浪费了，因此当EN没选到加法器那块时，需要将输入输出gate住，防止跳变产生功耗。</p>
+<p>题解如下：</p>
+<p><img src="https://pic2.zhimg.com/v2-157bae16578185a2eb10197bd05543b5_1440w.jpg" srcset="/img/blog_img/loading.gif" lazyload alt="img"></p>
+<h3 id="3-编码优化"><a href="#3-编码优化" class="headerlink" title="3.编码优化"></a>3.<a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=199273436&content_type=Article&match_order=1&q=%E7%BC%96%E7%A0%81%E4%BC%98%E5%8C%96&zd_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ6aGlkYV9zZXJ2ZXIiLCJleHAiOjE3NDQ4NTk2NzcsInEiOiLnvJbnoIHkvJjljJYiLCJ6aGlkYV9zb3VyY2UiOiJlbnRpdHkiLCJjb250ZW50X2lkIjoxOTkyNzM0MzYsImNvbnRlbnRfdHlwZSI6IkFydGljbGUiLCJtYXRjaF9vcmRlciI6MSwiemRfdG9rZW4iOm51bGx9.bRbFj49ECF7feRX_aYRfQ2VMwdzjWNqR-5jIjh3OmTw&zhida_source=entity">编码优化</a></h3><p>状态机编码采用格雷码或者独热码，能够减少状态跳转时的信号bit翻转。</p>
+<p>二进制转格雷码：</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs verilog">gray = bin^(bin&gt;&gt;<span class="hljs-number">1</span>)<br></code></pre></td></tr></table></figure>
+
+<p>一般用于多路选择器的输入端，防止输入乱跳，比如输入为4’b1111，突然跳变为4’b0000，这直接全部跳变了，功耗拉满，相比较下格雷码为</p>
+<p>（4’b1111）(bin)-&gt; (4’b1000) (gray)</p>
+<p>（4’b0000）(bin)-&gt; (4’b0000) (gray） 只跳变了1bit，功耗就降下来了。</p>
+<h3 id="4-减小毛刺及其传递"><a href="#4-减小毛刺及其传递" class="headerlink" title="4.减小毛刺及其传递"></a>4.减小毛刺及其传递</h3><p>毛刺本身就算一种翻转，因为毛刺也可能使后续模块产生翻转，为了降低毛刺带来的影响，一般将关键信号或者变化较快的信号放在离输出最近的一级电路中，这样能减小毛刺的传递，从而降低功耗。</p>
+<h2 id="三、面向面积的设计方法"><a href="#三、面向面积的设计方法" class="headerlink" title="三、面向面积的设计方法"></a>三、面向面积的设计方法</h2><p>一般地，我们在设计中总会要求以性能优先，然后再尽可能去减小设计面积。减小面积就意味着降低成本和功耗，是IC设计工程师在写RTL时必须注意的点。</p>
+<p>本文主要介绍在RTL代码如何来节约面积，</p>
+<h3 id="1-利用位数做判断。"><a href="#1-利用位数做判断。" class="headerlink" title="1.利用位数做判断。"></a>1.利用位数做判断。</h3><p>做判断时注意需要可以采用取某些bit进行判断。</p>
+<p><img src="https://pica.zhimg.com/v2-6bcd96be19c45ecb0a6a64821cba8db4_1440w.jpg" srcset="/img/blog_img/loading.gif" lazyload alt="img"></p>
+<p>这里如果用A&lt;32,那就是A与32做减法了，虽然EDA会做优化，但肯定也没A[5]&#x3D;&#x3D;1’b1的效果好。</p>
+<h3 id="2-尽可能调用成熟的算术IP核"><a href="#2-尽可能调用成熟的算术IP核" class="headerlink" title="2.尽可能调用成熟的算术IP核"></a>2.尽可能调用成熟的算术IP核</h3><p><strong>成熟的IP远比自己写的运算速率和面积都进行了优化，所以对于大bit的操作数建议直接用IP进行运算。</strong></p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs verilog">  <span class="hljs-comment">//不调用IP       </span><br><span class="hljs-keyword">reg</span>[<span class="hljs-number">255</span>:<span class="hljs-number">0</span>] a,b;<br>      ....<br>      <span class="hljs-keyword">if</span>(a+b &lt;c)<br>       ...<br>      <span class="hljs-keyword">else</span><br>      ...<br><span class="hljs-comment">////////////////////////////////////////////////////</span><br>   <span class="hljs-comment">//调用IP</span><br><span class="hljs-keyword">reg</span>[<span class="hljs-number">255</span>:<span class="hljs-number">0</span>] a,b;<br>add add_inst(<br><span class="hljs-variable">.a</span>(a),<br><span class="hljs-variable">.b</span>(b),<br><span class="hljs-variable">.s</span>(s)<br>);<br><span class="hljs-keyword">wire</span>[<span class="hljs-number">256</span>:<span class="hljs-number">0</span>]s;<br>      ....<br>      <span class="hljs-keyword">if</span>(s &lt;c)<br>       ...<br>      <span class="hljs-keyword">else</span><br>      ...<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-资源共享"><a href="#3-资源共享" class="headerlink" title="3.资源共享"></a>3.资源共享</h3><figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs verilog"><span class="hljs-comment">//假设进行如下运算</span><br><span class="hljs-keyword">assign</span> out1=b+c+d+e+f;<br><br><span class="hljs-keyword">assign</span> out2=a+c+d+e+f;<br><br><span class="hljs-keyword">assign</span> out3=a+b+d+e+f;<br><br><span class="hljs-keyword">assign</span> out4=a+b+c+e+f;<br><br><span class="hljs-keyword">assign</span> out5=a+b+c+d+f;<br><br><span class="hljs-comment">//资源共享后</span><br><span class="hljs-keyword">assign</span> sum=a+b+c+d+e+f;<br><br><span class="hljs-keyword">assign</span> out1=sum-a;<br><br><span class="hljs-keyword">assign</span> out2=sum-b;<br><br><span class="hljs-keyword">assign</span> out3=sum-c;<br><br><span class="hljs-keyword">assign</span> out4=sum-d;<br><br><span class="hljs-keyword">assign</span> out5=sum-e;<br></code></pre></td></tr></table></figure>
+
+<h3 id="4-缩减操作位宽"><a href="#4-缩减操作位宽" class="headerlink" title="4.缩减操作位宽"></a>4.缩减操作位宽</h3><p>对于精度要求不高的运算时，比如调用了一个FIR Filter，输出为64bit，我们可以取其最高的32bit进行下一步运算。</p>
+<p>又比如byte加法器，一次增加一个byte（8bit），则大部分人可能直接写成</p>
+<p>cnt &lt;&#x3D; cnt +8;</p>
+<p>这里注意我们的cnt低三位并没有使用，所以这里可以这样写：</p>
+<p>cnt[7:3] &lt;&#x3D; cnt[7:3]+1;</p>
+<p>cnt[2:0] &lt;&#x3D; cnt[2:0] +0;</p>
+<h3 id="5-卡诺图"><a href="#5-卡诺图" class="headerlink" title="5.卡诺图"></a>5.卡诺图</h3><p>我们可以通过卡诺图尽可能的化简操作式。</p>
+<p>如nv笔试题：用尽可能少的与非门搭建如下逻辑：O&#x3D;C?A&amp;B:A；</p>
+<p>先画卡诺图</p>
+<p><img src="https://pic4.zhimg.com/v2-263fe9113edbb5bda160175ef2d33ddd_1440w.jpg" srcset="/img/blog_img/loading.gif" lazyload alt="img"></p>
+<p>化简后逻辑式为：</p>
+<p><img src="https://pica.zhimg.com/v2-668a0d1bfe907267cc79ce4d3598ce0c_1440w.jpg" srcset="/img/blog_img/loading.gif" lazyload alt="img"></p>
+<p>电路图为：</p>
+<p><img src="https://pic4.zhimg.com/v2-f5b5856e0820ac7045c04a397ae4f70d_1440w.jpg" srcset="/img/blog_img/loading.gif" lazyload alt="img"></p>
+<h3 id="6-时分复用"><a href="#6-时分复用" class="headerlink" title="6.时分复用"></a>6.时分复用</h3><p>其实与资源共享有些类似，核心在于用过时钟流水形成运算器的复用。</p>
+<p>比如：我们要计算e&#x3D;a+b+c+d;如果不要求1个时钟算完，那我们可以只用1个加法器实现。</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs verilog"><span class="hljs-comment">//时分复用  伪代码，明白意思就行</span><br><span class="hljs-keyword">input</span> a,b,c,d;<br><span class="hljs-keyword">output</span> e;<br><br><span class="hljs-keyword">assign</span> x = y + x;<br>...<br><span class="hljs-keyword">case</span>(counter)<br><span class="hljs-number">2&#x27;b00</span>:y&lt;=a;z&lt;=b;temp1&lt;=x;<span class="hljs-comment">//第一个时钟先算a+b，并将结果存放到temp1中</span><br><span class="hljs-number">2&#x27;b01</span>:y&lt;=temp1;z&lt;=c;temp2&lt;=x;<span class="hljs-comment">//第二个时钟算temp1+c,并将结果存放到temp2中</span><br><span class="hljs-number">2&#x27;b10</span>:y&lt;=temp2;z&lt;=d;e&lt;=x;<span class="hljs-comment">//第二个时钟算temp2+d,并将结果存放到e中   至此，计算结束</span><br><span class="hljs-keyword">endcase</span><br></code></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="CT项目中的PPA"><a href="#CT项目中的PPA" class="headerlink" title="CT项目中的PPA"></a>CT项目中的PPA</h2><p>主要是面向面积的优化，</p>
+<p>状态机的判断条件使用位数进行判断</p>
+<p>状态的定义使用独热码，更节省面积</p>
+<p>尽量使用简单的逻辑运算表达式，化简卡诺图的方法</p>
+<p>IP 核的使用</p>
+<p>或者是其他的判断条件，例如计数器等等</p>
+<p>对于算法的设计，并不对所有的3*3像素都配置一个算法计算单元，而是通过时分复用</p>
+<p>数据的缓存策略和流动策略</p>
+<p>所有像素的计数器的不可少的，因此所有的计数都是并行执行的，在计数完进行算法计算的时候，通过移位寄存器将数据流入计算单元中，计算每个3*3像素的修正值，每次都是计算得到一个中心像素的修正值，（这里的修正是一个能量聚集的策略）计算完之后，数据流入双端口SRAM进行缓存，SRAM的缓存使用多块的策略。</p>
+<p>我这里只有一块，但整体可以分块进行，在宽度上进行分块</p>
+<p>功耗</p>
+<p>时钟门控和使能信号</p>
+<p>工艺角的问题</p>
+<table>
+<thead>
+<tr>
+<th align="left">工艺角</th>
+<th align="left">NMOS速度</th>
+<th align="left">PMOS速度</th>
+<th align="left">典型影响</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>TT</strong></td>
+<td align="left">典型</td>
+<td align="left">典型</td>
+<td align="left">标称性能</td>
+</tr>
+<tr>
+<td align="left"><strong>FF</strong></td>
+<td align="left">最快</td>
+<td align="left">最快</td>
+<td align="left">速度最快，但功耗和漏电可能超标</td>
+</tr>
+<tr>
+<td align="left"><strong>SS</strong></td>
+<td align="left">最慢</td>
+<td align="left">最慢</td>
+<td align="left">速度最慢，时序易违规</td>
+</tr>
+<tr>
+<td align="left"><strong>FS</strong></td>
+<td align="left">最快</td>
+<td align="left">最慢</td>
+<td align="left">不对称性能（如PMOS拖累）</td>
+</tr>
+<tr>
+<td align="left"><strong>SF</strong></td>
+<td align="left">最慢</td>
+<td align="left">最快</td>
+<td align="left">不对称性能（如NMOS拖累）</td>
+</tr>
+</tbody></table>
+<p>SS 指芯片中<strong>NMOS和PMOS晶体管均处于最慢速度</strong>的工作状态（高阈值电压、低迁移率）</p>
+<p>开关速度降低，时序路径延迟增加</p>
+<ul>
+<li><strong>可靠性验证</strong>：确保芯片在<strong>最恶劣工艺偏差</strong>下仍能满足时序要求（如时钟频率）。</li>
+<li><strong>功耗评估</strong>：SS角下漏电流最小，可用于评估最低功耗场景。</li>
+<li><strong>设计余量（Margin）</strong>：防止实际生产中出现“速度过慢”的芯片失效。</li>
+</ul>
+<p>FF 用于评估功耗最大的场景，主要由于晶体管速度最快导致动态功耗激增，同时低阈值电压加剧漏电流。设计时必须通过仿真覆盖FF角条件，避免芯片在实际应用中因功耗超标失效。</p>
+<ul>
+<li><strong>SS + 125℃ + Vdd_min</strong>（最差时序）</li>
+<li><strong>FF + 125℃ + Vdd_max</strong>（最大功耗）</li>
+<li><strong>TT + 25℃ + Vdd_nom</strong>（标称性能）</li>
+</ul>
+<h1 id="公司总结"><a href="#公司总结" class="headerlink" title="公司总结"></a>公司总结</h1><h2 id="APB协议"><a href="#APB协议" class="headerlink" title="APB协议"></a>APB协议</h2><p>PCLK     1      时钟</p>
+<p>PRESET   1      复位</p>
+<p>PWRITE   1      读写控制</p>
+<p>PSEL      1      设备选择</p>
+<p>PENABLE   1      设备使能</p>
+<p>PADDR     32     读写地址</p>
+<p>PWDATA  32     写数据</p>
+<p>PRDATA   32     读数据</p>
+<p>PREADY   1      设备状态反馈</p>
+<p>PSLVERR   1      设备错误反馈</p>
+<p>PSTRB             写选通信号，指示总线上哪些字节数据有效</p>
+<p>非流水线式读写，每次读写分为两拍，前一拍为建立阶段，后一拍为访问阶段。</p>
+<p>PSEL在两拍中都为高，PENABLE只有在访问阶段才为高，其余地址和数据信号在两拍中保持不变</p>
+<p>PREADY信号为0时，起到暂停总线的作用，访问阶段会拖延，期间控制信号不变</p>
+<p>PSLVERR信号为1时，表示设备寄存器发生错误，对于读操作，CPU忽略返回的数据</p>
+<p>主机：</p>
+<p>通过维护一个状态机，来实现读写控制逻辑</p>
+<p>空闲状态，设备建立状态，设备访问状态</p>
+<p>根据不同状态，输出控制信号和读写数据</p>
+<p>从机：</p>
+<p>配置字先是被存储在APB域的寄存器，然后在合适的时机同步到内部寄存器，可以由CPU发送同步信号来同步。Buffer Enable</p>
+<p>状态机：</p>
+<p>二进制编码，格雷码，独热码</p>
+<p>1．二进制编码  </p>
+<p>优点：触发器利用率高，仅用较少的触发器就能表示较多的状态</p>
+<p>缺点：状态之间切换速度慢，译码复杂</p>
+<ol start="2">
+<li>格雷码</li>
+</ol>
+<p>优点：触发器利用率高，可以避免多bit信号的数据歪斜，状态切换速度较快、</p>
+<p>缺点：译码复杂 </p>
+<ol start="3">
+<li>独热码</li>
+</ol>
+<p>优点：状态切换速度快，译码简单</p>
+<p>缺点：会使用较多的触发器，触发器利用率不高</p>
+<p><strong>高速系统</strong>下统一采用<strong>独热码</strong></p>
+<p>使用独热码的更加节省组合逻辑，对于译码和状态比较和跳转的逻辑都更加简单</p>
+<p>在卡诺图化简中，不care的编码可以与其余的有效编码合并化简。实际上综合器也会这么做，所以独热码非常容易化简。</p>
+<h2 id="AHB协议"><a href="#AHB协议" class="headerlink" title="AHB协议"></a>AHB协议</h2><p>HCLK            1      时钟</p>
+<p>HRESET          1      复位</p>
+<p>HWRITE          1      读写控制</p>
+<p>HTRANS           2      传输方式（空闲，忙，传一个，传多个）</p>
+<p>HSIZE             3      每次传输多少个字节（最大值由数据位宽决定）</p>
+<p>HPORT            4      数据保护（Cache，Buffer，数据权限，指令&#x2F;数据）</p>
+<p>HBUSRT           3      突发传输个数和地址传输方式</p>
+<p>HADDR           32     读写地址</p>
+<p>HWDATA         32     写数据</p>
+<p>HRDATA         32     读数据</p>
+<p>HREADY          1      总线上所有设备状态反馈</p>
+<p>HREADYOUT      1      设备状态反馈</p>
+<p>HRESP            1      设备错误反馈</p>
+<p>其他控制信号</p>
+<p>HMASTER      </p>
+<p>HMASTLOCK     </p>
+<p>AHB的读写数据，分为两拍进行，地址阶段和数据阶段</p>
+<p>传输方式是流水线方式，即B轮传输的地址和A轮的数据重合</p>
+<p>如果HREADY拉低，总线暂停，B轮的地址和控制信号都会保持</p>
+<h2 id="寄存器类型"><a href="#寄存器类型" class="headerlink" title="寄存器类型"></a>寄存器类型</h2><p>已支持类型</p>
+<p><strong>RW（读写）</strong></p>
+<p>描述：由APB数据接口写入，输出到其他模块，可以使用APB数据接口读出	</p>
+<p>写入：APB总线写入新值</p>
+<p>读取：APB总线可以读取</p>
+<p>输出：值可用于控制其他模块</p>
+<p>应用场景：常用于控制寄存器，例如配置工作模式、使能位、阈值设置等。</p>
+<p><strong>R（只读）</strong></p>
+<p>描述：由其他模块输入，直接给到APB数据接口读出，该寄存器值由模块内部逻辑提供，CPU&#x2F;APB只能读取，不能写。</p>
+<p>写入：不允许</p>
+<p>读取：APB总线可读取</p>
+<p>应用场景：用于状态反馈、只读标志位、传感器输出、状态监测等。</p>
+<p><strong>W（只写）</strong></p>
+<p>描述：由APB数据接口写入，输出到其他模块，不会使用APB数据接口读出</p>
+<p>写入：可以</p>
+<p>读取：APB无法读取</p>
+<p>输出：用于产生某些控制信号，如触发、复位等</p>
+<p>应用场景：写入触发类操作，如启动DMA、复位模块、产生脉冲控制信号等。</p>
+<p><strong>RC（读清）</strong></p>
+<p>描述：由APB数据接口写入，输出到其他模块，可以使用APB数据接口读出，但读出之后清0</p>
+<p>写入：可以</p>
+<p>读取：读时清0</p>
+<p>应用场景：状态或事件标志类寄存器，如FIFO满&#x2F;空标志、错误中断标志。读取后清零避免重复响应。</p>
+<p><strong>W1C（写1清）</strong></p>
+<p>描述：由APB数据接口写入1时，该寄存器清0，否则保持不变，脉冲，输出到其他模块，可以使用APB数据接口读出</p>
+<p>写入：可以</p>
+<p>读取：可以</p>
+<p>用途：常用于中断清除，CPU进入ISR后写1清除中断标志位。常常用于对中断寄存器清0，当CPU进入中断服务程序时，就必须发出一个脉冲对中断寄存器清0</p>
+<p>应用场景：中断状态寄存器，异常标志寄存器。</p>
+<p><strong>W0S（写0S）</strong></p>
+<p>描述：写0时该位被置1（Set），写1无效。输出到其他模块，可以使用APB数据接口读出</p>
+<p>写入：可以</p>
+<p>读取：可以读取</p>
+<p>用途：不常见，某些特殊场景下用于位反转或异常启动信号。</p>
+<p>注意：不同设计者可能赋予W0S不同含义，也有设计中写0置0的称法，具体以文档定义为准。</p>
+<p><strong>W1（写一次）</strong></p>
+<p>由APB数据接口写入，输出到其他模块，可以使用APB数据接口读出，只有在复位的时候可以写1次</p>
+<p>描述：该寄存器只能在上电&#x2F;复位后写入一次，之后无法修改。</p>
+<p>写入：只能写一次</p>
+<p>读取：可以读取</p>
+<p>应用场景：一次性配置信息，如芯片配置锁定、安全区域解锁等。</p>
+<p><strong>WRS</strong></p>
+<p>由APB数据接口写入，输出到其他模块，可以使用APB数据接口读出（与RW的区别在哪里？）</p>
+<p>描述：与RW相似，但强调寄存器由写入值驱动行为后，也可读回写入值。</p>
+<p>区别于RW：在某些规范中，WRS更强调“写驱动行为”，RW更强调“长期配置保存”</p>
+<p>应用场景：控制启动后可以确认写入值是否生效，如写入DMA启动地址后可读回确认。</p>
+<p>✅ 总结表：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>是否可写</th>
+<th>是否可读</th>
+<th>特殊行为</th>
+<th>应用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>RW</td>
+<td>✅</td>
+<td>✅</td>
+<td>无</td>
+<td>控制与配置</td>
+</tr>
+<tr>
+<td>R</td>
+<td>❌</td>
+<td>✅</td>
+<td>无</td>
+<td>状态反馈</td>
+</tr>
+<tr>
+<td>W</td>
+<td>✅</td>
+<td>❌</td>
+<td>无</td>
+<td>写触发类控制</td>
+</tr>
+<tr>
+<td>RC</td>
+<td>✅</td>
+<td>✅</td>
+<td><strong>读后清零</strong></td>
+<td>标志位&#x2F;事件记录</td>
+</tr>
+<tr>
+<td>W1C</td>
+<td>✅</td>
+<td>✅</td>
+<td><strong>写1清零</strong></td>
+<td>中断清除&#x2F;错误清除</td>
+</tr>
+<tr>
+<td>W0S</td>
+<td>✅</td>
+<td>✅</td>
+<td><strong>写0置位</strong>（不常见）</td>
+<td>启动信号&#x2F;调试</td>
+</tr>
+<tr>
+<td>W1</td>
+<td>✅</td>
+<td>✅</td>
+<td><strong>只允许写1次</strong></td>
+<td>安全配置&#x2F;锁定值</td>
+</tr>
+<tr>
+<td>WRS</td>
+<td>✅</td>
+<td>✅</td>
+<td>强调写驱动行为</td>
+<td>写后确认写入值（DMA配置等）</td>
+</tr>
+</tbody></table>
+<p>下面是一个代码例子</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br></pre></td><td class="code"><pre><code class="hljs verilog"><span class="hljs-comment">/***************************************************MODULE NAME usart**************************************************</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">--------------------------------------------------usart_sr--------------------------------------------------</span><br><span class="hljs-comment">|BIT NAME                 |BIT POSITION   |REG_ACCESS                    |REG_KEY        |SET       |CLEAR     </span><br><span class="hljs-comment">|-------------------------|---------------|------------------------------|---------------|----------|----------</span><br><span class="hljs-comment">|pe                       |[0:0]          |RW                            |None           |0         |0         </span><br><span class="hljs-comment">|fe                       |[1:1]          |W(WriteOnly)                  |None           |0         |0         </span><br><span class="hljs-comment">|ne                       |[2:2]          |R(ReadOnly)                   |None           |0         |0         </span><br><span class="hljs-comment">|ore                      |[3:3]          |RC(readclear)                 |None           |0         |0         </span><br><span class="hljs-comment">|idle                     |[4:4]          |W1C(Write1/auto-clear 0)      |None           |0         |0         </span><br><span class="hljs-comment">|rxne                     |[5:5]          |W0S(Write0/auto-set1)         |None           |0         |0         </span><br><span class="hljs-comment">|tc                       |[6:6]          |W1(WriteOnce)                 |None           |0         |0         </span><br><span class="hljs-comment">|txe                      |[7:7]          |WRS(WR/hardware update)       |None           |0         |0         </span><br><span class="hljs-comment">|lbd                      |[8:8]          |RW                            |None           |0         |0         </span><br><span class="hljs-comment">|cts                      |[9:9]          |RW                            |None           |0         |0         </span><br><span class="hljs-comment">--------------------------------------------------------------------------------------------------------------</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">--------------------------------------------------usart_dr--------------------------------------------------</span><br><span class="hljs-comment">|BIT NAME                 |BIT POSITION   |REG_ACCESS                    |REG_KEY        |SET       |CLEAR     </span><br><span class="hljs-comment">|-------------------------|---------------|------------------------------|---------------|----------|----------</span><br><span class="hljs-comment">|dr                       |[7:0]          |RW                            |None           |0         |0         </span><br><span class="hljs-comment">--------------------------------------------------------------------------------------------------------------</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">**************************************************end usart**************************************************/</span><br><br><br><span class="hljs-meta">`<span class="hljs-keyword">ifndef</span> USART_MMR_V</span><br><span class="hljs-meta">`<span class="hljs-keyword">define</span> USART_MMR_V</span><br><br><span class="hljs-keyword">module</span> usart_mmr<br>    #( <br>    <span class="hljs-keyword">parameter</span> ADDR_WIDTH     =    <span class="hljs-number">32</span>,<br>    <span class="hljs-keyword">parameter</span> DATA_WIDTH     =    <span class="hljs-number">32</span>,<br>	<span class="hljs-comment">//Reg address parameter define </span><br>	<span class="hljs-keyword">parameter</span> [ADDR_WIDTH-<span class="hljs-number">1</span> : <span class="hljs-number">0</span>] addr_usart_sr       =  <span class="hljs-number">&#x27;h0</span>,<br>	<span class="hljs-keyword">parameter</span> [ADDR_WIDTH-<span class="hljs-number">1</span> : <span class="hljs-number">0</span>] addr_usart_dr       =  <span class="hljs-number">&#x27;h4</span> ) <br><br>( <br><span class="hljs-keyword">input</span>                              userkey   ,<br><span class="hljs-keyword">input</span>                              lckey     ,<br><span class="hljs-keyword">input</span>                              clk       ,<br><span class="hljs-keyword">input</span>                              rstn      ,<br><span class="hljs-keyword">input</span>          [ADDR_WIDTH-<span class="hljs-number">1</span> : <span class="hljs-number">0</span>]  p_addr    ,<br><span class="hljs-keyword">input</span>                              p_sel     ,<br><span class="hljs-keyword">input</span>                              p_enable  ,<br><span class="hljs-keyword">input</span>                              p_write   ,<br><span class="hljs-keyword">input</span>          [DATA_WIDTH-<span class="hljs-number">1</span> : <span class="hljs-number">0</span>]  p_wdata   ,<br><span class="hljs-keyword">input</span>          [<span class="hljs-number">3</span>:<span class="hljs-number">0</span>]               p_strb    ,<br><span class="hljs-keyword">output</span>                             p_ready   ,<br><span class="hljs-keyword">output</span> <span class="hljs-keyword">reg</span>     [DATA_WIDTH-<span class="hljs-number">1</span> : <span class="hljs-number">0</span>]  p_rdata   ,<br><span class="hljs-keyword">output</span>                             p_slaverr ,<br><br><span class="hljs-comment">//The signal define of the USART_SR ,type &quot;RW&quot;</span><br><span class="hljs-keyword">output</span> <span class="hljs-keyword">reg</span>                         O_usart_sr_pe,<br><span class="hljs-keyword">output</span> <span class="hljs-keyword">reg</span>                         O_usart_sr_fe,<br><span class="hljs-keyword">input</span>                              I_usart_sr_ne,<br><span class="hljs-keyword">output</span> <span class="hljs-keyword">reg</span>                         O_usart_sr_ore,<br><span class="hljs-keyword">output</span> <span class="hljs-keyword">reg</span>                         O_usart_sr_idle,<br><span class="hljs-keyword">output</span> <span class="hljs-keyword">reg</span>                         O_usart_sr_rxne,<br><span class="hljs-keyword">output</span> <span class="hljs-keyword">reg</span>                         O_usart_sr_tc,<br><span class="hljs-keyword">output</span> <span class="hljs-keyword">reg</span>                         O_usart_sr_txe,<br><span class="hljs-keyword">output</span> <span class="hljs-keyword">reg</span>                         O_usart_sr_lbd,<br><span class="hljs-keyword">output</span> <span class="hljs-keyword">reg</span>                         O_usart_sr_cts,<br><br><span class="hljs-comment">//The signal define of the USART_DR ,type &quot;RW&quot;</span><br><span class="hljs-keyword">output</span> <span class="hljs-keyword">reg</span>     [<span class="hljs-number">7</span>:<span class="hljs-number">0</span>]               O_usart_dr_dr<br>);<br><br><span class="hljs-comment">//Write and read enable wire define </span><br><span class="hljs-keyword">wire</span>    wr_en; <br><span class="hljs-keyword">wire</span>    rd_en; <br><span class="hljs-keyword">wire</span>    wen_usart_sr; <br><span class="hljs-keyword">wire</span>    wen_usart_dr; <br><br><span class="hljs-comment">//Write enable assign for bus </span><br><span class="hljs-keyword">assign</span>   wr_en                = p_sel &amp; p_enable &amp; p_write; <br><span class="hljs-keyword">assign</span>   rd_en                = p_sel &amp; p_enable &amp; !p_write; <br><span class="hljs-keyword">assign</span>   wen_usart_sr         = wr_en &amp; (p_addr ==  addr_usart_sr); <br><span class="hljs-keyword">assign</span>   wen_usart_dr         = wr_en &amp; (p_addr ==  addr_usart_dr); <br><br><span class="hljs-comment">//define always write for reg usart_sr_pe / type-RW</span><br><span class="hljs-keyword">always</span> @(<span class="hljs-keyword">posedge</span> clk <span class="hljs-keyword">or</span> <span class="hljs-keyword">negedge</span> rstn ) <span class="hljs-keyword">begin</span> <br>	<span class="hljs-keyword">if</span>(!rstn) <span class="hljs-keyword">begin</span> <br>		O_usart_sr_pe &lt;= <span class="hljs-number">1&#x27;h0</span>;<br>	<span class="hljs-keyword">end</span> <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(wen_usart_sr &amp; p_strb[<span class="hljs-number">0</span>]) <span class="hljs-keyword">begin</span><br>		O_usart_sr_pe &lt;= p_wdata[<span class="hljs-number">0</span>]; <br>	<span class="hljs-keyword">end</span><br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">//define always write for reg usart_sr_fe / type-W(WriteOnly)</span><br><span class="hljs-keyword">always</span> @(<span class="hljs-keyword">posedge</span> clk <span class="hljs-keyword">or</span> <span class="hljs-keyword">negedge</span> rstn ) <span class="hljs-keyword">begin</span> <br>	<span class="hljs-keyword">if</span>(!rstn) <span class="hljs-keyword">begin</span> <br>		O_usart_sr_fe &lt;= <span class="hljs-number">1&#x27;h0</span>;<br>	<span class="hljs-keyword">end</span> <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(wen_usart_sr &amp; p_strb[<span class="hljs-number">0</span>]) <span class="hljs-keyword">begin</span><br>		O_usart_sr_fe &lt;= p_wdata[<span class="hljs-number">1</span>]; <br>	<span class="hljs-keyword">end</span><br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">//define always write for reg usart_sr_ore / type-RC(readclear)</span><br><span class="hljs-keyword">wire</span>	rd_clr_usart_sr_ore;<br><span class="hljs-keyword">assign</span>	rd_clr_usart_sr_ore = rd_en &amp; (p_addr == addr_usart_sr);<br><span class="hljs-keyword">always</span> @(<span class="hljs-keyword">posedge</span> clk <span class="hljs-keyword">or</span> <span class="hljs-keyword">negedge</span> rstn ) <span class="hljs-keyword">begin</span> <br>	<span class="hljs-keyword">if</span>(!rstn) <span class="hljs-keyword">begin</span> <br>		O_usart_sr_ore &lt;= <span class="hljs-number">1&#x27;h0</span>;<br>	<span class="hljs-keyword">end</span> <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(wen_usart_sr &amp; p_strb[<span class="hljs-number">0</span>]) <span class="hljs-keyword">begin</span><br>		O_usart_sr_ore &lt;= p_wdata[<span class="hljs-number">3</span>]; <br>	<span class="hljs-keyword">end</span> <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(rd_clr_usart_sr_ore) <span class="hljs-keyword">begin</span><br>		O_usart_sr_ore &lt;= <span class="hljs-number">1&#x27;b0</span>;<br>	<span class="hljs-keyword">end</span><br><span class="hljs-keyword">end</span> <br><br><span class="hljs-comment">//define always write for reg usart_sr_idle / type-W1C(Write1/auto-clear 0)</span><br><span class="hljs-keyword">always</span> @(<span class="hljs-keyword">posedge</span> clk <span class="hljs-keyword">or</span> <span class="hljs-keyword">negedge</span> rstn ) <span class="hljs-keyword">begin</span> <br>	<span class="hljs-keyword">if</span>(!rstn) <span class="hljs-keyword">begin</span> <br>		O_usart_sr_idle &lt;= <span class="hljs-number">1&#x27;h0</span>;<br>	<span class="hljs-keyword">end</span> <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(wen_usart_sr &amp; p_strb[<span class="hljs-number">0</span>]) <span class="hljs-keyword">begin</span><br>		O_usart_sr_idle &lt;= p_wdata[<span class="hljs-number">4</span>] ? <span class="hljs-number">1&#x27;b0</span> : O_usart_sr_idle;<br>	<span class="hljs-keyword">end</span><br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">//define always write for reg usart_sr_rxne / type-W0S(Write0/auto-set1)</span><br><span class="hljs-keyword">always</span> @(<span class="hljs-keyword">posedge</span> clk <span class="hljs-keyword">or</span> <span class="hljs-keyword">negedge</span> rstn ) <span class="hljs-keyword">begin</span> <br>	<span class="hljs-keyword">if</span>(!rstn) <span class="hljs-keyword">begin</span> <br>		O_usart_sr_rxne &lt;= <span class="hljs-number">1&#x27;h0</span>;<br>	<span class="hljs-keyword">end</span> <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(wen_usart_sr &amp; p_strb[<span class="hljs-number">0</span>]) <span class="hljs-keyword">begin</span><br>		O_usart_sr_rxne &lt;= (!p_wdata[<span class="hljs-number">5</span>]) ? <span class="hljs-number">1&#x27;b1</span> : O_usart_sr_rxne; <br>	<span class="hljs-keyword">end</span><br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">//define always write for reg usart_sr_tc / type-W1(WriteOnce)</span><br><span class="hljs-keyword">reg</span>    flag_w1_usart_sr_tc;<br><span class="hljs-keyword">always</span> @(<span class="hljs-keyword">posedge</span> clk <span class="hljs-keyword">or</span> <span class="hljs-keyword">negedge</span> rstn ) <span class="hljs-keyword">begin</span> <br>	<span class="hljs-keyword">if</span>(!rstn) <span class="hljs-keyword">begin</span> <br>		flag_w1_usart_sr_tc &lt;= <span class="hljs-number">1&#x27;b1</span>;<br>	<span class="hljs-keyword">end</span> <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(wen_usart_sr &amp; p_strb[<span class="hljs-number">0</span>]) <span class="hljs-keyword">begin</span> <br>		flag_w1_usart_sr_tc &lt;= <span class="hljs-number">1&#x27;b0</span>;<br>	<span class="hljs-keyword">end</span> <br><span class="hljs-keyword">end</span> <br><br><span class="hljs-keyword">wire</span> flag_w1_usart_sr_tc_write;<br><span class="hljs-keyword">assign</span> flag_w1_usart_sr_tc_write = wen_usart_sr &amp; p_strb[<span class="hljs-number">0</span>] &amp; flag_w1_usart_sr_tc;<br><span class="hljs-keyword">always</span> @(<span class="hljs-keyword">posedge</span> clk <span class="hljs-keyword">or</span> <span class="hljs-keyword">negedge</span> rstn ) <span class="hljs-keyword">begin</span> <br>	<span class="hljs-keyword">if</span>(!rstn) <span class="hljs-keyword">begin</span> <br>		O_usart_sr_tc &lt;= <span class="hljs-number">1&#x27;h1</span>;<br>	<span class="hljs-keyword">end</span> <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(flag_w1_usart_sr_tc_write) <span class="hljs-keyword">begin</span><br>		O_usart_sr_tc &lt;= p_wdata[<span class="hljs-number">6</span>]; <br>	<span class="hljs-keyword">end</span><br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">//define always write for reg usart_sr_txe / type-WRS(WR/hardware update)</span><br><span class="hljs-keyword">always</span> @(<span class="hljs-keyword">posedge</span> clk <span class="hljs-keyword">or</span> <span class="hljs-keyword">negedge</span> rstn ) <span class="hljs-keyword">begin</span> <br>	<span class="hljs-keyword">if</span>(!rstn) <span class="hljs-keyword">begin</span> <br>		O_usart_sr_txe &lt;= <span class="hljs-number">1&#x27;h1</span>;<br>	<span class="hljs-keyword">end</span> <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(wen_usart_sr &amp; p_strb[<span class="hljs-number">0</span>]) <span class="hljs-keyword">begin</span><br>		O_usart_sr_txe &lt;= p_wdata[<span class="hljs-number">7</span>]; <br>	<span class="hljs-keyword">end</span><br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">//define always write for reg usart_sr_lbd / type-RW</span><br><span class="hljs-keyword">always</span> @(<span class="hljs-keyword">posedge</span> clk <span class="hljs-keyword">or</span> <span class="hljs-keyword">negedge</span> rstn ) <span class="hljs-keyword">begin</span> <br>	<span class="hljs-keyword">if</span>(!rstn) <span class="hljs-keyword">begin</span> <br>		O_usart_sr_lbd &lt;= <span class="hljs-number">1&#x27;h0</span>;<br>	<span class="hljs-keyword">end</span> <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(wen_usart_sr &amp; p_strb[<span class="hljs-number">1</span>]) <span class="hljs-keyword">begin</span><br>		O_usart_sr_lbd &lt;= p_wdata[<span class="hljs-number">8</span>]; <br>	<span class="hljs-keyword">end</span><br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">//define always write for reg usart_sr_cts / type-RW</span><br><span class="hljs-keyword">always</span> @(<span class="hljs-keyword">posedge</span> clk <span class="hljs-keyword">or</span> <span class="hljs-keyword">negedge</span> rstn ) <span class="hljs-keyword">begin</span> <br>	<span class="hljs-keyword">if</span>(!rstn) <span class="hljs-keyword">begin</span> <br>		O_usart_sr_cts &lt;= <span class="hljs-number">1&#x27;h0</span>;<br>	<span class="hljs-keyword">end</span> <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(wen_usart_sr &amp; p_strb[<span class="hljs-number">1</span>]) <span class="hljs-keyword">begin</span><br>		O_usart_sr_cts &lt;= p_wdata[<span class="hljs-number">9</span>]; <br>	<span class="hljs-keyword">end</span><br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">//define always write for reg usart_dr_dr / type-RW</span><br><span class="hljs-keyword">always</span> @(<span class="hljs-keyword">posedge</span> clk <span class="hljs-keyword">or</span> <span class="hljs-keyword">negedge</span> rstn ) <span class="hljs-keyword">begin</span> <br>	<span class="hljs-keyword">if</span>(!rstn) <span class="hljs-keyword">begin</span> <br>		O_usart_dr_dr[<span class="hljs-number">7</span>:<span class="hljs-number">0</span>] &lt;= <span class="hljs-number">8&#x27;h0</span>;<br>	<span class="hljs-keyword">end</span> <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(wen_usart_dr &amp; p_strb[<span class="hljs-number">0</span>]) <span class="hljs-keyword">begin</span><br>		O_usart_dr_dr[<span class="hljs-number">7</span>:<span class="hljs-number">0</span>] &lt;= p_wdata[<span class="hljs-number">7</span>:<span class="hljs-number">0</span>]; <br>	<span class="hljs-keyword">end</span><br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">//For the bus read for module USART</span><br><span class="hljs-keyword">always</span> @(*) <span class="hljs-keyword">begin</span> <br>	p_rdata = <span class="hljs-number">&#x27;b0</span>;<br>	<span class="hljs-keyword">if</span>(<span class="hljs-number">1&#x27;b1</span>) <span class="hljs-keyword">begin</span> <br>		<span class="hljs-keyword">case</span>(p_addr)<br>			addr_usart_sr : <span class="hljs-keyword">begin</span> <br>				p_rdata[<span class="hljs-number">0</span>]           = O_usart_sr_pe;<br>				p_rdata[<span class="hljs-number">1</span>]           = <span class="hljs-number">1&#x27;h0</span>;<br>				p_rdata[<span class="hljs-number">2</span>]           = I_usart_sr_ne;<br>				p_rdata[<span class="hljs-number">3</span>]           = O_usart_sr_ore;<br>				p_rdata[<span class="hljs-number">4</span>]           = O_usart_sr_idle;<br>				p_rdata[<span class="hljs-number">5</span>]           = O_usart_sr_rxne;<br>				p_rdata[<span class="hljs-number">6</span>]           = O_usart_sr_tc;<br>				p_rdata[<span class="hljs-number">7</span>]           = O_usart_sr_txe;<br>				p_rdata[<span class="hljs-number">8</span>]           = O_usart_sr_lbd;<br>				p_rdata[<span class="hljs-number">9</span>]           = O_usart_sr_cts;<br>			<span class="hljs-keyword">end</span> <br>			addr_usart_dr : <span class="hljs-keyword">begin</span> <br>				p_rdata[<span class="hljs-number">7</span>:<span class="hljs-number">0</span>]         = O_usart_dr_dr[<span class="hljs-number">7</span>:<span class="hljs-number">0</span>];<br>			<span class="hljs-keyword">end</span> <br>			<span class="hljs-keyword">default</span>: p_rdata = <span class="hljs-number">&#x27;b0</span>;<br>		<span class="hljs-keyword">endcase</span> <br>	<span class="hljs-keyword">end</span> <span class="hljs-keyword">else</span> <br>		p_rdata = <span class="hljs-number">&#x27;b0</span>;<br><span class="hljs-keyword">end</span><br><br><span class="hljs-keyword">wire</span> reg_map;<br><span class="hljs-keyword">assign</span> reg_map = <br>		(p_addr ==  addr_usart_sr       ) |<br>		(p_addr ==  addr_usart_dr       )  ;<br><br><span class="hljs-keyword">assign</span> p_slaverr = p_sel &amp; p_enable &amp; reg_map;<br><br><span class="hljs-keyword">assign</span> p_ready = p_enable;<br><br><span class="hljs-keyword">endmodule</span> <br><br></code></pre></td></tr></table></figure>
+
+
+
+<p>其他类型</p>
+<p>RS（读置位） </p>
+<p>WC（写清）</p>
+<p>W1T（写1翻转）</p>
+<p>WRC</p>
+<p>WSRC</p>
+<p>WCRS</p>
+<p>W1S</p>
+<p> <strong>参考</strong></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/moon9999/article/details/131146296#:~:text=%E6%9C%AC%E6%96%87%E8%AF%A6%E7%BB%86%E4%BB%8B%E7%BB%8D%E4%BA%86%E5%AF%84%E5%AD%98%E5%99%A8%E7%9A%84%E8%AF%BB%E5%86%99%E5%B1%9E%E6%80%A7%EF%BC%8C%E5%8C%85%E6%8B%ACread-writeaccess%E3%80%81modifiedWriteValue%E5%92%8CreadAction%EF%BC%8C%E5%B9%B6%E5%88%97%E4%B8%BE%E4%BA%8625%E7%A7%8D%E4%B8%8D%E5%90%8C%E7%9A%84%E5%AF%84%E5%AD%98%E5%99%A8%E8%A1%8C%E4%B8%BA%E5%8F%8A%E5%85%B6%E5%9C%A8RAL%E6%A8%A1%E5%9E%8B%E4%B8%AD%E7%9A%84%E6%94%AF%E6%8C%81%E6%83%85%E5%86%B5%E3%80%82,%E6%AD%A4%E5%A4%96%EF%BC%8C%E8%BF%98%E6%8F%90%E4%BE%9B%E4%BA%86%E5%85%B3%E9%94%AE%E5%AF%84%E5%AD%98%E5%99%A8%E7%B1%BB%E5%9E%8B%E7%9A%84RTL%E5%AE%9E%E7%8E%B0%EF%BC%8C%E5%A6%82RW%E3%80%81WO%E3%80%81RO%E3%80%81W1%E3%80%81W1C%E3%80%81RC%E3%80%81RS%E3%80%81WRC%E3%80%81WRS%E3%80%81WC%E3%80%81WS%E3%80%81WSRC%E5%92%8CWCRS%E7%AD%89%EF%BC%8C%E4%BB%A5%E5%8F%8A%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86%E8%BD%AF%E4%BB%B6%E5%92%8C%E7%A1%AC%E4%BB%B6%E6%93%8D%E4%BD%9C%E3%80%82">【前端验证】通关寄存器与ral_model —— 25种常用寄存器类型全览_寄存器属性-CSDN博客</a></p>
 
                 
               </div>
