@@ -1,0 +1,783 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/blog_img/avatar_my.jpg">
+  <link rel="icon" href="/img/blog_img/avatar_my.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Vinters-v">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="UVM知识笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UVM知识笔记">
+<meta property="og:url" content="http://vinters-v.github.io/2025/05/20/%E6%95%B0%E5%AD%97IC%E2%80%94%E2%80%94UVM_%E8%BF%9B%E9%98%B6/index.html">
+<meta property="og:site_name" content="Vinters-v">
+<meta property="og:description" content="UVM知识笔记">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://vinters-v.github.io/img/article_img/IC/IC.jpg">
+<meta property="article:published_time" content="2025-05-20T06:41:50.405Z">
+<meta property="article:modified_time" content="2025-05-28T10:44:32.776Z">
+<meta property="article:author" content="Vinters-v">
+<meta property="article:tag" content="UVM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://vinters-v.github.io/img/article_img/IC/IC.jpg">
+  
+  
+  
+  <title>UVM知识笔记 - Vinters-v</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"vinters-v.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"left","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/blog_img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Vinters-v</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/blog_img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="UVM知识笔记"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-05-20 14:41" pubdate>
+          2025年5月20日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.9k 字
+        
+      </span>
+    
+
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="padding-left: 2rem; margin-right: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">UVM知识笔记</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>UVM知识笔记</p>
+<span id="more"></span>
+
+<h1 id="UVM"><a href="#UVM" class="headerlink" title="UVM"></a>UVM</h1><h2 id="interface"><a href="#interface" class="headerlink" title="interface"></a>interface</h2><p><strong>时钟块</strong></p>
+<p>在 posedge clk 后 1ns 采样 input 信号</p>
+<p>在 posedge clk 后 2ns 驱动 output 信号</p>
+<p>保证：DUT 始终采样到“前一周期”的数据，testbench 始终看到“当前周期”的 DUT 输出</p>
+<p>给 DUT 充足时间生成输出，Testbench 采样稳定值（input delay）</p>
+<p>保证 Testbench 的驱动不会在 DUT 时钟敏感路径上竞争（output delay）</p>
+<p><strong>断言控制</strong></p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs verilog"><span class="hljs-keyword">default</span> <span class="hljs-keyword">disable</span> <span class="hljs-keyword">iff</span> (!presetn); <span class="hljs-comment">//这里的iff是if and only if的意思</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>APB VIP的接口</strong></p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><code class="hljs verilog"><span class="hljs-meta">`<span class="hljs-keyword">ifndef</span> SVK_APB_IF__SV</span><br><span class="hljs-meta">`<span class="hljs-keyword">define</span> SVK_APB_IF__SV</span><br><br><span class="hljs-keyword">interface</span> svk_apb_if();<br>    <span class="hljs-keyword">logic</span>                             pclk;<br>    <span class="hljs-keyword">logic</span>                             presetn;<br><br>    <span class="hljs-keyword">logic</span> [`SVK_APB_ADDR_WIDTH -<span class="hljs-number">1</span> :<span class="hljs-number">0</span>] paddr;<br>    <span class="hljs-keyword">logic</span>                             psel;<br>    <span class="hljs-keyword">logic</span> [`SVK_APB_DATA_WIDTH -<span class="hljs-number">1</span> :<span class="hljs-number">0</span>] pwdata;<br>    <span class="hljs-keyword">logic</span> [`SVK_APB_DATA_WIDTH -<span class="hljs-number">1</span> :<span class="hljs-number">0</span>] prdata;<br>    <span class="hljs-keyword">logic</span>                             penable;<br>    <span class="hljs-keyword">logic</span>                             pwrite;<br>    <span class="hljs-keyword">logic</span>                             pready;<br>    <span class="hljs-keyword">logic</span>                             pslverr;<br>    <span class="hljs-keyword">logic</span> [<span class="hljs-number">2</span>                  :<span class="hljs-number">0</span>]     pprot;<br>    <span class="hljs-keyword">logic</span> [`SVK_APB_STRB_WIDTH -<span class="hljs-number">1</span> :<span class="hljs-number">0</span>] pstrb;<br>    <span class="hljs-keyword">logic</span> [`SVK_APB_USER_WIDTH -<span class="hljs-number">1</span> :<span class="hljs-number">0</span>] puser;<br><br><br>    <span class="hljs-keyword">clocking</span> mst_cb @(<span class="hljs-keyword">posedge</span> pclk);<br>        <span class="hljs-keyword">default</span> <span class="hljs-keyword">input</span> #<span class="hljs-number">0</span><span class="hljs-variable">.1ns</span> <span class="hljs-keyword">output</span> #<span class="hljs-number">0</span><span class="hljs-variable">.1ns</span>;<br><br>        <span class="hljs-keyword">output</span> paddr;<br>        <span class="hljs-keyword">output</span> psel;<br>        <span class="hljs-keyword">output</span> pwdata;<br>        <span class="hljs-keyword">input</span>  prdata;<br>        <span class="hljs-keyword">output</span> penable;<br>        <span class="hljs-keyword">output</span> pwrite;<br>        <span class="hljs-keyword">input</span>  pready;<br>        <span class="hljs-keyword">input</span>  pslverr;<br>        <span class="hljs-keyword">output</span> pprot;<br>        <span class="hljs-keyword">output</span> pstrb;<br>        <span class="hljs-keyword">output</span> puser;<br><br>    <span class="hljs-keyword">endclocking</span><br><br>    <span class="hljs-keyword">clocking</span> slv_cb @(<span class="hljs-keyword">posedge</span> pclk);<br>        <span class="hljs-keyword">default</span> <span class="hljs-keyword">input</span> #<span class="hljs-number">0</span><span class="hljs-variable">.1ns</span> <span class="hljs-keyword">output</span> #<span class="hljs-number">0</span><span class="hljs-variable">.1ns</span>;<br>        <span class="hljs-keyword">input</span>  paddr;<br>        <span class="hljs-keyword">input</span>  psel;<br>        <span class="hljs-keyword">input</span>  pwdata;<br>        <span class="hljs-keyword">output</span> prdata;<br>        <span class="hljs-keyword">input</span>  penable;<br>        <span class="hljs-keyword">input</span>  pwrite;<br>        <span class="hljs-keyword">output</span> pready;<br>        <span class="hljs-keyword">output</span> pslverr;<br>        <span class="hljs-keyword">input</span>  pprot;<br>        <span class="hljs-keyword">input</span>  pstrb;<br>        <span class="hljs-keyword">input</span>  puser;<br>    <span class="hljs-keyword">endclocking</span><br><br>    <span class="hljs-keyword">clocking</span> mon_cb @(<span class="hljs-keyword">posedge</span> pclk);<br>        <span class="hljs-keyword">default</span> <span class="hljs-keyword">input</span> #<span class="hljs-number">0</span><span class="hljs-variable">.1ns</span> <span class="hljs-keyword">output</span> #<span class="hljs-number">0</span><span class="hljs-variable">.1ns</span>;<br><br>        <span class="hljs-keyword">input</span>  paddr;<br>        <span class="hljs-keyword">input</span>  psel;<br>        <span class="hljs-keyword">input</span>  pwdata;<br>        <span class="hljs-keyword">input</span>  prdata;<br>        <span class="hljs-keyword">input</span>  penable;<br>        <span class="hljs-keyword">input</span>  pwrite;<br>        <span class="hljs-keyword">input</span>  pready;<br>        <span class="hljs-keyword">input</span>  pslverr;<br>        <span class="hljs-keyword">input</span>  pprot;<br>        <span class="hljs-keyword">input</span>  pstrb;<br>        <span class="hljs-keyword">input</span>  puser;<br><br>    <span class="hljs-keyword">endclocking</span><br><br>    <span class="hljs-keyword">modport</span> mst_mp(<span class="hljs-keyword">clocking</span> mst_cb);<br>    <span class="hljs-keyword">modport</span> slv_mp(<span class="hljs-keyword">clocking</span> slv_cb);<br>    <span class="hljs-keyword">modport</span> mon_mp(<span class="hljs-keyword">clocking</span> mon_cb);<br><br><br>    <span class="hljs-keyword">default</span> <span class="hljs-keyword">disable</span> <span class="hljs-keyword">iff</span>(!presetn);<br>    <span class="hljs-keyword">default</span> <span class="hljs-keyword">clocking</span> mon_cb;<br><br>    a1:<span class="hljs-keyword">assert</span> <span class="hljs-keyword">property</span>((!psel &amp; !penable) |=&gt; !(psel &amp; penable));<br>    a2:<span class="hljs-keyword">assert</span> <span class="hljs-keyword">property</span>((psel &amp; !penable) |=&gt; (psel &amp; penable));<br>    a3:<span class="hljs-keyword">assert</span> <span class="hljs-keyword">property</span>(!(!psel &amp; penable));<br>    a4:<span class="hljs-keyword">assert</span> <span class="hljs-keyword">property</span>((psel &amp; penable &amp; !pready) |=&gt; 			<span class="hljs-built_in">$stable</span>(&#123;psel,penable,pwdata,pwrite,pprot,pstrb&#125;));<br>    a5:<span class="hljs-keyword">assert</span> <span class="hljs-keyword">property</span>((psel &amp; penable &amp; pready) |=&gt; !penable);<br>    a6:<span class="hljs-keyword">assert</span> <span class="hljs-keyword">property</span>((psel) |-&gt; !<span class="hljs-built_in">$isunknown</span>(&#123;penable,pwdata,pwrite,pprot,pstrb,pready&#125;));<br>    a7:<span class="hljs-keyword">assert</span> <span class="hljs-keyword">property</span>(!<span class="hljs-built_in">$isunknown</span>(&#123;psel,penable&#125;));<br><br><span class="hljs-keyword">endinterface</span><br><br><br><span class="hljs-meta">`<span class="hljs-keyword">endif</span></span><br></code></pre></td></tr></table></figure>
+
+<p>$stable(signal) 断言专用的系统函数，在当前时钟周期与上一个周期的取值一致（没变），则返回 true，否则返回 false。</p>
+<p>与<code> $rose</code> &#x2F; <code>$fell</code> 区别</p>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>$stable(signal)</code></td>
+<td>检查信号是否保持不变</td>
+</tr>
+<tr>
+<td><code>$rose(signal)</code></td>
+<td>检查信号是否从 0 跳变为 1（上升沿）</td>
+</tr>
+<tr>
+<td><code>$fell(signal)</code></td>
+<td>检查信号是否从 1 跳变为 0（下降沿）</td>
+</tr>
+</tbody></table>
+<p>$isunknown(signal) 会判断 <code>signal</code> 是否包含 未知值（也就是 <code>&#39;x&#39;</code> 或 <code>&#39;z&#39;</code>），如果是返回1，否则返回0</p>
+<p>!$isunknown(signal) 检查 <code>signal</code> 是否 全是 0&#x2F;1，没有任何未知值</p>
+<p>普通接口 (<code>interface</code>)</p>
+<ul>
+<li>是对一组 相关信号的打包。</li>
+<li>可以用于 DUT（Design Under Test）和 TB（Testbench）之间的数据交互。</li>
+<li>在 module 里直接 <code>import</code> 和 <code>connect</code> 接口即可访问所有信号。</li>
+</ul>
+<p>虚拟接口 (<code>virtual interface</code>)</p>
+<ul>
+<li>是接口的 句柄（指针），不是实际的信号本体。</li>
+<li>声明为 <code>virtual</code> 是为了能在 类中使用接口（如 UVM 的 driver、monitor、sequencer 等类）。</li>
+<li><code>virtual</code> 是必须的关键词，因为 SystemVerilog 中 类不允许直接使用非虚拟接口。</li>
+</ul>
+<h2 id="reg-model"><a href="#reg-model" class="headerlink" title="reg_model"></a>reg_model</h2><p>uvm_reg_field：这是寄存器模型中的最小单位</p>
+<p>uvm_reg：它比uvm_reg_field高一个级别，一个寄存器中至少包含一个uvm_reg_field</p>
+<p>uvm_reg_block：在其中可以加入许多的uvm_reg，也可以加入其他的uvm_reg_block，一个寄存器模 型中至少包含一个uvm_reg_block</p>
+<p>uvm_reg_map：每个寄存器在加入寄存器模型时都有其地址，uvm_reg_map就是存储这些地址，并将其转换成可以访问的物理地址（因为加入寄存器模型中的寄存器地址一般都是偏移地址，而不是绝对地址）。</p>
+<p>当寄存器模型使用前门访问方式来实现读或写操作时，uvm_reg_map就会将地址转换成绝对地址，启动一个读或写的sequence，并将读或写的结果返回。在每个reg_block内部，至少有一个（通常也只有一个）uvm_reg_map</p>
+<p>uvm_reg 定义</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs verilog"><span class="hljs-keyword">class</span> NN_ACC_ORDER <span class="hljs-keyword">extends</span> uvm_reg;<br>    `uvm_object_utils(NN_ACC_ORDER)<br><br>    <span class="hljs-keyword">rand</span> uvm_reg_field ORDER_;<br><br>    <span class="hljs-comment">//Function : build </span><br>    <span class="hljs-keyword">virtual</span> <span class="hljs-keyword">function</span> <span class="hljs-keyword">void</span> build();<br>        <span class="hljs-keyword">this</span><span class="hljs-variable">.ORDER_</span> = uvm_reg_field::type_id::create(<span class="hljs-string">&quot;ORDER_&quot;</span>);<br>        <span class="hljs-keyword">this</span><span class="hljs-variable">.ORDER_</span><span class="hljs-variable">.configure</span>(<span class="hljs-keyword">this</span>, <span class="hljs-number">3</span>, <span class="hljs-number">0</span>, <span class="hljs-string">&quot;RW&quot;</span>, <span class="hljs-number">0</span>, <span class="hljs-number">&#x27;d0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0</span>);<br>        <span class="hljs-comment">//配置宽度，起始位，读写权限，是否易失，默认值，是否有复位，是否可以随机化，是否可以单独存取</span><br>    <span class="hljs-keyword">endfunction</span><br><br>    <span class="hljs-comment">//Function new</span><br>    <span class="hljs-keyword">function</span> <span class="hljs-keyword">new</span>(<span class="hljs-keyword">string</span> name = <span class="hljs-string">&quot;NN_ACC_ORDER&quot;</span>);<br>        <span class="hljs-keyword">super</span><span class="hljs-variable">.new</span>(name, <span class="hljs-number">32</span>, build_coverage(UVM_NO_COVERAGE));<br>    <span class="hljs-keyword">endfunction</span><br><br><span class="hljs-keyword">endclass</span><br></code></pre></td></tr></table></figure>
+
+<p>default_map</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs verilog"><span class="hljs-keyword">class</span> NN_ACC_block <span class="hljs-keyword">extends</span> uvm_reg_block;<br>    `uvm_object_utils(NN_ACC_block)<br><br>    <span class="hljs-keyword">rand</span> NN_ACC_ORDER              ORDER                    ;<br><br>    <span class="hljs-comment">//Function : new</span><br>    <span class="hljs-keyword">function</span> <span class="hljs-keyword">new</span>(<span class="hljs-keyword">string</span> name = <span class="hljs-string">&quot;NN_ACC_block&quot;</span>);<br>        <span class="hljs-keyword">super</span><span class="hljs-variable">.new</span>(name, UVM_NO_COVERAGE);<br>    <span class="hljs-keyword">endfunction</span><br><br>    <span class="hljs-comment">//Function : build</span><br>    <span class="hljs-keyword">virtual</span> <span class="hljs-keyword">function</span> <span class="hljs-keyword">void</span> build();<br>        <span class="hljs-comment">//create</span><br>        <span class="hljs-keyword">this</span><span class="hljs-variable">.ORDER</span>                     = NN_ACC_ORDER::type_id::create(<span class="hljs-string">&quot;ORDER&quot;</span>);<br>        <span class="hljs-keyword">this</span><span class="hljs-variable">.ORDER</span><span class="hljs-variable">.configure</span>(<span class="hljs-keyword">this</span>, <span class="hljs-literal">null</span>);<br>        <span class="hljs-comment">//这个函数的主要功能是指定寄存器进行后门访问操作时的路径。其第一个参数是此寄存器所在uvm_reg_block的指针，这里填写this，第二个参数是reg_file的指针（7.4.2节将会介绍reg_file的概念）这里暂时填写null</span><br>        <span class="hljs-keyword">this</span><span class="hljs-variable">.ORDER</span><span class="hljs-variable">.build</span>(); <span class="hljs-comment">//手动调用build函数实例化</span><br>        <span class="hljs-keyword">this</span><span class="hljs-variable">.ORDER</span><span class="hljs-variable">.add_hdl_path_slice</span>(<span class="hljs-string">&quot;O_order_&quot;</span>, <span class="hljs-number">0</span>, <span class="hljs-number">3</span>); <span class="hljs-comment">//实现了寄存器模型与DUT各个寄存器的路径映射，用于后门访问</span><br><br>        <span class="hljs-comment">//define default map and add reg/regfiles</span><br>        <span class="hljs-comment">//基地址，多少Byte，大端小端</span><br>        default_map= create_map(<span class="hljs-string">&quot;default_map&quot;</span>, <span class="hljs-number">&#x27;h0</span>, <span class="hljs-number">4</span> UVM_BIG_ENDIAN, <span class="hljs-number">1</span>);<br>        default_map<span class="hljs-variable">.add_reg</span>(ORDER, <span class="hljs-number">&#x27;h0</span>, <span class="hljs-string">&quot;RW&quot;</span>);<br>        <span class="hljs-comment">//uvm_reg_map的作用是存储所有寄存器的地址，因此必须将实例化的寄存器加入default_map中，否则无法进行前门访问操作。</span><br>        lock_model();<br><br>    <span class="hljs-keyword">endfunction</span><br><br><span class="hljs-keyword">endclass</span> : NN_ACC_block<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="adapter"><a href="#adapter" class="headerlink" title="adapter"></a>adapter</h2><p>寄存器模型的前门操作</p>
+<p>无论是读或写，寄存器模型都会通过sequence产生一个 uvm_reg_bus_op 的变量，此变量中存储着操作类型（读还是写）和操作的地址，如果是写操作，还会有要写入的数据。此变量中的信息要经过一个转换器（adapter）转换后交给bus_sequencer，随后交给bus_driver，由bus_driver实现最终的前门访问读写操作。因此，必须要定义好一个转换器。</p>
+<p>一个转换器要定义好两个函数，一是reg2bus，其作用为将寄存器模型通过sequence发出的uvm_reg_bus_op型的变量转换成 bus_sequencer能够接受的形式，二是bus2reg，其作用为当监测到总线上有操作时，它将收集来的transaction转换成寄存器模型能够 接受的形式，以便寄存器模型能够更新相应的寄存器的值</p>
+<p>集成寄存器模型</p>
+<p>定义两个成员变量，一是reg_model，另外一个就是 reg_sqr_adapter。将所有用到的类在build_phase中实例化。在实例化后reg_model还要做四件事：第一是调用configure函数。第二是调用build函数，将所有的寄存器实例化。第三是调用lock_model函数，调用此函数后，reg_model中就不能再加入新的寄存器了。第四是调用reset函数，如果不调用此函数，那么reg_model中所有寄存器的值都是0，调用此函数后，所有寄存器的值都将变为设置的复位值。 </p>
+<p>寄存器模型的前门访问操作最终都将由uvm_reg_map完成，因此在connect_phase中，需要将转换器和bus_sequencer通过 set_sequencer函数告知reg_model的default_map，并将default_map设置为自动预测状态。</p>
+<p>对于寄存器，寄存器模型提供了两个基本的任务：read和write。</p>
+<p>代码示例</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs verilog"><span class="hljs-comment">//aaa</span><br><br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="predictor"><a href="#predictor" class="headerlink" title="predictor"></a>predictor</h2><p>当 DUT 收到一个寄存器写指令，寄存器模型本身是不知道 DUT 有没有真正完成写入的，而是靠 <code>predictor</code> 来：</p>
+<ol>
+<li>监听 DUT 实际发生的 读写事务（通常是 monitor 捕获到的）。</li>
+<li>根据事务内容 推测寄存器模型中相应寄存器的值变化。</li>
+<li>更新模型的镜像值（mirror），保持模型与 DUT 行为一致。</li>
+</ol>
+<p>举例说明</p>
+<p>你发了一个写寄存器的操作：写 <code>0x55</code> 到 <code>CTRL_REG</code>。<br><code>driver</code> 把这个数据送给 DUT。<br><code>monitor</code> 捕获这个事务，并送给 <code>predictor</code>。<br><code>predictor</code> 调用 <code>reg_model.predict()</code>，告诉寄存器模型：“我刚刚看到你被写入了 <code>0x55</code>。”<br><code>reg_model</code> 的镜像值就更新为 <code>0x55</code>，不会等额外的 read-back 确认。</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs verilog"><span class="hljs-comment">//简化示意</span><br>uvm_reg_predictor <span class="hljs-variable">#(apb_transaction)</span> predictor;<br><br>predictor = uvm_reg_predictor<span class="hljs-variable">#(apb_transaction)::type_id::create(&quot;predictor&quot;, this)</span>;<br>predictor<span class="hljs-variable">.map</span>     = regmodel<span class="hljs-variable">.default_map</span>;<br>predictor<span class="hljs-variable">.adapter</span> = reg_adapter;<br>monitor<span class="hljs-variable">.ap</span><span class="hljs-variable">.connect</span>(predictor<span class="hljs-variable">.bus_in</span>);  <span class="hljs-comment">// 将monitor输出连接到predictor</span><br><br></code></pre></td></tr></table></figure>
+
+<p>set_auto_predict(1) 是自动更新模型的镜像值，只是假设成功了，并不是根据DUT的行为更新的</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs verilog">rgm<span class="hljs-variable">.set_auto_predict</span>()<br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/UVM/" class="category-chain-item">UVM</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/UVM/">#UVM</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>UVM知识笔记</div>
+      <div>http://vinters-v.github.io/2025/05/20/数字IC——UVM_进阶/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Vinters-v</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年5月20日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/04/06/%E6%95%B0%E5%AD%97IC_%E7%9F%A5%E8%AF%86%E8%A1%A5%E5%85%85/" title="知识补充">
+                        <span class="hidden-mobile">知识补充</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
