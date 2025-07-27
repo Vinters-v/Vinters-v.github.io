@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://vinters-v.github.io/img/article_img/IC/IC.jpg">
 <meta property="article:published_time" content="2025-05-20T06:41:50.405Z">
-<meta property="article:modified_time" content="2025-05-28T10:44:32.776Z">
+<meta property="article:modified_time" content="2025-06-11T10:54:55.349Z">
 <meta property="article:author" content="Vinters-v">
 <meta property="article:tag" content="UVM">
 <meta name="twitter:card" content="summary_large_image">
@@ -358,7 +358,7 @@
 
 <h2 id="adapter"><a href="#adapter" class="headerlink" title="adapter"></a>adapter</h2><p>寄存器模型的前门操作</p>
 <p>无论是读或写，寄存器模型都会通过sequence产生一个 uvm_reg_bus_op 的变量，此变量中存储着操作类型（读还是写）和操作的地址，如果是写操作，还会有要写入的数据。此变量中的信息要经过一个转换器（adapter）转换后交给bus_sequencer，随后交给bus_driver，由bus_driver实现最终的前门访问读写操作。因此，必须要定义好一个转换器。</p>
-<p>一个转换器要定义好两个函数，一是reg2bus，其作用为将寄存器模型通过sequence发出的uvm_reg_bus_op型的变量转换成 bus_sequencer能够接受的形式，二是bus2reg，其作用为当监测到总线上有操作时，它将收集来的transaction转换成寄存器模型能够 接受的形式，以便寄存器模型能够更新相应的寄存器的值</p>
+<p>一个转换器要定义好两个函数，一是reg2bus，其作用为将寄存器模型通过sequence发出的uvm_reg_bus_op型的变量转换成 bus_sequencer能够接受的形式，二是bus2reg，其作用为当监测到总线上有操作时，它将收集来的transaction转换成寄存器模型能够接受的形式，以便寄存器模型能够更新相应的寄存器的值</p>
 <p>集成寄存器模型</p>
 <p>定义两个成员变量，一是reg_model，另外一个就是 reg_sqr_adapter。将所有用到的类在build_phase中实例化。在实例化后reg_model还要做四件事：第一是调用configure函数。第二是调用build函数，将所有的寄存器实例化。第三是调用lock_model函数，调用此函数后，reg_model中就不能再加入新的寄存器了。第四是调用reset函数，如果不调用此函数，那么reg_model中所有寄存器的值都是0，调用此函数后，所有寄存器的值都将变为设置的复位值。 </p>
 <p>寄存器模型的前门访问操作最终都将由uvm_reg_map完成，因此在connect_phase中，需要将转换器和bus_sequencer通过 set_sequencer函数告知reg_model的default_map，并将default_map设置为自动预测状态。</p>
@@ -381,6 +381,11 @@
 <p>set_auto_predict(1) 是自动更新模型的镜像值，只是假设成功了，并不是根据DUT的行为更新的</p>
 <figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs verilog">rgm<span class="hljs-variable">.set_auto_predict</span>()<br></code></pre></td></tr></table></figure>
 
+
+
+
+
+<p>port类型的问题，需要总结一下</p>
 
                 
               </div>
@@ -470,6 +475,12 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2025/07/15/%E6%95%B0%E5%AD%97IC_PCIE/" title="PCIE知识">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">PCIE知识</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
