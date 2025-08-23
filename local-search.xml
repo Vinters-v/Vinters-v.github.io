@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>低功耗设计知识</title>
+    <link href="/2025/08/22/%E6%95%B0%E5%AD%97IC_%E4%BD%8E%E5%8A%9F%E8%80%97%E8%AE%BE%E8%AE%A1/"/>
+    <url>/2025/08/22/%E6%95%B0%E5%AD%97IC_%E4%BD%8E%E5%8A%9F%E8%80%97%E8%AE%BE%E8%AE%A1/</url>
+    
+    <content type="html"><![CDATA[<p>低功耗设计</p><span id="more"></span><h1 id="低功耗设计"><a href="#低功耗设计" class="headerlink" title="低功耗设计"></a>低功耗设计</h1><h2 id="功耗分类"><a href="#功耗分类" class="headerlink" title="功耗分类"></a>功耗分类</h2><p>分为动态功耗和静态功耗</p><h3 id="动态功耗"><a href="#动态功耗" class="headerlink" title="动态功耗"></a>动态功耗</h3><p>（1）switch power ：输出翻转在负载电容上充放电引起的功耗</p><p>​                                                 $ P_{sp} &#x3D; ACV_{DD}^2f $</p><p>（2）short current power ：输入变化导致输出变化，在漏源之间形成短暂通路 </p><p>​                                                 $ P_{su} &#x3D; AI_{su}V_{DD} $</p><h3 id="静态功耗"><a href="#静态功耗" class="headerlink" title="静态功耗"></a>静态功耗</h3><p>电路不工作时，CMOS并未完全关断</p><p>（1）漏源之间的亚阈值电流</p><p>（2）有源衬底之间的反向漏电流</p><p>​                                                  $ P &#x3D; A(I_{bias} + I_{lea})V_{DD} $</p><h2 id="影响功耗的因素"><a href="#影响功耗的因素" class="headerlink" title="影响功耗的因素"></a>影响功耗的因素</h2><table><thead><tr><th>因素</th><th>影响</th><th>解决方法</th></tr></thead><tbody><tr><td>供电电压</td><td>动态功耗，静态功耗</td><td></td></tr><tr><td>工艺</td><td>静态功耗</td><td></td></tr><tr><td>环境（如温度）</td><td>动态功耗，静态功耗</td><td></td></tr><tr><td>工作频率</td><td>动态功耗</td><td></td></tr><tr><td>翻转因子</td><td>动态功耗</td><td></td></tr><tr><td>翻转电容</td><td>动态功耗</td><td></td></tr></tbody></table><h2 id="低功耗技术"><a href="#低功耗技术" class="headerlink" title="低功耗技术"></a>低功耗技术</h2><p>（1）时钟门控 Clock Gate</p><p>（2）电源关断 Power Gate</p><p>​         通过PMU模块控制Power-Switch Cells或者模拟部分的LDO，DC-DC，关断不工作的电源域。</p><p>​         需要Isolation cells做钳位处理，以免下电区的输出影响上电区。插入Retention Register Cells保存下电前的数据，供再次上电使用。</p><p>（3）多电源域 Multi Vdd</p><p>​         对于跨不同电压的信号需要插入Level-Shifer Cells，</p><p>（4）多电压阈值 Multi Vt</p><p>​         Multiple-Vt Library Cells 多阈值cell；对翻转频率要求不高的路径，采用高Vt cell，降低漏电流。如果速度要求很高，这个方法是不可行的。</p><p>（5）动态电压频率&#x2F;自适应电压</p><h2 id="低功耗编码"><a href="#低功耗编码" class="headerlink" title="低功耗编码"></a>低功耗编码</h2><p>（1）自动时钟门控编码</p><p><img src="/../img/article_img/new/image-20250823103958852.png" alt="image-20250823103958852"></p><p>（2）Mem数量与访问次数，mem选型，regfile 和mem选择，mem分块（例如使用高地址片选，低地址寻址，分为多块mem）</p><p><img src="/../img/article_img/new/image-20250823104941187.png" alt="image-20250823104941187"></p><p>（3）操作数隔离，例如运算单元，在不使用时，将输入latch，使得运算单元的输出保持</p><p><img src="/../img/article_img/new/image-20250823105604863.png" alt="image-20250823105604863"></p><p>（4）超前计算，例如比较器，比较最高位，如果高位已经不同了，那么后面的bit不需要再比较</p><p><img src="/../img/article_img/new/image-20250823110852245.png" alt="image-20250823110852245"></p><p>（5）状态机编码，对于需要频繁切换的状态，避免多bit同时翻转，格雷码；状态较少使用独热码</p><p>（6）降低频繁开关信号的逻辑级数，重排if else</p><p>（7）减少Glitch，优化逻辑顺序或者插入pipline</p><p>（8）复位信号不使用，异步复位大于同步复位功耗</p><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://blog.csdn.net/Holden_Liu/article/details/118250226">低功耗验证 (一) CMOS基础，功耗分类，低功耗方法-CSDN博客</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>IC</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>IC</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>PCIE知识</title>
     <link href="/2025/07/15/%E6%95%B0%E5%AD%97IC_PCIE/"/>
     <url>/2025/07/15/%E6%95%B0%E5%AD%97IC_PCIE/</url>
