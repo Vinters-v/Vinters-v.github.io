@@ -19,13 +19,13 @@
     <meta name="description" content="电路知识补充">
 <meta property="og:type" content="article">
 <meta property="og:title" content="知识补充">
-<meta property="og:url" content="http://vinters-v.github.io/2025/04/06/%E6%95%B0%E5%AD%97IC_%E7%9F%A5%E8%AF%86%E8%A1%A5%E5%85%85/index.html">
+<meta property="og:url" content="http://vinters-v.github.io/2025/09/21/%E6%95%B0%E5%AD%97IC_PPA%E4%BC%98%E5%8C%96/index.html">
 <meta property="og:site_name" content="Vinters-v">
 <meta property="og:description" content="电路知识补充">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://vinters-v.github.io/img/article_img/IC/IC.jpg">
-<meta property="article:published_time" content="2025-04-06T07:45:18.185Z">
-<meta property="article:modified_time" content="2025-04-26T08:33:15.583Z">
+<meta property="article:published_time" content="2025-09-21T08:00:46.144Z">
+<meta property="article:modified_time" content="2025-09-21T07:59:56.495Z">
 <meta property="article:author" content="Vinters-v">
 <meta property="article:tag" content="IC">
 <meta name="twitter:card" content="summary_large_image">
@@ -222,8 +222,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-04-06 15:45" pubdate>
-          2025年4月6日 下午
+        <time datetime="2025-09-21 16:00" pubdate>
+          2025年9月21日 下午
         </time>
       </span>
     
@@ -234,7 +234,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          19k 字
+          22k 字
         
       </span>
     
@@ -694,6 +694,429 @@
 <p>WSRC</p>
 <p>WCRS</p>
 <p>W1S</p>
+<h1 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h1><h2 id="AXI4接口定义"><a href="#AXI4接口定义" class="headerlink" title="AXI4接口定义"></a>AXI4接口定义</h2><h3 id="AXI4-SLAVE"><a href="#AXI4-SLAVE" class="headerlink" title="AXI4-SLAVE"></a>AXI4-SLAVE</h3><p><strong>模块参数</strong></p>
+<table>
+<thead>
+<tr>
+<th><strong>名称</strong></th>
+<th><strong>解释</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>C_S_AXI_ID_WIDTH</td>
+<td>ID 信号的宽度</td>
+</tr>
+<tr>
+<td>C_S_AXI_DATA_WIDTH</td>
+<td>数据宽度</td>
+</tr>
+<tr>
+<td>C_S_AXI_ADDR_WIDTH</td>
+<td>地址宽度</td>
+</tr>
+</tbody></table>
+<p><strong>通用</strong></p>
+<table>
+<thead>
+<tr>
+<th><strong>名称</strong></th>
+<th><strong>解释</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S_AXI_ACLK</td>
+<td>时钟</td>
+</tr>
+<tr>
+<td>S_AXI_ARESETN</td>
+<td>复位信号，低电平复位</td>
+</tr>
+</tbody></table>
+<p><strong>写地址通道</strong></p>
+<table>
+<thead>
+<tr>
+<th><strong>名称</strong></th>
+<th><strong>解释</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>input wire [C_S_AXI_ID_WIDTH-1 : 0] S_AXI_AWID</td>
+<td>写地址ID，示例代码的 Slave 不支持重排序</td>
+</tr>
+<tr>
+<td>input wire [C_S_AXI_ADDR_WIDTH-1 : 0] S_AXI_AWADDR</td>
+<td>写地址</td>
+</tr>
+<tr>
+<td>input wire [7 : 0] S_AXI_AWLEN</td>
+<td>突发长度（Burst length），给出了突发中传输（Transfer）的数量</td>
+</tr>
+<tr>
+<td>input wire [2 : 0] S_AXI_AWSIZE</td>
+<td>突发大小，给出了突发中每次传输的大小</td>
+</tr>
+<tr>
+<td>input wire [1 : 0] S_AXI_AWBURST</td>
+<td>突发类型，AWBURST 和 AWSIZE 决定了此处突发中每次传输的地址是如何计算的</td>
+</tr>
+<tr>
+<td>input wire S_AXI_AWVALID</td>
+<td>写地址有效</td>
+</tr>
+<tr>
+<td>output wire S_AXI_AWREADY</td>
+<td>写地址准备</td>
+</tr>
+</tbody></table>
+<p>注：</p>
+<p>S_AXI_AWLEN：实际传输次数为 S_AXI_AWLEN+ 1（AXI4支持最多256次传输）。</p>
+<p>S_AXI_AWSIZE：定义单次传输的字节数（如 <code>0b010</code> 表示4字节，即32位）。</p>
+<p>S_AXI_AWBURST：决定地址变化模式（固定地址、递增或回环）。</p>
+<p><strong>写数据通道</strong></p>
+<table>
+<thead>
+<tr>
+<th><strong>名称</strong></th>
+<th><strong>解释</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>input wire [C_S_AXI_DATA_WIDTH-1 : 0] S_AXI_WDATA</td>
+<td>写数据</td>
+</tr>
+<tr>
+<td>input wire [(C_S_AXI_DATA_WIDTH&#x2F;8)-1 : 0] S_AXI_WSTRB</td>
+<td>写数据选通</td>
+</tr>
+<tr>
+<td>input wire S_AXI_WLAST</td>
+<td>写最后，表示当前传输是突发中的最后一个传输</td>
+</tr>
+<tr>
+<td>input wire S_AXI_WVALID</td>
+<td>写数据有效</td>
+</tr>
+<tr>
+<td>output wire S_AXI_WREADY</td>
+<td>写数据准备</td>
+</tr>
+</tbody></table>
+<p><strong>写响应通道</strong></p>
+<table>
+<thead>
+<tr>
+<th><strong>名称</strong></th>
+<th><strong>解释</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>output wire [C_S_AXI_ID_WIDTH-1 : 0] S_AXI_BID</td>
+<td>写响应的ID，由于本 Slave 不支持重排序，必须赋值为 S_AXI_AWID</td>
+</tr>
+<tr>
+<td>output wire [1 : 0] S_AXI_BRESP</td>
+<td>写响应，给出写事务的状态，示例代码中该信号恒为 2’b0</td>
+</tr>
+<tr>
+<td>output wire S_AXI_BVALID</td>
+<td>写响应有效</td>
+</tr>
+<tr>
+<td>input wire S_AXI_BREADY</td>
+<td>写响应准备</td>
+</tr>
+</tbody></table>
+<p><strong>读地址通道</strong></p>
+<table>
+<thead>
+<tr>
+<th><strong>名称</strong></th>
+<th><strong>解释</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>input wire [C_S_AXI_ID_WIDTH-1 : 0] S_AXI_ARID</td>
+<td>读地址ID，示例代码的 Slave 不支持重排序</td>
+</tr>
+<tr>
+<td>input wire [C_S_AXI_ADDR_WIDTH-1 : 0] S_AXI_ARADDR</td>
+<td>读地址</td>
+</tr>
+<tr>
+<td>input wire [7 : 0] S_AXI_ARLEN</td>
+<td>突发长度，给出了突发中传输的数量</td>
+</tr>
+<tr>
+<td>input wire [2 : 0] S_AXI_ARSIZE</td>
+<td>突发大小，给出了突发中每次传输的大小</td>
+</tr>
+<tr>
+<td>input wire [1 : 0] S_AXI_ARBURST</td>
+<td>突发类型</td>
+</tr>
+<tr>
+<td>input wire S_AXI_ARVALID</td>
+<td>读地址有效</td>
+</tr>
+<tr>
+<td>output wire S_AXI_ARREADY</td>
+<td>读地址准备</td>
+</tr>
+</tbody></table>
+<p><strong>读数据通道</strong></p>
+<table>
+<thead>
+<tr>
+<th><strong>名称</strong></th>
+<th><strong>解释</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>output wire [C_S_AXI_ID_WIDTH-1 : 0] S_AXI_RID</td>
+<td>读ID，由于Slave 不支持重排序，必须赋值为 S_AXI_ARID</td>
+</tr>
+<tr>
+<td>output wire [C_S_AXI_DATA_WIDTH-1 : 0] S_AXI_RDATA</td>
+<td>读数据</td>
+</tr>
+<tr>
+<td>output wire [1 : 0] S_AXI_RRESP</td>
+<td>读响应，示例代码中该信号恒为 2’b0</td>
+</tr>
+<tr>
+<td>output wire S_AXI_RLAST</td>
+<td>读最后，表示当前传输是突发中的最后一个传输</td>
+</tr>
+<tr>
+<td>output wire S_AXI_RVALID</td>
+<td>读数据有效</td>
+</tr>
+<tr>
+<td>input wire S_AXI_RREADY</td>
+<td>读数据准备</td>
+</tr>
+</tbody></table>
+<h4 id="修改"><a href="#修改" class="headerlink" title="修改"></a>修改</h4><p>在代码设计中，需要修改，存储数据的部分</p>
+<h3 id="AXI4-Master"><a href="#AXI4-Master" class="headerlink" title="AXI4-Master"></a>AXI4-Master</h3><p><strong>模块参数</strong></p>
+<table>
+<thead>
+<tr>
+<th><strong>名称</strong></th>
+<th><strong>解释</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>C_M_AXI_ID_WIDTH</td>
+<td>ID 信号的宽度</td>
+</tr>
+<tr>
+<td>C_M_AXI_ADDR_WIDTH</td>
+<td>数据宽度</td>
+</tr>
+<tr>
+<td>C_M_AXI_DATA_WIDTH</td>
+<td>地址宽度</td>
+</tr>
+<tr>
+<td>C_M_AXI_BURST_LEN</td>
+<td>突发长度</td>
+</tr>
+<tr>
+<td>C_M_TARGET_SLAVE_BASE_ADDR</td>
+<td>目的从机的基地址</td>
+</tr>
+</tbody></table>
+<p><strong>通用</strong></p>
+<table>
+<thead>
+<tr>
+<th><strong>名称</strong></th>
+<th><strong>解释</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>M_AXI_ACLK</td>
+<td>时钟</td>
+</tr>
+<tr>
+<td>M_AXI_ARESETN</td>
+<td>复位信号，低电平复位</td>
+</tr>
+<tr>
+<td>input wire  INIT_AXI_TXN</td>
+<td>传输开始脉冲</td>
+</tr>
+<tr>
+<td>output wire  TXN_DONE</td>
+<td>传输结束断言</td>
+</tr>
+<tr>
+<td>output reg  ERROR</td>
+<td>错误信号</td>
+</tr>
+</tbody></table>
+<p><strong>写地址通道</strong></p>
+<table>
+<thead>
+<tr>
+<th><strong>名称</strong></th>
+<th><strong>解释</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>output wire [C_M_AXI_ID_WIDTH-1 : 0] M_AXI_AWID</td>
+<td>写地址ID</td>
+</tr>
+<tr>
+<td>output wire [C_M_AXI_ADDR_WIDTH-1 : 0] M_AXI_AWADDR</td>
+<td>写地址</td>
+</tr>
+<tr>
+<td>output wire [7 : 0] M_AXI_AWLEN</td>
+<td>突发长度（Burst length），给出了突发中传输（Transfer）的数量</td>
+</tr>
+<tr>
+<td>output wire [2 : 0] M_AXI_AWSIZE</td>
+<td>突发大小，给出了突发中每次传输的大小</td>
+</tr>
+<tr>
+<td>output wire [1 : 0] M_AXI_AWBURST</td>
+<td>突发类型，AWBURST 和 AWSIZE 决定了此处突发中每次传输的地址是如何计算的</td>
+</tr>
+<tr>
+<td>output wire  M_AXI_AWVALID</td>
+<td>写地址有效</td>
+</tr>
+<tr>
+<td>input wire  M_AXI_AWREADY</td>
+<td>写地址准备</td>
+</tr>
+</tbody></table>
+<p><strong>写数据通道</strong></p>
+<table>
+<thead>
+<tr>
+<th><strong>名称</strong></th>
+<th><strong>解释</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>output wire [C_M_AXI_DATA_WIDTH-1 : 0] M_AXI_WDATA</td>
+<td>写数据</td>
+</tr>
+<tr>
+<td>output wire [C_M_AXI_DATA_WIDTH&#x2F;8-1 : 0] M_AXI_WSTRB</td>
+<td>写数据选通</td>
+</tr>
+<tr>
+<td>output wire  M_AXI_WLAST</td>
+<td>写最后，表示当前传输是突发中的最后一个传输</td>
+</tr>
+<tr>
+<td>output wire  M_AXI_WVALID</td>
+<td>写数据有效</td>
+</tr>
+<tr>
+<td>input wire  M_AXI_WREADY</td>
+<td>写数据准备</td>
+</tr>
+</tbody></table>
+<p><strong>写响应通道</strong></p>
+<table>
+<thead>
+<tr>
+<th><strong>名称</strong></th>
+<th><strong>解释</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>input wire [C_M_AXI_ID_WIDTH-1 : 0] M_AXI_BID</td>
+<td>写响应的ID，由于本 Slave 不支持重排序，必须赋值为 S_AXI_AWID</td>
+</tr>
+<tr>
+<td>input wire [1 : 0] M_AXI_BRESP</td>
+<td>写响应，给出写事务的状态，示例代码中该信号恒为 2’b0</td>
+</tr>
+<tr>
+<td>input wire  M_AXI_BVALID</td>
+<td>写响应有效</td>
+</tr>
+<tr>
+<td>output wire  M_AXI_BREADY</td>
+<td>写响应准备</td>
+</tr>
+</tbody></table>
+<p><strong>读地址通道</strong></p>
+<table>
+<thead>
+<tr>
+<th><strong>名称</strong></th>
+<th><strong>解释</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>output wire [C_M_AXI_ID_WIDTH-1 : 0] M_AXI_ARID</td>
+<td>读地址ID，示例代码的 Slave 不支持重排序</td>
+</tr>
+<tr>
+<td>output wire [C_M_AXI_ADDR_WIDTH-1 : 0] M_AXI_ARADDR</td>
+<td>读地址</td>
+</tr>
+<tr>
+<td>output wire [7 : 0] M_AXI_ARLEN</td>
+<td>突发长度，给出了突发中传输的数量</td>
+</tr>
+<tr>
+<td>output wire [2 : 0] M_AXI_ARSIZE</td>
+<td>突发大小，给出了突发中每次传输的大小</td>
+</tr>
+<tr>
+<td>output wire [1 : 0] M_AXI_ARBURST</td>
+<td>突发类型</td>
+</tr>
+<tr>
+<td>output wire  M_AXI_ARVALID</td>
+<td>读地址有效</td>
+</tr>
+<tr>
+<td>input wire  M_AXI_ARREADY</td>
+<td>读地址准备</td>
+</tr>
+</tbody></table>
+<p><strong>读数据通道</strong></p>
+<table>
+<thead>
+<tr>
+<th><strong>名称</strong></th>
+<th><strong>解释</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>input wire [C_M_AXI_ID_WIDTH-1 : 0] M_AXI_RID</td>
+<td>读ID，由于Slave 不支持重排序，必须赋值为 S_AXI_ARID</td>
+</tr>
+<tr>
+<td>input wire [C_M_AXI_DATA_WIDTH-1 : 0] M_AXI_RDATA</td>
+<td>读数据</td>
+</tr>
+<tr>
+<td>input wire [1 : 0] M_AXI_RRESP</td>
+<td>读响应，示例代码中该信号恒为 2’b0</td>
+</tr>
+<tr>
+<td>input wire  M_AXI_RLAST</td>
+<td>读最后，表示当前传输是突发中的最后一个传输</td>
+</tr>
+<tr>
+<td>input wire  M_AXI_RVALID</td>
+<td>读数据有效</td>
+</tr>
+<tr>
+<td>output wire  M_AXI_RREADY</td>
+<td>读数据准备</td>
+</tr>
+</tbody></table>
 <p> <strong>参考</strong></p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/moon9999/article/details/131146296#:~:text=%E6%9C%AC%E6%96%87%E8%AF%A6%E7%BB%86%E4%BB%8B%E7%BB%8D%E4%BA%86%E5%AF%84%E5%AD%98%E5%99%A8%E7%9A%84%E8%AF%BB%E5%86%99%E5%B1%9E%E6%80%A7%EF%BC%8C%E5%8C%85%E6%8B%ACread-writeaccess%E3%80%81modifiedWriteValue%E5%92%8CreadAction%EF%BC%8C%E5%B9%B6%E5%88%97%E4%B8%BE%E4%BA%8625%E7%A7%8D%E4%B8%8D%E5%90%8C%E7%9A%84%E5%AF%84%E5%AD%98%E5%99%A8%E8%A1%8C%E4%B8%BA%E5%8F%8A%E5%85%B6%E5%9C%A8RAL%E6%A8%A1%E5%9E%8B%E4%B8%AD%E7%9A%84%E6%94%AF%E6%8C%81%E6%83%85%E5%86%B5%E3%80%82,%E6%AD%A4%E5%A4%96%EF%BC%8C%E8%BF%98%E6%8F%90%E4%BE%9B%E4%BA%86%E5%85%B3%E9%94%AE%E5%AF%84%E5%AD%98%E5%99%A8%E7%B1%BB%E5%9E%8B%E7%9A%84RTL%E5%AE%9E%E7%8E%B0%EF%BC%8C%E5%A6%82RW%E3%80%81WO%E3%80%81RO%E3%80%81W1%E3%80%81W1C%E3%80%81RC%E3%80%81RS%E3%80%81WRC%E3%80%81WRS%E3%80%81WC%E3%80%81WS%E3%80%81WSRC%E5%92%8CWCRS%E7%AD%89%EF%BC%8C%E4%BB%A5%E5%8F%8A%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86%E8%BD%AF%E4%BB%B6%E5%92%8C%E7%A1%AC%E4%BB%B6%E6%93%8D%E4%BD%9C%E3%80%82">【前端验证】通关寄存器与ral_model —— 25种常用寄存器类型全览_寄存器属性-CSDN博客</a></p>
 
@@ -742,7 +1165,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>知识补充</div>
-      <div>http://vinters-v.github.io/2025/04/06/数字IC_知识补充/</div>
+      <div>http://vinters-v.github.io/2025/09/21/数字IC_PPA优化/</div>
     </div>
     <div class="license-meta">
       
@@ -754,7 +1177,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2025年4月6日</div>
+          <div>2025年9月21日</div>
         </div>
       
       
@@ -786,18 +1209,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/05/20/%E6%95%B0%E5%AD%97IC%E2%80%94%E2%80%94UVM_%E8%BF%9B%E9%98%B6/" title="UVM知识笔记">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">UVM知识笔记</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/04/02/%E6%95%B0%E5%AD%97IC_%E7%94%B5%E8%B7%AF%E6%A8%A1%E5%9D%97/" title="电路模块">
-                        <span class="hidden-mobile">电路模块</span>
+                      <a href="/2025/09/21/%E6%95%B0%E5%AD%97IC_APB&amp;AHB/" title="知识补充">
+                        <span class="hidden-mobile">知识补充</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
