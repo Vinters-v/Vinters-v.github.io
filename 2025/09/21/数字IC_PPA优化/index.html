@@ -16,16 +16,16 @@
   <meta name="author" content="Vinters-v">
   <meta name="keywords" content="">
   
-    <meta name="description" content="电路知识补充">
+    <meta name="description" content="PPA">
 <meta property="og:type" content="article">
-<meta property="og:title" content="知识补充">
+<meta property="og:title" content="PPA优化">
 <meta property="og:url" content="http://vinters-v.github.io/2025/09/21/%E6%95%B0%E5%AD%97IC_PPA%E4%BC%98%E5%8C%96/index.html">
 <meta property="og:site_name" content="Vinters-v">
-<meta property="og:description" content="电路知识补充">
+<meta property="og:description" content="PPA">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://vinters-v.github.io/img/article_img/IC/IC.jpg">
 <meta property="article:published_time" content="2025-09-21T08:00:46.144Z">
-<meta property="article:modified_time" content="2025-09-21T07:59:56.495Z">
+<meta property="article:modified_time" content="2025-09-25T10:33:23.444Z">
 <meta property="article:author" content="Vinters-v">
 <meta property="article:tag" content="IC">
 <meta name="twitter:card" content="summary_large_image">
@@ -33,7 +33,7 @@
   
   
   
-  <title>知识补充 - Vinters-v</title>
+  <title>PPA优化 - Vinters-v</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -211,7 +211,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="知识补充"></span>
+            <span id="subtitle" data-typed-text="PPA优化"></span>
           
         </div>
 
@@ -234,7 +234,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          22k 字
+          6.7k 字
         
       </span>
     
@@ -287,83 +287,18 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">知识补充</h1>
+            <h1 style="display: none">PPA优化</h1>
             
             
               <div class="markdown-body">
                 
-                <p>电路知识补充</p>
+                <p>PPA</p>
 <span id="more"></span>
 
 
 
-<h1 id="AXI4协议"><a href="#AXI4协议" class="headerlink" title="AXI4协议"></a>AXI4协议</h1><p>AXI总线作为一种总线，可以挂载若干个主设备（master）和从设备（slave），AXI总线协议定义了主设备和从设备之间如何进行通信。</p>
-<p>主设备可以向从设备发起读事务（Read Transaction）和写事务（Write Transaction），从设备只能被动接受主设备发起的请求并作出响应。</p>
-<p>AXI4总线协议支持以下三种类型的<strong>接口</strong>（Interface）：</p>
-<ol>
-<li>AXI4（有时候也叫AXI4-full）：高性能存储映射接口，数据位宽可以是 32,64,128,256,512,1024bits，最大256突发传输，地址位宽可以是64bits &#x2F; 32bits</li>
-<li>AXI4-Lite：简化版的AXI4接口，用于较少数据量的存储映射通信，数据位宽32bits，地址位宽时32bits</li>
-<li>AXI4-Steam：用于高速数据流传输，非存储映射接口</li>
-</ol>
-<p>（所谓存储映射，就是主设备访问从设备时需要给出访问的地址，即从设备是对应一段内存空间地址的，和IO统一编址类似）</p>
-<p>AXI4-full接口支持突发传输，主要用于处理器访问存储器等需要指定地址的高速数据传输场景。AXI4-Lite接口为外设提供单个数据传输，主要用于访问一些低速外设中的寄存器。而AXI-Steam接口则向FIFO一样，数据传输时不需要地址，在主从设备之间直接连续读写数据，主要用于如视频、高速AD、PCIe、DMA接口等需要高速数据传输的场合。</p>
-<p>AXI4-Full 接口和 Lite 接口的一个不同点在于，前者支持 Transaction Identififiers，也就是给每个读&#x2F;写事务赋予一个 ID，具有相同 ID 的事务的顺序不能打乱，不同 ID 的事务的顺序可以打乱（即重排序），这个东西的作用是即使当前还有事务没有完成，Master 可以发出新事务（新事物的ID和未完成事务的ID要不一样），可以提高系统性能。</p>
-<h2 id="AXI4-full"><a href="#AXI4-full" class="headerlink" title="AXI4-full"></a>AXI4-full</h2><p>详细接口设计见设计文档。</p>
-<p>AXI4接口由五个独立的通道构成：</p>
-<ol>
-<li>读地址</li>
-<li>读数据</li>
-<li>写地址</li>
-<li>写数据</li>
-<li>写响应</li>
-</ol>
-<h2 id="AXI的握手机制"><a href="#AXI的握手机制" class="headerlink" title="AXI的握手机制"></a>AXI的握手机制</h2><p>在AXI协议中，请求的发起方是Master，接受方是Slave。</p>
-<p>在每个通道的数据传输控制都是通过主从间的握手机制实现的，具体由两个关键信号完成。</p>
-<ul>
-<li><p>VALID：由发送方驱动，表示数据、地址或者控制信息已经准备就绪，并且相关信号已经稳定。<strong>VALID信号必须保持高电平，直到数据传输完成</strong>。</p>
-</li>
-<li><p>READY：由接收方驱动，表示接收方可以接收数据。READY信号可以在VALID之前或之后拉高。</p>
-</li>
-</ul>
-<p>当VALID和READY同时为高时，握手成功，数据在这一拍完成传输。</p>
-<p>握手机制有效解决了发送方和接收方速率不一致的问题，确保了数据传输的可靠性。</p>
-<h2 id="突发传输"><a href="#突发传输" class="headerlink" title="突发传输"></a>突发传输</h2><p>对于AXI4-Full接口，一次写事务中，Master发出一个地址后，可以连续发出多个数据，Slave可以从该地址开始连续写多个地址处的数据，这便是所谓的突发传输。读事务同理。</p>
-<p>三种突发类型：</p>
-<ul>
-<li><strong>FIXED（0b00）</strong><br>每次传输的地址保持不变，适用于重复访问同一位置（如写入FIFO）。</li>
-<li><strong>INCR（0b01）</strong> (incrementing)<br>地址线性递增，每次增加值为 <strong>AxSIZE</strong> 定义的字节数（如AxSIZE&#x3D;4字节，地址+4）。此时，给出的地址必须是对齐的。<br>适用于顺序访问数据块（如内存读写）。</li>
-<li><strong>WRAP（0b10）</strong>(wrapping)<br>地址递增，但达到特定边界时回绕到起始地址。<br>常用于缓存行填充（Cache Line Fill），需满足：边界地址 &#x3D; 起始地址 + (传输次数 × 字节数)；传输次数必须是2的幂（如4、8次）。根据起始地址和传输大小，可以计算出一个 lower address 和 upper address，Wrapping Burst 下每次传输地址的计算和 Incrementing Burst 是相似的，除了当地址增加到 upper address 时，下次传输的地址需要回落到 lower address 。</li>
-</ul>
-<p>在AXI4协议中，一个突发传输（burst transfer）不能跨越这个4KB的边界，这是为了避免一个突发事务访问两个不同的slave设备，因为每个slave设备通常是4KB对齐的。如果一个突发传输跨越了4KB边界，可能会导致数据被错误地写入到另一个slave设备，从而引发传输错误。1K为2的10次方</p>
-<h2 id="交易标识符-ID"><a href="#交易标识符-ID" class="headerlink" title="交易标识符 ID"></a>交易标识符 ID</h2><p>AXI交易标识符ID，主机用这些ID来判别必须按顺序返回的交易。</p>
-<p>同一ID的交易必须按顺序返回，不同ID的交易可以乱序 。</p>
-<p>AXI通过使用ID，主机可以不等待一笔交易完成就发起多笔交易。起到提升系统性能的作用，实现多笔交易的并行处理。</p>
-<p>从机需要返回合适的BID或者RID来响应主机的ID。</p>
-<p>有以下几个ID信号：写地址ID，写数据ID（只有AXI3，AXI4删除），写响应ID，读地址ID，读响应ID</p>
-<p><strong>乱序 out of order传输</strong></p>
-<p>乱序传输：表示当有多个事务在传输时，有的事务可能先准备好，因此可以先发送在总线上，通过ID号来区分数据和响应来自哪一个事务，乱序指得是事务乱序，而不是说的master，即多个不同master可以发起多个不同的事务，单个master也可以发起多个不同的事务</p>
-<p>说明：</p>
-<p>不同事务的AxID如果一致，那么这些事务就不能实现out of order，只能进行顺序完成。</p>
-<p>如果不同事务AxID不同，那么这些事务之间可以乱序。那么不同AxID事务的数据，对于AXI读来说，如何判断返回的数据属于哪个事务呢，是通过RID来进行匹配的，也就是说，在完成乱序传输的时候，需要RID和ARID保持一致，以标识不同事务的数据</p>
-<p>那么对于实际情况来说，在实际传输中，可能有的事务AxID是不同的，有的是相同的，这是如何解决的？答：对于ID相同的就顺序完成，对于ID不同的可以乱序。</p>
-<p>特殊的写乱序：在AXI4中取消了WID，所以写地址和写数据的顺序必须一致</p>
-<h2 id="OutStanding"><a href="#OutStanding" class="headerlink" title="OutStanding"></a>OutStanding</h2><p><strong>不需要等待前一笔传输完成就可以发送下一笔操作</strong>。AXI因为是通道分离的所以master不需要等待前一笔操作A响应完成就可以发送下一笔操作请求B，这样可以有效提升通路利用率，提升系统性能</p>
-<p>outstanding 就是发出去的地址数量，未处理的地址可以先存放在AXI总线的缓存中，等完成一次传输事务之后，无需再握手传输地址，即可进行下一次的数据传输。所以 outstanding 的本质是为了实现数据传输的pipeline，outstanding 能力即AXI4 Master 不需要等到response 就可以持续发写命令的个数。</p>
-<h2 id="交织interleaving-传输"><a href="#交织interleaving-传输" class="headerlink" title="交织interleaving 传输"></a>交织interleaving 传输</h2><p>交织传输：表示实现不同transaction中的beat的交替传输，但同一transaction的beat是需要按照顺序进行传输的， AXI4不再支持写交织。(依然需要根据ID号来判断数据属于哪个事务)</p>
-<p>例如事务A指令为A，数据是a0，a1，a2,事务B指令是B，数据是b0，b1，b2,</p>
-<p>支持交织数据总线数据顺序就可以是a0，b0，a1，b1，a2，b2(或者其他顺序)</p>
-<p>不支持交织数据总线数据顺序就只能是a0，a1，a2，b0，b1，b2或者b0，b1，b2，a0，a1，a2</p>
-<h2 id="总线带宽的计算"><a href="#总线带宽的计算" class="headerlink" title="总线带宽的计算"></a>总线带宽的计算</h2><p>不考虑缓存大小的前提下，最佳outstanding能力 &#x3D; latency_cycle &#x2F; burst_length</p>
-<p>不考虑访问延迟和outstanding的情况下，</p>
-<p>一次突发传输，传输的数据量为：总线位宽 × 突发传输个数</p>
-<p>一次突发传输，消耗的时间为：突发传输个数 &#x2F; 时钟频率</p>
-<p>因此带宽为，数据量 &#x2F; 时间 &#x3D; 总线位宽 × 时钟频率</p>
-<p>考虑访问延迟和outstanding</p>
-<p>传输的数据量为：总线位宽 × 突发传输个数 × outstandings</p>
-<p>消耗的时间为：突发传输个数 &#x2F; 时钟频率 × outstandings + 访问延迟</p>
-<p>因此带宽为，数据量 &#x2F; 时间 &#x3D; 总线位宽 × 时钟频率</p>
-<p>例：在一个AXI总线系统中，总线位宽为128bit,频率为500MHz，允许的最大Outstanding为8、最大Burst为16,Slave的访问至时为200ns。 那么该AXI总线最大传输带宽是多少？请给出推理过程，并计算最终结果。</p>
-<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/554026947">AXI outstanding传输带宽计算 - 知乎</a></p>
+
+
 <h1 id="FIFO深度计算"><a href="#FIFO深度计算" class="headerlink" title="FIFO深度计算"></a>FIFO深度计算</h1><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_40483920/article/details/108233399">FPGA&#x2F;IC笔试面试（一）：异步FIFO最小深度计算-CSDN博客</a></p>
 <h1 id="PPA"><a href="#PPA" class="headerlink" title="PPA"></a>PPA</h1><h2 id="一、面向性能的设计方法"><a href="#一、面向性能的设计方法" class="headerlink" title="一、面向性能的设计方法"></a>一、面向性能的设计方法</h2><p>决定性能的因素有很多，比如算法策略，操作数预处理，批量处理，并行处理，输入延迟等等。</p>
 <p>本文主要想讲的是 HDL 层面，所以举如下例子：</p>
@@ -441,20 +376,8 @@
 
 
 
-
-
-<h2 id="CT项目中的PPA"><a href="#CT项目中的PPA" class="headerlink" title="CT项目中的PPA"></a>CT项目中的PPA</h2><p>主要是面向面积的优化，</p>
-<p>状态机的判断条件使用位数进行判断</p>
-<p>状态的定义使用独热码，更节省面积</p>
-<p>尽量使用简单的逻辑运算表达式，化简卡诺图的方法</p>
-<p>IP 核的使用</p>
-<p>或者是其他的判断条件，例如计数器等等</p>
-<p>对于算法的设计，并不对所有的3*3像素都配置一个算法计算单元，而是通过时分复用</p>
-<p>数据的缓存策略和流动策略</p>
-<p>所有像素的计数器的不可少的，因此所有的计数都是并行执行的，在计数完进行算法计算的时候，通过移位寄存器将数据流入计算单元中，计算每个3*3像素的修正值，每次都是计算得到一个中心像素的修正值，（这里的修正是一个能量聚集的策略）计算完之后，数据流入双端口SRAM进行缓存，SRAM的缓存使用多块的策略。</p>
-<p>我这里只有一块，但整体可以分块进行，在宽度上进行分块</p>
-<p>功耗</p>
-<p>时钟门控和使能信号</p>
+<p>LVT HVT概念</p>
+<p>LVT是低阈值单元，因此，速度更快，同时意味着静态功耗更大</p>
 <p>工艺角的问题</p>
 <table>
 <thead>
@@ -509,27 +432,6 @@
 <li><strong>FF + 125℃ + Vdd_max</strong>（最大功耗）</li>
 <li><strong>TT + 25℃ + Vdd_nom</strong>（标称性能）</li>
 </ul>
-<h1 id="公司总结"><a href="#公司总结" class="headerlink" title="公司总结"></a>公司总结</h1><h2 id="APB协议"><a href="#APB协议" class="headerlink" title="APB协议"></a>APB协议</h2><p>PCLK     1      时钟</p>
-<p>PRESET   1      复位</p>
-<p>PWRITE   1      读写控制</p>
-<p>PSEL      1      设备选择</p>
-<p>PENABLE   1      设备使能</p>
-<p>PADDR     32     读写地址</p>
-<p>PWDATA  32     写数据</p>
-<p>PRDATA   32     读数据</p>
-<p>PREADY   1      设备状态反馈</p>
-<p>PSLVERR   1      设备错误反馈</p>
-<p>PSTRB             写选通信号，指示总线上哪些字节数据有效</p>
-<p>非流水线式读写，每次读写分为两拍，前一拍为建立阶段，后一拍为访问阶段。</p>
-<p>PSEL在两拍中都为高，PENABLE只有在访问阶段才为高，其余地址和数据信号在两拍中保持不变</p>
-<p>PREADY信号为0时，起到暂停总线的作用，访问阶段会拖延，期间控制信号不变</p>
-<p>PSLVERR信号为1时，表示设备寄存器发生错误，对于读操作，CPU忽略返回的数据</p>
-<p>主机：</p>
-<p>通过维护一个状态机，来实现读写控制逻辑</p>
-<p>空闲状态，设备建立状态，设备访问状态</p>
-<p>根据不同状态，输出控制信号和读写数据</p>
-<p>从机：</p>
-<p>配置字先是被存储在APB域的寄存器，然后在合适的时机同步到内部寄存器，可以由CPU发送同步信号来同步。Buffer Enable</p>
 <p>状态机：</p>
 <p>二进制编码，格雷码，独热码</p>
 <p>1．二进制编码  </p>
@@ -548,577 +450,6 @@
 <p><strong>高速系统</strong>下统一采用<strong>独热码</strong></p>
 <p>使用独热码的更加节省组合逻辑，对于译码和状态比较和跳转的逻辑都更加简单</p>
 <p>在卡诺图化简中，不care的编码可以与其余的有效编码合并化简。实际上综合器也会这么做，所以独热码非常容易化简。</p>
-<h2 id="AHB协议"><a href="#AHB协议" class="headerlink" title="AHB协议"></a>AHB协议</h2><p>HCLK            1      时钟</p>
-<p>HRESET          1      复位</p>
-<p>HWRITE          1      读写控制</p>
-<p>HTRANS           2      传输方式（空闲，忙，传一个，传多个）</p>
-<p>HSIZE             3      每次传输多少个字节（最大值由数据位宽决定）</p>
-<p>HPORT            4      数据保护（Cache，Buffer，数据权限，指令&#x2F;数据）</p>
-<p>HBUSRT           3      突发传输个数和地址传输方式</p>
-<p>HADDR           32     读写地址</p>
-<p>HWDATA         32     写数据</p>
-<p>HRDATA         32     读数据</p>
-<p>HREADY          1      总线上所有设备状态反馈</p>
-<p>HREADYOUT      1      设备状态反馈</p>
-<p>HRESP            1      设备错误反馈</p>
-<p>其他控制信号</p>
-<p>HMASTER      </p>
-<p>HMASTLOCK     </p>
-<p>AHB的读写数据，分为两拍进行，地址阶段和数据阶段</p>
-<p>传输方式是流水线方式，即B轮传输的地址和A轮的数据重合</p>
-<p>如果HREADY拉低，总线暂停，B轮的地址和控制信号都会保持</p>
-<h2 id="寄存器类型"><a href="#寄存器类型" class="headerlink" title="寄存器类型"></a>寄存器类型</h2><p>已支持类型</p>
-<p><strong>RW（读写）</strong></p>
-<p>描述：由APB数据接口写入，输出到其他模块，可以使用APB数据接口读出	</p>
-<p>写入：APB总线写入新值</p>
-<p>读取：APB总线可以读取</p>
-<p>输出：值可用于控制其他模块</p>
-<p>应用场景：常用于控制寄存器，例如配置工作模式、使能位、阈值设置等。</p>
-<p><strong>R（只读）</strong></p>
-<p>描述：由其他模块输入，直接给到APB数据接口读出，该寄存器值由模块内部逻辑提供，CPU&#x2F;APB只能读取，不能写。</p>
-<p>写入：不允许</p>
-<p>读取：APB总线可读取</p>
-<p>应用场景：用于状态反馈、只读标志位、传感器输出、状态监测等。</p>
-<p><strong>W（只写）</strong></p>
-<p>描述：由APB数据接口写入，输出到其他模块，不会使用APB数据接口读出</p>
-<p>写入：可以</p>
-<p>读取：APB无法读取</p>
-<p>输出：用于产生某些控制信号，如触发、复位等</p>
-<p>应用场景：写入触发类操作，如启动DMA、复位模块、产生脉冲控制信号等。</p>
-<p><strong>RC（读清）</strong></p>
-<p>描述：由APB数据接口写入，输出到其他模块，可以使用APB数据接口读出，但读出之后清0</p>
-<p>写入：可以</p>
-<p>读取：读时清0</p>
-<p>应用场景：状态或事件标志类寄存器，如FIFO满&#x2F;空标志、错误中断标志。读取后清零避免重复响应。</p>
-<p><strong>W1C（写1清）</strong></p>
-<p>描述：由APB数据接口写入1时，该寄存器清0，否则保持不变，脉冲，输出到其他模块，可以使用APB数据接口读出</p>
-<p>写入：可以</p>
-<p>读取：可以</p>
-<p>用途：常用于中断清除，CPU进入ISR后写1清除中断标志位。常常用于对中断寄存器清0，当CPU进入中断服务程序时，就必须发出一个脉冲对中断寄存器清0</p>
-<p>应用场景：中断状态寄存器，异常标志寄存器。</p>
-<p><strong>W0S（写0S）</strong></p>
-<p>描述：写0时该位被置1（Set），写1无效。输出到其他模块，可以使用APB数据接口读出</p>
-<p>写入：可以</p>
-<p>读取：可以读取</p>
-<p>用途：不常见，某些特殊场景下用于位反转或异常启动信号。</p>
-<p>注意：不同设计者可能赋予W0S不同含义，也有设计中写0置0的称法，具体以文档定义为准。</p>
-<p><strong>W1（写一次）</strong></p>
-<p>由APB数据接口写入，输出到其他模块，可以使用APB数据接口读出，只有在复位的时候可以写1次</p>
-<p>描述：该寄存器只能在上电&#x2F;复位后写入一次，之后无法修改。</p>
-<p>写入：只能写一次</p>
-<p>读取：可以读取</p>
-<p>应用场景：一次性配置信息，如芯片配置锁定、安全区域解锁等。</p>
-<p><strong>WRS</strong></p>
-<p>由APB数据接口写入，输出到其他模块，可以使用APB数据接口读出（与RW的区别在哪里？）</p>
-<p>描述：与RW相似，但强调寄存器由写入值驱动行为后，也可读回写入值。</p>
-<p>区别于RW：在某些规范中，WRS更强调“写驱动行为”，RW更强调“长期配置保存”</p>
-<p>应用场景：控制启动后可以确认写入值是否生效，如写入DMA启动地址后可读回确认。</p>
-<p>✅ 总结表：</p>
-<table>
-<thead>
-<tr>
-<th>类型</th>
-<th>是否可写</th>
-<th>是否可读</th>
-<th>特殊行为</th>
-<th>应用场景</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>RW</td>
-<td>✅</td>
-<td>✅</td>
-<td>无</td>
-<td>控制与配置</td>
-</tr>
-<tr>
-<td>R</td>
-<td>❌</td>
-<td>✅</td>
-<td>无</td>
-<td>状态反馈</td>
-</tr>
-<tr>
-<td>W</td>
-<td>✅</td>
-<td>❌</td>
-<td>无</td>
-<td>写触发类控制</td>
-</tr>
-<tr>
-<td>RC</td>
-<td>✅</td>
-<td>✅</td>
-<td><strong>读后清零</strong></td>
-<td>标志位&#x2F;事件记录</td>
-</tr>
-<tr>
-<td>W1C</td>
-<td>✅</td>
-<td>✅</td>
-<td><strong>写1清零</strong></td>
-<td>中断清除&#x2F;错误清除</td>
-</tr>
-<tr>
-<td>W0S</td>
-<td>✅</td>
-<td>✅</td>
-<td><strong>写0置位</strong>（不常见）</td>
-<td>启动信号&#x2F;调试</td>
-</tr>
-<tr>
-<td>W1</td>
-<td>✅</td>
-<td>✅</td>
-<td><strong>只允许写1次</strong></td>
-<td>安全配置&#x2F;锁定值</td>
-</tr>
-<tr>
-<td>WRS</td>
-<td>✅</td>
-<td>✅</td>
-<td>强调写驱动行为</td>
-<td>写后确认写入值（DMA配置等）</td>
-</tr>
-</tbody></table>
-<p>下面是一个代码例子</p>
-<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br></pre></td><td class="code"><pre><code class="hljs verilog"><span class="hljs-comment">/***************************************************MODULE NAME usart**************************************************</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">--------------------------------------------------usart_sr--------------------------------------------------</span><br><span class="hljs-comment">|BIT NAME                 |BIT POSITION   |REG_ACCESS                    |REG_KEY        |SET       |CLEAR     </span><br><span class="hljs-comment">|-------------------------|---------------|------------------------------|---------------|----------|----------</span><br><span class="hljs-comment">|pe                       |[0:0]          |RW                            |None           |0         |0         </span><br><span class="hljs-comment">|fe                       |[1:1]          |W(WriteOnly)                  |None           |0         |0         </span><br><span class="hljs-comment">|ne                       |[2:2]          |R(ReadOnly)                   |None           |0         |0         </span><br><span class="hljs-comment">|ore                      |[3:3]          |RC(readclear)                 |None           |0         |0         </span><br><span class="hljs-comment">|idle                     |[4:4]          |W1C(Write1/auto-clear 0)      |None           |0         |0         </span><br><span class="hljs-comment">|rxne                     |[5:5]          |W0S(Write0/auto-set1)         |None           |0         |0         </span><br><span class="hljs-comment">|tc                       |[6:6]          |W1(WriteOnce)                 |None           |0         |0         </span><br><span class="hljs-comment">|txe                      |[7:7]          |WRS(WR/hardware update)       |None           |0         |0         </span><br><span class="hljs-comment">|lbd                      |[8:8]          |RW                            |None           |0         |0         </span><br><span class="hljs-comment">|cts                      |[9:9]          |RW                            |None           |0         |0         </span><br><span class="hljs-comment">--------------------------------------------------------------------------------------------------------------</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">--------------------------------------------------usart_dr--------------------------------------------------</span><br><span class="hljs-comment">|BIT NAME                 |BIT POSITION   |REG_ACCESS                    |REG_KEY        |SET       |CLEAR     </span><br><span class="hljs-comment">|-------------------------|---------------|------------------------------|---------------|----------|----------</span><br><span class="hljs-comment">|dr                       |[7:0]          |RW                            |None           |0         |0         </span><br><span class="hljs-comment">--------------------------------------------------------------------------------------------------------------</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">**************************************************end usart**************************************************/</span><br><br><br><span class="hljs-meta">`<span class="hljs-keyword">ifndef</span> USART_MMR_V</span><br><span class="hljs-meta">`<span class="hljs-keyword">define</span> USART_MMR_V</span><br><br><span class="hljs-keyword">module</span> usart_mmr<br>    #( <br>    <span class="hljs-keyword">parameter</span> ADDR_WIDTH     =    <span class="hljs-number">32</span>,<br>    <span class="hljs-keyword">parameter</span> DATA_WIDTH     =    <span class="hljs-number">32</span>,<br>	<span class="hljs-comment">//Reg address parameter define </span><br>	<span class="hljs-keyword">parameter</span> [ADDR_WIDTH-<span class="hljs-number">1</span> : <span class="hljs-number">0</span>] addr_usart_sr       =  <span class="hljs-number">&#x27;h0</span>,<br>	<span class="hljs-keyword">parameter</span> [ADDR_WIDTH-<span class="hljs-number">1</span> : <span class="hljs-number">0</span>] addr_usart_dr       =  <span class="hljs-number">&#x27;h4</span> ) <br><br>( <br><span class="hljs-keyword">input</span>                              userkey   ,<br><span class="hljs-keyword">input</span>                              lckey     ,<br><span class="hljs-keyword">input</span>                              clk       ,<br><span class="hljs-keyword">input</span>                              rstn      ,<br><span class="hljs-keyword">input</span>          [ADDR_WIDTH-<span class="hljs-number">1</span> : <span class="hljs-number">0</span>]  p_addr    ,<br><span class="hljs-keyword">input</span>                              p_sel     ,<br><span class="hljs-keyword">input</span>                              p_enable  ,<br><span class="hljs-keyword">input</span>                              p_write   ,<br><span class="hljs-keyword">input</span>          [DATA_WIDTH-<span class="hljs-number">1</span> : <span class="hljs-number">0</span>]  p_wdata   ,<br><span class="hljs-keyword">input</span>          [<span class="hljs-number">3</span>:<span class="hljs-number">0</span>]               p_strb    ,<br><span class="hljs-keyword">output</span>                             p_ready   ,<br><span class="hljs-keyword">output</span> <span class="hljs-keyword">reg</span>     [DATA_WIDTH-<span class="hljs-number">1</span> : <span class="hljs-number">0</span>]  p_rdata   ,<br><span class="hljs-keyword">output</span>                             p_slaverr ,<br><br><span class="hljs-comment">//The signal define of the USART_SR ,type &quot;RW&quot;</span><br><span class="hljs-keyword">output</span> <span class="hljs-keyword">reg</span>                         O_usart_sr_pe,<br><span class="hljs-keyword">output</span> <span class="hljs-keyword">reg</span>                         O_usart_sr_fe,<br><span class="hljs-keyword">input</span>                              I_usart_sr_ne,<br><span class="hljs-keyword">output</span> <span class="hljs-keyword">reg</span>                         O_usart_sr_ore,<br><span class="hljs-keyword">output</span> <span class="hljs-keyword">reg</span>                         O_usart_sr_idle,<br><span class="hljs-keyword">output</span> <span class="hljs-keyword">reg</span>                         O_usart_sr_rxne,<br><span class="hljs-keyword">output</span> <span class="hljs-keyword">reg</span>                         O_usart_sr_tc,<br><span class="hljs-keyword">output</span> <span class="hljs-keyword">reg</span>                         O_usart_sr_txe,<br><span class="hljs-keyword">output</span> <span class="hljs-keyword">reg</span>                         O_usart_sr_lbd,<br><span class="hljs-keyword">output</span> <span class="hljs-keyword">reg</span>                         O_usart_sr_cts,<br><br><span class="hljs-comment">//The signal define of the USART_DR ,type &quot;RW&quot;</span><br><span class="hljs-keyword">output</span> <span class="hljs-keyword">reg</span>     [<span class="hljs-number">7</span>:<span class="hljs-number">0</span>]               O_usart_dr_dr<br>);<br><br><span class="hljs-comment">//Write and read enable wire define </span><br><span class="hljs-keyword">wire</span>    wr_en; <br><span class="hljs-keyword">wire</span>    rd_en; <br><span class="hljs-keyword">wire</span>    wen_usart_sr; <br><span class="hljs-keyword">wire</span>    wen_usart_dr; <br><br><span class="hljs-comment">//Write enable assign for bus </span><br><span class="hljs-keyword">assign</span>   wr_en                = p_sel &amp; p_enable &amp; p_write; <br><span class="hljs-keyword">assign</span>   rd_en                = p_sel &amp; p_enable &amp; !p_write; <br><span class="hljs-keyword">assign</span>   wen_usart_sr         = wr_en &amp; (p_addr ==  addr_usart_sr); <br><span class="hljs-keyword">assign</span>   wen_usart_dr         = wr_en &amp; (p_addr ==  addr_usart_dr); <br><br><span class="hljs-comment">//define always write for reg usart_sr_pe / type-RW</span><br><span class="hljs-keyword">always</span> @(<span class="hljs-keyword">posedge</span> clk <span class="hljs-keyword">or</span> <span class="hljs-keyword">negedge</span> rstn ) <span class="hljs-keyword">begin</span> <br>	<span class="hljs-keyword">if</span>(!rstn) <span class="hljs-keyword">begin</span> <br>		O_usart_sr_pe &lt;= <span class="hljs-number">1&#x27;h0</span>;<br>	<span class="hljs-keyword">end</span> <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(wen_usart_sr &amp; p_strb[<span class="hljs-number">0</span>]) <span class="hljs-keyword">begin</span><br>		O_usart_sr_pe &lt;= p_wdata[<span class="hljs-number">0</span>]; <br>	<span class="hljs-keyword">end</span><br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">//define always write for reg usart_sr_fe / type-W(WriteOnly)</span><br><span class="hljs-keyword">always</span> @(<span class="hljs-keyword">posedge</span> clk <span class="hljs-keyword">or</span> <span class="hljs-keyword">negedge</span> rstn ) <span class="hljs-keyword">begin</span> <br>	<span class="hljs-keyword">if</span>(!rstn) <span class="hljs-keyword">begin</span> <br>		O_usart_sr_fe &lt;= <span class="hljs-number">1&#x27;h0</span>;<br>	<span class="hljs-keyword">end</span> <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(wen_usart_sr &amp; p_strb[<span class="hljs-number">0</span>]) <span class="hljs-keyword">begin</span><br>		O_usart_sr_fe &lt;= p_wdata[<span class="hljs-number">1</span>]; <br>	<span class="hljs-keyword">end</span><br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">//define always write for reg usart_sr_ore / type-RC(readclear)</span><br><span class="hljs-keyword">wire</span>	rd_clr_usart_sr_ore;<br><span class="hljs-keyword">assign</span>	rd_clr_usart_sr_ore = rd_en &amp; (p_addr == addr_usart_sr);<br><span class="hljs-keyword">always</span> @(<span class="hljs-keyword">posedge</span> clk <span class="hljs-keyword">or</span> <span class="hljs-keyword">negedge</span> rstn ) <span class="hljs-keyword">begin</span> <br>	<span class="hljs-keyword">if</span>(!rstn) <span class="hljs-keyword">begin</span> <br>		O_usart_sr_ore &lt;= <span class="hljs-number">1&#x27;h0</span>;<br>	<span class="hljs-keyword">end</span> <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(wen_usart_sr &amp; p_strb[<span class="hljs-number">0</span>]) <span class="hljs-keyword">begin</span><br>		O_usart_sr_ore &lt;= p_wdata[<span class="hljs-number">3</span>]; <br>	<span class="hljs-keyword">end</span> <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(rd_clr_usart_sr_ore) <span class="hljs-keyword">begin</span><br>		O_usart_sr_ore &lt;= <span class="hljs-number">1&#x27;b0</span>;<br>	<span class="hljs-keyword">end</span><br><span class="hljs-keyword">end</span> <br><br><span class="hljs-comment">//define always write for reg usart_sr_idle / type-W1C(Write1/auto-clear 0)</span><br><span class="hljs-keyword">always</span> @(<span class="hljs-keyword">posedge</span> clk <span class="hljs-keyword">or</span> <span class="hljs-keyword">negedge</span> rstn ) <span class="hljs-keyword">begin</span> <br>	<span class="hljs-keyword">if</span>(!rstn) <span class="hljs-keyword">begin</span> <br>		O_usart_sr_idle &lt;= <span class="hljs-number">1&#x27;h0</span>;<br>	<span class="hljs-keyword">end</span> <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(wen_usart_sr &amp; p_strb[<span class="hljs-number">0</span>]) <span class="hljs-keyword">begin</span><br>		O_usart_sr_idle &lt;= p_wdata[<span class="hljs-number">4</span>] ? <span class="hljs-number">1&#x27;b0</span> : O_usart_sr_idle;<br>	<span class="hljs-keyword">end</span><br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">//define always write for reg usart_sr_rxne / type-W0S(Write0/auto-set1)</span><br><span class="hljs-keyword">always</span> @(<span class="hljs-keyword">posedge</span> clk <span class="hljs-keyword">or</span> <span class="hljs-keyword">negedge</span> rstn ) <span class="hljs-keyword">begin</span> <br>	<span class="hljs-keyword">if</span>(!rstn) <span class="hljs-keyword">begin</span> <br>		O_usart_sr_rxne &lt;= <span class="hljs-number">1&#x27;h0</span>;<br>	<span class="hljs-keyword">end</span> <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(wen_usart_sr &amp; p_strb[<span class="hljs-number">0</span>]) <span class="hljs-keyword">begin</span><br>		O_usart_sr_rxne &lt;= (!p_wdata[<span class="hljs-number">5</span>]) ? <span class="hljs-number">1&#x27;b1</span> : O_usart_sr_rxne; <br>	<span class="hljs-keyword">end</span><br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">//define always write for reg usart_sr_tc / type-W1(WriteOnce)</span><br><span class="hljs-keyword">reg</span>    flag_w1_usart_sr_tc;<br><span class="hljs-keyword">always</span> @(<span class="hljs-keyword">posedge</span> clk <span class="hljs-keyword">or</span> <span class="hljs-keyword">negedge</span> rstn ) <span class="hljs-keyword">begin</span> <br>	<span class="hljs-keyword">if</span>(!rstn) <span class="hljs-keyword">begin</span> <br>		flag_w1_usart_sr_tc &lt;= <span class="hljs-number">1&#x27;b1</span>;<br>	<span class="hljs-keyword">end</span> <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(wen_usart_sr &amp; p_strb[<span class="hljs-number">0</span>]) <span class="hljs-keyword">begin</span> <br>		flag_w1_usart_sr_tc &lt;= <span class="hljs-number">1&#x27;b0</span>;<br>	<span class="hljs-keyword">end</span> <br><span class="hljs-keyword">end</span> <br><br><span class="hljs-keyword">wire</span> flag_w1_usart_sr_tc_write;<br><span class="hljs-keyword">assign</span> flag_w1_usart_sr_tc_write = wen_usart_sr &amp; p_strb[<span class="hljs-number">0</span>] &amp; flag_w1_usart_sr_tc;<br><span class="hljs-keyword">always</span> @(<span class="hljs-keyword">posedge</span> clk <span class="hljs-keyword">or</span> <span class="hljs-keyword">negedge</span> rstn ) <span class="hljs-keyword">begin</span> <br>	<span class="hljs-keyword">if</span>(!rstn) <span class="hljs-keyword">begin</span> <br>		O_usart_sr_tc &lt;= <span class="hljs-number">1&#x27;h1</span>;<br>	<span class="hljs-keyword">end</span> <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(flag_w1_usart_sr_tc_write) <span class="hljs-keyword">begin</span><br>		O_usart_sr_tc &lt;= p_wdata[<span class="hljs-number">6</span>]; <br>	<span class="hljs-keyword">end</span><br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">//define always write for reg usart_sr_txe / type-WRS(WR/hardware update)</span><br><span class="hljs-keyword">always</span> @(<span class="hljs-keyword">posedge</span> clk <span class="hljs-keyword">or</span> <span class="hljs-keyword">negedge</span> rstn ) <span class="hljs-keyword">begin</span> <br>	<span class="hljs-keyword">if</span>(!rstn) <span class="hljs-keyword">begin</span> <br>		O_usart_sr_txe &lt;= <span class="hljs-number">1&#x27;h1</span>;<br>	<span class="hljs-keyword">end</span> <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(wen_usart_sr &amp; p_strb[<span class="hljs-number">0</span>]) <span class="hljs-keyword">begin</span><br>		O_usart_sr_txe &lt;= p_wdata[<span class="hljs-number">7</span>]; <br>	<span class="hljs-keyword">end</span><br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">//define always write for reg usart_sr_lbd / type-RW</span><br><span class="hljs-keyword">always</span> @(<span class="hljs-keyword">posedge</span> clk <span class="hljs-keyword">or</span> <span class="hljs-keyword">negedge</span> rstn ) <span class="hljs-keyword">begin</span> <br>	<span class="hljs-keyword">if</span>(!rstn) <span class="hljs-keyword">begin</span> <br>		O_usart_sr_lbd &lt;= <span class="hljs-number">1&#x27;h0</span>;<br>	<span class="hljs-keyword">end</span> <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(wen_usart_sr &amp; p_strb[<span class="hljs-number">1</span>]) <span class="hljs-keyword">begin</span><br>		O_usart_sr_lbd &lt;= p_wdata[<span class="hljs-number">8</span>]; <br>	<span class="hljs-keyword">end</span><br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">//define always write for reg usart_sr_cts / type-RW</span><br><span class="hljs-keyword">always</span> @(<span class="hljs-keyword">posedge</span> clk <span class="hljs-keyword">or</span> <span class="hljs-keyword">negedge</span> rstn ) <span class="hljs-keyword">begin</span> <br>	<span class="hljs-keyword">if</span>(!rstn) <span class="hljs-keyword">begin</span> <br>		O_usart_sr_cts &lt;= <span class="hljs-number">1&#x27;h0</span>;<br>	<span class="hljs-keyword">end</span> <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(wen_usart_sr &amp; p_strb[<span class="hljs-number">1</span>]) <span class="hljs-keyword">begin</span><br>		O_usart_sr_cts &lt;= p_wdata[<span class="hljs-number">9</span>]; <br>	<span class="hljs-keyword">end</span><br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">//define always write for reg usart_dr_dr / type-RW</span><br><span class="hljs-keyword">always</span> @(<span class="hljs-keyword">posedge</span> clk <span class="hljs-keyword">or</span> <span class="hljs-keyword">negedge</span> rstn ) <span class="hljs-keyword">begin</span> <br>	<span class="hljs-keyword">if</span>(!rstn) <span class="hljs-keyword">begin</span> <br>		O_usart_dr_dr[<span class="hljs-number">7</span>:<span class="hljs-number">0</span>] &lt;= <span class="hljs-number">8&#x27;h0</span>;<br>	<span class="hljs-keyword">end</span> <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(wen_usart_dr &amp; p_strb[<span class="hljs-number">0</span>]) <span class="hljs-keyword">begin</span><br>		O_usart_dr_dr[<span class="hljs-number">7</span>:<span class="hljs-number">0</span>] &lt;= p_wdata[<span class="hljs-number">7</span>:<span class="hljs-number">0</span>]; <br>	<span class="hljs-keyword">end</span><br><span class="hljs-keyword">end</span><br><br><span class="hljs-comment">//For the bus read for module USART</span><br><span class="hljs-keyword">always</span> @(*) <span class="hljs-keyword">begin</span> <br>	p_rdata = <span class="hljs-number">&#x27;b0</span>;<br>	<span class="hljs-keyword">if</span>(<span class="hljs-number">1&#x27;b1</span>) <span class="hljs-keyword">begin</span> <br>		<span class="hljs-keyword">case</span>(p_addr)<br>			addr_usart_sr : <span class="hljs-keyword">begin</span> <br>				p_rdata[<span class="hljs-number">0</span>]           = O_usart_sr_pe;<br>				p_rdata[<span class="hljs-number">1</span>]           = <span class="hljs-number">1&#x27;h0</span>;<br>				p_rdata[<span class="hljs-number">2</span>]           = I_usart_sr_ne;<br>				p_rdata[<span class="hljs-number">3</span>]           = O_usart_sr_ore;<br>				p_rdata[<span class="hljs-number">4</span>]           = O_usart_sr_idle;<br>				p_rdata[<span class="hljs-number">5</span>]           = O_usart_sr_rxne;<br>				p_rdata[<span class="hljs-number">6</span>]           = O_usart_sr_tc;<br>				p_rdata[<span class="hljs-number">7</span>]           = O_usart_sr_txe;<br>				p_rdata[<span class="hljs-number">8</span>]           = O_usart_sr_lbd;<br>				p_rdata[<span class="hljs-number">9</span>]           = O_usart_sr_cts;<br>			<span class="hljs-keyword">end</span> <br>			addr_usart_dr : <span class="hljs-keyword">begin</span> <br>				p_rdata[<span class="hljs-number">7</span>:<span class="hljs-number">0</span>]         = O_usart_dr_dr[<span class="hljs-number">7</span>:<span class="hljs-number">0</span>];<br>			<span class="hljs-keyword">end</span> <br>			<span class="hljs-keyword">default</span>: p_rdata = <span class="hljs-number">&#x27;b0</span>;<br>		<span class="hljs-keyword">endcase</span> <br>	<span class="hljs-keyword">end</span> <span class="hljs-keyword">else</span> <br>		p_rdata = <span class="hljs-number">&#x27;b0</span>;<br><span class="hljs-keyword">end</span><br><br><span class="hljs-keyword">wire</span> reg_map;<br><span class="hljs-keyword">assign</span> reg_map = <br>		(p_addr ==  addr_usart_sr       ) |<br>		(p_addr ==  addr_usart_dr       )  ;<br><br><span class="hljs-keyword">assign</span> p_slaverr = p_sel &amp; p_enable &amp; reg_map;<br><br><span class="hljs-keyword">assign</span> p_ready = p_enable;<br><br><span class="hljs-keyword">endmodule</span> <br><br></code></pre></td></tr></table></figure>
-
-
-
-<p>其他类型</p>
-<p>RS（读置位） </p>
-<p>WC（写清）</p>
-<p>W1T（写1翻转）</p>
-<p>WRC</p>
-<p>WSRC</p>
-<p>WCRS</p>
-<p>W1S</p>
-<h1 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h1><h2 id="AXI4接口定义"><a href="#AXI4接口定义" class="headerlink" title="AXI4接口定义"></a>AXI4接口定义</h2><h3 id="AXI4-SLAVE"><a href="#AXI4-SLAVE" class="headerlink" title="AXI4-SLAVE"></a>AXI4-SLAVE</h3><p><strong>模块参数</strong></p>
-<table>
-<thead>
-<tr>
-<th><strong>名称</strong></th>
-<th><strong>解释</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>C_S_AXI_ID_WIDTH</td>
-<td>ID 信号的宽度</td>
-</tr>
-<tr>
-<td>C_S_AXI_DATA_WIDTH</td>
-<td>数据宽度</td>
-</tr>
-<tr>
-<td>C_S_AXI_ADDR_WIDTH</td>
-<td>地址宽度</td>
-</tr>
-</tbody></table>
-<p><strong>通用</strong></p>
-<table>
-<thead>
-<tr>
-<th><strong>名称</strong></th>
-<th><strong>解释</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>S_AXI_ACLK</td>
-<td>时钟</td>
-</tr>
-<tr>
-<td>S_AXI_ARESETN</td>
-<td>复位信号，低电平复位</td>
-</tr>
-</tbody></table>
-<p><strong>写地址通道</strong></p>
-<table>
-<thead>
-<tr>
-<th><strong>名称</strong></th>
-<th><strong>解释</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>input wire [C_S_AXI_ID_WIDTH-1 : 0] S_AXI_AWID</td>
-<td>写地址ID，示例代码的 Slave 不支持重排序</td>
-</tr>
-<tr>
-<td>input wire [C_S_AXI_ADDR_WIDTH-1 : 0] S_AXI_AWADDR</td>
-<td>写地址</td>
-</tr>
-<tr>
-<td>input wire [7 : 0] S_AXI_AWLEN</td>
-<td>突发长度（Burst length），给出了突发中传输（Transfer）的数量</td>
-</tr>
-<tr>
-<td>input wire [2 : 0] S_AXI_AWSIZE</td>
-<td>突发大小，给出了突发中每次传输的大小</td>
-</tr>
-<tr>
-<td>input wire [1 : 0] S_AXI_AWBURST</td>
-<td>突发类型，AWBURST 和 AWSIZE 决定了此处突发中每次传输的地址是如何计算的</td>
-</tr>
-<tr>
-<td>input wire S_AXI_AWVALID</td>
-<td>写地址有效</td>
-</tr>
-<tr>
-<td>output wire S_AXI_AWREADY</td>
-<td>写地址准备</td>
-</tr>
-</tbody></table>
-<p>注：</p>
-<p>S_AXI_AWLEN：实际传输次数为 S_AXI_AWLEN+ 1（AXI4支持最多256次传输）。</p>
-<p>S_AXI_AWSIZE：定义单次传输的字节数（如 <code>0b010</code> 表示4字节，即32位）。</p>
-<p>S_AXI_AWBURST：决定地址变化模式（固定地址、递增或回环）。</p>
-<p><strong>写数据通道</strong></p>
-<table>
-<thead>
-<tr>
-<th><strong>名称</strong></th>
-<th><strong>解释</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>input wire [C_S_AXI_DATA_WIDTH-1 : 0] S_AXI_WDATA</td>
-<td>写数据</td>
-</tr>
-<tr>
-<td>input wire [(C_S_AXI_DATA_WIDTH&#x2F;8)-1 : 0] S_AXI_WSTRB</td>
-<td>写数据选通</td>
-</tr>
-<tr>
-<td>input wire S_AXI_WLAST</td>
-<td>写最后，表示当前传输是突发中的最后一个传输</td>
-</tr>
-<tr>
-<td>input wire S_AXI_WVALID</td>
-<td>写数据有效</td>
-</tr>
-<tr>
-<td>output wire S_AXI_WREADY</td>
-<td>写数据准备</td>
-</tr>
-</tbody></table>
-<p><strong>写响应通道</strong></p>
-<table>
-<thead>
-<tr>
-<th><strong>名称</strong></th>
-<th><strong>解释</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>output wire [C_S_AXI_ID_WIDTH-1 : 0] S_AXI_BID</td>
-<td>写响应的ID，由于本 Slave 不支持重排序，必须赋值为 S_AXI_AWID</td>
-</tr>
-<tr>
-<td>output wire [1 : 0] S_AXI_BRESP</td>
-<td>写响应，给出写事务的状态，示例代码中该信号恒为 2’b0</td>
-</tr>
-<tr>
-<td>output wire S_AXI_BVALID</td>
-<td>写响应有效</td>
-</tr>
-<tr>
-<td>input wire S_AXI_BREADY</td>
-<td>写响应准备</td>
-</tr>
-</tbody></table>
-<p><strong>读地址通道</strong></p>
-<table>
-<thead>
-<tr>
-<th><strong>名称</strong></th>
-<th><strong>解释</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>input wire [C_S_AXI_ID_WIDTH-1 : 0] S_AXI_ARID</td>
-<td>读地址ID，示例代码的 Slave 不支持重排序</td>
-</tr>
-<tr>
-<td>input wire [C_S_AXI_ADDR_WIDTH-1 : 0] S_AXI_ARADDR</td>
-<td>读地址</td>
-</tr>
-<tr>
-<td>input wire [7 : 0] S_AXI_ARLEN</td>
-<td>突发长度，给出了突发中传输的数量</td>
-</tr>
-<tr>
-<td>input wire [2 : 0] S_AXI_ARSIZE</td>
-<td>突发大小，给出了突发中每次传输的大小</td>
-</tr>
-<tr>
-<td>input wire [1 : 0] S_AXI_ARBURST</td>
-<td>突发类型</td>
-</tr>
-<tr>
-<td>input wire S_AXI_ARVALID</td>
-<td>读地址有效</td>
-</tr>
-<tr>
-<td>output wire S_AXI_ARREADY</td>
-<td>读地址准备</td>
-</tr>
-</tbody></table>
-<p><strong>读数据通道</strong></p>
-<table>
-<thead>
-<tr>
-<th><strong>名称</strong></th>
-<th><strong>解释</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>output wire [C_S_AXI_ID_WIDTH-1 : 0] S_AXI_RID</td>
-<td>读ID，由于Slave 不支持重排序，必须赋值为 S_AXI_ARID</td>
-</tr>
-<tr>
-<td>output wire [C_S_AXI_DATA_WIDTH-1 : 0] S_AXI_RDATA</td>
-<td>读数据</td>
-</tr>
-<tr>
-<td>output wire [1 : 0] S_AXI_RRESP</td>
-<td>读响应，示例代码中该信号恒为 2’b0</td>
-</tr>
-<tr>
-<td>output wire S_AXI_RLAST</td>
-<td>读最后，表示当前传输是突发中的最后一个传输</td>
-</tr>
-<tr>
-<td>output wire S_AXI_RVALID</td>
-<td>读数据有效</td>
-</tr>
-<tr>
-<td>input wire S_AXI_RREADY</td>
-<td>读数据准备</td>
-</tr>
-</tbody></table>
-<h4 id="修改"><a href="#修改" class="headerlink" title="修改"></a>修改</h4><p>在代码设计中，需要修改，存储数据的部分</p>
-<h3 id="AXI4-Master"><a href="#AXI4-Master" class="headerlink" title="AXI4-Master"></a>AXI4-Master</h3><p><strong>模块参数</strong></p>
-<table>
-<thead>
-<tr>
-<th><strong>名称</strong></th>
-<th><strong>解释</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>C_M_AXI_ID_WIDTH</td>
-<td>ID 信号的宽度</td>
-</tr>
-<tr>
-<td>C_M_AXI_ADDR_WIDTH</td>
-<td>数据宽度</td>
-</tr>
-<tr>
-<td>C_M_AXI_DATA_WIDTH</td>
-<td>地址宽度</td>
-</tr>
-<tr>
-<td>C_M_AXI_BURST_LEN</td>
-<td>突发长度</td>
-</tr>
-<tr>
-<td>C_M_TARGET_SLAVE_BASE_ADDR</td>
-<td>目的从机的基地址</td>
-</tr>
-</tbody></table>
-<p><strong>通用</strong></p>
-<table>
-<thead>
-<tr>
-<th><strong>名称</strong></th>
-<th><strong>解释</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>M_AXI_ACLK</td>
-<td>时钟</td>
-</tr>
-<tr>
-<td>M_AXI_ARESETN</td>
-<td>复位信号，低电平复位</td>
-</tr>
-<tr>
-<td>input wire  INIT_AXI_TXN</td>
-<td>传输开始脉冲</td>
-</tr>
-<tr>
-<td>output wire  TXN_DONE</td>
-<td>传输结束断言</td>
-</tr>
-<tr>
-<td>output reg  ERROR</td>
-<td>错误信号</td>
-</tr>
-</tbody></table>
-<p><strong>写地址通道</strong></p>
-<table>
-<thead>
-<tr>
-<th><strong>名称</strong></th>
-<th><strong>解释</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>output wire [C_M_AXI_ID_WIDTH-1 : 0] M_AXI_AWID</td>
-<td>写地址ID</td>
-</tr>
-<tr>
-<td>output wire [C_M_AXI_ADDR_WIDTH-1 : 0] M_AXI_AWADDR</td>
-<td>写地址</td>
-</tr>
-<tr>
-<td>output wire [7 : 0] M_AXI_AWLEN</td>
-<td>突发长度（Burst length），给出了突发中传输（Transfer）的数量</td>
-</tr>
-<tr>
-<td>output wire [2 : 0] M_AXI_AWSIZE</td>
-<td>突发大小，给出了突发中每次传输的大小</td>
-</tr>
-<tr>
-<td>output wire [1 : 0] M_AXI_AWBURST</td>
-<td>突发类型，AWBURST 和 AWSIZE 决定了此处突发中每次传输的地址是如何计算的</td>
-</tr>
-<tr>
-<td>output wire  M_AXI_AWVALID</td>
-<td>写地址有效</td>
-</tr>
-<tr>
-<td>input wire  M_AXI_AWREADY</td>
-<td>写地址准备</td>
-</tr>
-</tbody></table>
-<p><strong>写数据通道</strong></p>
-<table>
-<thead>
-<tr>
-<th><strong>名称</strong></th>
-<th><strong>解释</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>output wire [C_M_AXI_DATA_WIDTH-1 : 0] M_AXI_WDATA</td>
-<td>写数据</td>
-</tr>
-<tr>
-<td>output wire [C_M_AXI_DATA_WIDTH&#x2F;8-1 : 0] M_AXI_WSTRB</td>
-<td>写数据选通</td>
-</tr>
-<tr>
-<td>output wire  M_AXI_WLAST</td>
-<td>写最后，表示当前传输是突发中的最后一个传输</td>
-</tr>
-<tr>
-<td>output wire  M_AXI_WVALID</td>
-<td>写数据有效</td>
-</tr>
-<tr>
-<td>input wire  M_AXI_WREADY</td>
-<td>写数据准备</td>
-</tr>
-</tbody></table>
-<p><strong>写响应通道</strong></p>
-<table>
-<thead>
-<tr>
-<th><strong>名称</strong></th>
-<th><strong>解释</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>input wire [C_M_AXI_ID_WIDTH-1 : 0] M_AXI_BID</td>
-<td>写响应的ID，由于本 Slave 不支持重排序，必须赋值为 S_AXI_AWID</td>
-</tr>
-<tr>
-<td>input wire [1 : 0] M_AXI_BRESP</td>
-<td>写响应，给出写事务的状态，示例代码中该信号恒为 2’b0</td>
-</tr>
-<tr>
-<td>input wire  M_AXI_BVALID</td>
-<td>写响应有效</td>
-</tr>
-<tr>
-<td>output wire  M_AXI_BREADY</td>
-<td>写响应准备</td>
-</tr>
-</tbody></table>
-<p><strong>读地址通道</strong></p>
-<table>
-<thead>
-<tr>
-<th><strong>名称</strong></th>
-<th><strong>解释</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>output wire [C_M_AXI_ID_WIDTH-1 : 0] M_AXI_ARID</td>
-<td>读地址ID，示例代码的 Slave 不支持重排序</td>
-</tr>
-<tr>
-<td>output wire [C_M_AXI_ADDR_WIDTH-1 : 0] M_AXI_ARADDR</td>
-<td>读地址</td>
-</tr>
-<tr>
-<td>output wire [7 : 0] M_AXI_ARLEN</td>
-<td>突发长度，给出了突发中传输的数量</td>
-</tr>
-<tr>
-<td>output wire [2 : 0] M_AXI_ARSIZE</td>
-<td>突发大小，给出了突发中每次传输的大小</td>
-</tr>
-<tr>
-<td>output wire [1 : 0] M_AXI_ARBURST</td>
-<td>突发类型</td>
-</tr>
-<tr>
-<td>output wire  M_AXI_ARVALID</td>
-<td>读地址有效</td>
-</tr>
-<tr>
-<td>input wire  M_AXI_ARREADY</td>
-<td>读地址准备</td>
-</tr>
-</tbody></table>
-<p><strong>读数据通道</strong></p>
-<table>
-<thead>
-<tr>
-<th><strong>名称</strong></th>
-<th><strong>解释</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>input wire [C_M_AXI_ID_WIDTH-1 : 0] M_AXI_RID</td>
-<td>读ID，由于Slave 不支持重排序，必须赋值为 S_AXI_ARID</td>
-</tr>
-<tr>
-<td>input wire [C_M_AXI_DATA_WIDTH-1 : 0] M_AXI_RDATA</td>
-<td>读数据</td>
-</tr>
-<tr>
-<td>input wire [1 : 0] M_AXI_RRESP</td>
-<td>读响应，示例代码中该信号恒为 2’b0</td>
-</tr>
-<tr>
-<td>input wire  M_AXI_RLAST</td>
-<td>读最后，表示当前传输是突发中的最后一个传输</td>
-</tr>
-<tr>
-<td>input wire  M_AXI_RVALID</td>
-<td>读数据有效</td>
-</tr>
-<tr>
-<td>output wire  M_AXI_RREADY</td>
-<td>读数据准备</td>
-</tr>
-</tbody></table>
-<p> <strong>参考</strong></p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/moon9999/article/details/131146296#:~:text=%E6%9C%AC%E6%96%87%E8%AF%A6%E7%BB%86%E4%BB%8B%E7%BB%8D%E4%BA%86%E5%AF%84%E5%AD%98%E5%99%A8%E7%9A%84%E8%AF%BB%E5%86%99%E5%B1%9E%E6%80%A7%EF%BC%8C%E5%8C%85%E6%8B%ACread-writeaccess%E3%80%81modifiedWriteValue%E5%92%8CreadAction%EF%BC%8C%E5%B9%B6%E5%88%97%E4%B8%BE%E4%BA%8625%E7%A7%8D%E4%B8%8D%E5%90%8C%E7%9A%84%E5%AF%84%E5%AD%98%E5%99%A8%E8%A1%8C%E4%B8%BA%E5%8F%8A%E5%85%B6%E5%9C%A8RAL%E6%A8%A1%E5%9E%8B%E4%B8%AD%E7%9A%84%E6%94%AF%E6%8C%81%E6%83%85%E5%86%B5%E3%80%82,%E6%AD%A4%E5%A4%96%EF%BC%8C%E8%BF%98%E6%8F%90%E4%BE%9B%E4%BA%86%E5%85%B3%E9%94%AE%E5%AF%84%E5%AD%98%E5%99%A8%E7%B1%BB%E5%9E%8B%E7%9A%84RTL%E5%AE%9E%E7%8E%B0%EF%BC%8C%E5%A6%82RW%E3%80%81WO%E3%80%81RO%E3%80%81W1%E3%80%81W1C%E3%80%81RC%E3%80%81RS%E3%80%81WRC%E3%80%81WRS%E3%80%81WC%E3%80%81WS%E3%80%81WSRC%E5%92%8CWCRS%E7%AD%89%EF%BC%8C%E4%BB%A5%E5%8F%8A%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86%E8%BD%AF%E4%BB%B6%E5%92%8C%E7%A1%AC%E4%BB%B6%E6%93%8D%E4%BD%9C%E3%80%82">【前端验证】通关寄存器与ral_model —— 25种常用寄存器类型全览_寄存器属性-CSDN博客</a></p>
 
                 
               </div>
@@ -1164,7 +495,7 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>知识补充</div>
+      <div>PPA优化</div>
       <div>http://vinters-v.github.io/2025/09/21/数字IC_PPA优化/</div>
     </div>
     <div class="license-meta">
@@ -1209,12 +540,18 @@
                   <article class="post-prev col-6">
                     
                     
+                      <a href="/2025/09/25/%E6%95%B0%E5%AD%97IC_%E5%B8%B8%E8%80%83/" title="知识补充">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">知识补充</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/09/21/%E6%95%B0%E5%AD%97IC_APB&amp;AHB/" title="知识补充">
-                        <span class="hidden-mobile">知识补充</span>
+                      <a href="/2025/09/21/%E6%95%B0%E5%AD%97IC_APB&amp;AHB/" title="APB&amp;AHB协议">
+                        <span class="hidden-mobile">APB&amp;AHB协议</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
