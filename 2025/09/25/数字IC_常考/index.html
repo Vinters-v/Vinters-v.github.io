@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://vinters-v.github.io/img/article_img/IC/IC.jpg">
 <meta property="article:published_time" content="2025-09-25T10:32:19.737Z">
-<meta property="article:modified_time" content="2025-09-25T10:33:19.913Z">
+<meta property="article:modified_time" content="2025-10-20T14:35:01.127Z">
 <meta property="article:author" content="Vinters-v">
 <meta property="article:tag" content="IC">
 <meta name="twitter:card" content="summary_large_image">
@@ -234,7 +234,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          51 字
+          827 字
         
       </span>
     
@@ -300,6 +300,44 @@
 
 
 <h2 id="FIFO深度计算"><a href="#FIFO深度计算" class="headerlink" title="FIFO深度计算"></a>FIFO深度计算</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_40483920/article/details/108233399">FPGA&#x2F;IC笔试面试（一）：异步FIFO最小深度计算-CSDN博客</a></p>
+<h2 id="八股"><a href="#八股" class="headerlink" title="八股"></a>八股</h2><ul>
+<li>建立时间与保持时间及影响</li>
+</ul>
+<p>recover &#x2F; removal time概念</p>
+<p>recover 异步控制信号（如复位、置位信号）在时钟有效边沿到来之前必须保持稳定的最短时间</p>
+<p>removal 异步控制信号在时钟有效边沿到来之后必须继续保持稳定的最短时间</p>
+<p>若违反恢复时间或移除时间，可能导致异步控制信号无法被正确响应，触发器状态不确定，引发系统功能异常</p>
+<ul>
+<li>时钟skew jitter含义与影响</li>
+</ul>
+<p>jitter</p>
+<p>时钟信号的边沿在时间上偏离其理想位置的变化量，是一种随机的、非累积的时序偏差。来源于时钟发生器内部的噪声、电源干扰等</p>
+<p>skew</p>
+<p>同一个时钟信号到达电路中不同时序元件的时钟输入端的时间差异，是一种固定的或系统性的延迟差异。由时钟路径的长度差异、负载不同、缓冲器延迟不一致等原因引起</p>
+<p>jitter</p>
+<p>由于时钟边沿的不确定性，可用于数据传播的有效时间会减少，可能引发建立时间违例</p>
+<p>skew</p>
+<p>过大的时钟偏移可能导致时序违例</p>
+<ul>
+<li>fan-in，fan-out概念与影响</li>
+</ul>
+<p>大扇入<br>    意味着门的输入电容越大，增大传播延迟<br>    高扇入门通常内部晶体管更多，可能略微增加芯片面积和设计复杂度<br>大扇出<br>    输出需要驱动很大的负载电容，增加信号的上升&#x2F;下降时间，增加传播延迟<br>    过大的扇出可能导致驱动能力不足，造成电压降（IR Drop） 和信号边沿退化<br>    实际扇出超过限制，需要插入缓冲器（Buffer）来增强驱动能力，引入额外的延迟和面积开销</p>
+<ul>
+<li>AXI中outstanding，乱序和交织，通道，最大带宽计算</li>
+<li>静态时序分析计算</li>
+<li>跨时钟域的含义</li>
+<li>spyglass</li>
+<li>时序优化方法（5），功耗分类与优化（5，8），面积优化（4）</li>
+<li>计算机体系结构</li>
+<li></li>
+</ul>
+<h2 id="手撕"><a href="#手撕" class="headerlink" title="手撕"></a>手撕</h2><p>APB相关</p>
+<p>复数乘法</p>
+<p>序列检测器，计数连续0的个数，最大不超过15个</p>
+<p>移位挤气泡，组合逻辑</p>
+<p>计数序列，输出个数，考虑同时输入和输出的情况</p>
+<p>32深度 SRAM 拼接成 64深度</p>
+<p>同一周期内，同步FIFO，写0-1个数据</p>
 
                 
               </div>
